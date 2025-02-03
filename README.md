@@ -1,36 +1,64 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Next.js Project Setup Guide
 
-## Getting Started
+## Prerequisites
+- Node.js (v18.17 or later)
+- npm (Node Package Manager)
 
-First, run the development server:
+## Initial Project Setup
 
+### 1. Clone the Repository
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+git clone git@github.com:CMSC-128-A2/UPCampus-backend.git
+cd UPCampus-backend
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### 2. Install Dependencies
+```bash
+npm install
+```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+<!-- ### 3. Environment Configuration
+1. Copy `.env.example` to `.env.local`
+2. Update environment variables as needed -->
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### 4. Development Server
+Start the local development server:
+```bash
+npm run dev
+```
+Access the app at `http://localhost:3000`
 
-## Learn More
+### 5. Production Build
+Generate a production build:
+```bash
+npm run build
+```
 
-To learn more about Next.js, take a look at the following resources:
+### 6. Run Production Build
+```bash
+npm start
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Project Structure
+- `app/`: Next.js App Router pages
+- `components/`: Reusable React components
+- `public/`: Static assets
+- `styles/`: Global CSS files
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Key Scripts
+- `dev`: Start development server
+- `build`: Create production build
+- `start`: Run production build
+- `lint`: Run ESLint
+- `test`: Run project tests
 
-## Deploy on Vercel
+## Recommended Tools
+- VS Code
+- ESLint extension
+- Prettier extension
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Troubleshooting
+- Ensure Node.js and npm are updated
+- Clear npm cache: `npm cache clean --force`
+- Reinstall dependencies if issues persist
