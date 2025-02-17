@@ -8,18 +8,20 @@ import { Icon } from '@iconify/react';
 
 // Fix for default marker icons in Leaflet with Next.js
 const icon = L.icon({
-    iconUrl: '/assets/icons/location.svg',
-    iconSize: [25, 41],
-    iconAnchor: [12, 41],
+    iconUrl: '/assets/images/guy.png',
+    iconSize: [45, 45],
 });
 
 function Map() {
     const mockUserLocation: [number, number] = [10.322176, 123.898442];
+    const objectLocation: [number, number] = [10.3222097, 123.8981918];
 
     const [userLocation, setUserLocation] = useState<[number, number] | null>(
         null,
     );
     const [map, setMap] = useState<L.Map | null>(null);
+
+    const [objectId, setObjectId] = useState<string | null>(null);
 
     const getUserLocation = () => {
         if (navigator.geolocation) {
@@ -51,23 +53,47 @@ function Map() {
         setUserLocation(mockUserLocation);
     }, []);
 
+    useEffect(() => {
+        if (objectId) {
+            console.log('Object ID:', objectId);
+        }
+    }, [objectId]);
+
     return (
         <main className="h-[calc(100vh-62px)] w-full relative">
             <MapContainer
                 center={[10.322568, 123.898714]}
-                zoom={25}
+                zoom={18}
                 style={{ height: '100%', width: '100%' }}
                 ref={setMap}
+                zoomControl={false}
+                maxZoom={22}
+                wheelPxPerZoomLevel={100}
             >
                 <TileLayer
                     attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-                    url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                    url="https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png"
+                    maxZoom={22}
                 />
                 {userLocation && (
                     <Marker position={userLocation} icon={icon}>
                         <Popup>You are here!</Popup>
                     </Marker>
                 )}
+                <Marker
+                    position={objectLocation}
+                    icon={L.divIcon({
+                        html: `<svg width="20" height="20" viewBox="0 0 100 100">
+                                <circle cx="50" cy="50" r="40" fill="#4CAF50" stroke="white" stroke-width="3"/>
+                              </svg>`,
+                        className: 'custom-div-icon',
+                    })}
+                    eventHandlers={{
+                        click: () => setObjectId('1'),
+                    }}
+                >
+                    {/* <Popup>Object #1</Popup> */}
+                </Marker>
             </MapContainer>
             <button
                 onClick={getUserLocation}
