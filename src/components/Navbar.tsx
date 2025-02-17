@@ -3,6 +3,7 @@
 import { Icon } from '@iconify/react/dist/iconify.js';
 import Image from 'next/image';
 import { usePathname } from 'next/navigation';
+import Link from 'next/link';
 
 const navItems = [
     {
@@ -32,7 +33,7 @@ export default function Navbar() {
             />
             <div className="flex gap-6 items-center">
                 {navItems.map((item) => (
-                    <a
+                    <Link
                         key={item.href}
                         href={item.href}
                         className={`font-medium ${
@@ -42,14 +43,15 @@ export default function Navbar() {
                         }`}
                     >
                         {item.label}
-                    </a>
+                    </Link>
                 ))}
-                <div className="w-8 h-8 rounded-full bg-green-accent flex items-center justify-center">
+                <div className="w-8 h-8 rounded-full bg-green-accent flex items-center justify-center overflow-hidden">
                     <Image
                         src="/assets/images/gwapo.png"
                         alt="Profile"
-                        height={32}
                         width={32}
+                        height={32}
+                        // className="object-cover w-full h-full rounded-full"
                     />
                 </div>
             </div>

@@ -1,4 +1,5 @@
 import Image from 'next/image';
+import Link from 'next/link';
 
 export default function Home() {
     return (
@@ -17,12 +18,12 @@ export default function Home() {
             <p className="text-center text-gray-500 mb-4">
                 This will be a landing page
             </p>
-            <a
+            <Link
                 href="/map"
                 className="bg-green-accent text-white px-4 py-2 rounded-md"
             >
                 View Map
-            </a>
+            </Link>
         </div>
     );
 }
