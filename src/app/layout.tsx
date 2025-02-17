@@ -15,9 +15,6 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
     title: 'UPCampus Explorer',
     description: 'UPCampus Explorer',
-    icons: {
-        icon: '/favicon.svg',
-    },
 };
 
 export default function RootLayout({
