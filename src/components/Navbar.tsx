@@ -1,6 +1,5 @@
 'use client';
 
-import { Icon } from '@iconify/react/dist/iconify.js';
 import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import Link from 'next/link';
@@ -25,19 +24,29 @@ export default function Navbar() {
 
     return (
         <nav className="flex justify-between items-center p-3 px-4 bg-maroon-accent text-white h-[62px] max-h-[62px]">
-            <Image
-                src="/assets/images/UPC header logo.png"
-                alt="UPCampus Explorer"
-                height={32}
-                width={200}
-            />
+            <div className="flex items-center">
+                <Image
+                    src="/assets/images/logo.png"
+                    alt="UPCampus Explorer"
+                    height={32}
+                    width={32}
+                />
+                <Image
+                    src="/assets/images/UPC header logo.png"
+                    alt="UPCampus Explorer"
+                    height={32}
+                    width={200}
+                    style={{ width: 'auto', height: '32px' }}
+                />
+            </div>
             <div className="flex gap-6 items-center">
                 {navItems.map((item) => (
                     <Link
                         key={item.href}
                         href={item.href}
                         className={`font-medium ${
-                            pathname === item.href
+                            pathname?.startsWith(item.href) &&
+                            (item.href === '/' ? pathname === '/' : true)
                                 ? 'text-yellow-accent'
                                 : 'text-white'
                         }`}
