@@ -1,11 +1,5 @@
-import Map from '@/components/Map';
+import ClientMap from './ClientMap';
 
-function Page() {
-    return (
-        <>
-            <Map />
-        </>
-    );
+export default function Page() {
+    return <ClientMap />;
 }
-
-export default Page;
