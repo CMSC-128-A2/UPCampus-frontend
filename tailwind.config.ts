@@ -11,7 +11,9 @@ export default {
             colors: {
                 background: 'var(--background)',
                 foreground: 'var(--foreground)',
-                accent: '#8A1438',
+                'maroon-accent': '#8A1438',
+                'green-accent': '#0C573F',
+                'yellow-accent': '#FDBD59',
             },
         },
     },
