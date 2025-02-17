@@ -97,6 +97,7 @@ function Map() {
                 ref={setMap}
                 zoomControl={false}
                 maxZoom={22}
+                minZoom={17}
                 wheelPxPerZoomLevel={100}
                 maxBounds={bounds}
                 maxBoundsViscosity={1.0}
