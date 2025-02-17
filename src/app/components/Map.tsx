@@ -16,6 +16,7 @@ const icon = L.icon({
 function Map() {
     const mockUserLocation: [number, number] = [10.322176, 123.898442];
     const objectLocation: [number, number] = [10.3222097, 123.8981918];
+    const objectLocation2: [number, number] = [10.322391, 123.8985017];
 
     // Define map boundaries (approximately 500m around the center point)
     const bounds: L.LatLngBoundsLiteral = [
@@ -122,6 +123,18 @@ function Map() {
                     })}
                     eventHandlers={{
                         click: () => setObjectId('1'),
+                    }}
+                ></Marker>
+                <Marker
+                    position={objectLocation2}
+                    icon={L.divIcon({
+                        html: `<svg width="20" height="20" viewBox="0 0 100 100">
+                                <circle cx="50" cy="50" r="40" fill="#4CAF50" stroke="white" stroke-width="3"/>
+                              </svg>`,
+                        className: 'custom-div-icon',
+                    })}
+                    eventHandlers={{
+                        click: () => setObjectId('2'),
                     }}
                 ></Marker>
             </MapContainer>
