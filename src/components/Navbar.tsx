@@ -45,7 +45,12 @@ export default function Navbar() {
                     </a>
                 ))}
                 <div className="w-8 h-8 rounded-full bg-green-accent flex items-center justify-center">
-                    <Icon icon="iconamoon:profile" width="24" height="24" />
+                    <Image
+                        src="/assets/images/gwapo.png"
+                        alt="Profile"
+                        height={32}
+                        width={32}
+                    />
                 </div>
             </div>
         </nav>
