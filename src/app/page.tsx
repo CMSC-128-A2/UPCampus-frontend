@@ -10,7 +10,7 @@ export default function Home() {
                 width={200}
                 height={200}
             />
-            <h1 className="text-6xl font-extrabold">
+            <h1 className="text-6xl font-extrabold text-center">
                 <span className="text-maroon-accent">UPC</span>
                 <span className="text-yellow-accent">ampus</span>
                 <span className="text-green-accent"> Explorer</span>

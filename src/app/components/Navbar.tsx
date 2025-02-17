@@ -44,7 +44,7 @@ export default function Navbar() {
                     <Link
                         key={item.href}
                         href={item.href}
-                        className={`font-medium ${
+                        className={`font-medium hidden md:block ${
                             pathname?.startsWith(item.href) &&
                             (item.href === '/' ? pathname === '/' : true)
                                 ? 'text-yellow-accent'
