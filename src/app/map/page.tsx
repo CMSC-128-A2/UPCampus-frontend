@@ -1,9 +1,11 @@
 import Map from '@/components/Map';
 
-export default function MapPage() {
+function Page() {
     return (
         <>
             <Map />
         </>
     );
 }
+
+export default Page;

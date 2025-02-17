@@ -1,7 +1,7 @@
 import React from 'react';
 
-function page({ params }: { params: { id: string } }) {
-    return <div>faculty {params.id}</div>;
+function page() {
+    return <div>faculty</div>;
 }
 
 export default page;
