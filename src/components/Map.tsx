@@ -17,12 +17,19 @@ function Map() {
     const mockUserLocation: [number, number] = [10.322176, 123.898442];
     const objectLocation: [number, number] = [10.3222097, 123.8981918];
 
+    // Define map boundaries (approximately 500m around the center point)
+    const bounds: L.LatLngBoundsLiteral = [
+        [10.319568, 123.895714], // Southwest corner
+        [10.325568, 123.901714], // Northeast corner
+    ];
+
     const [userLocation, setUserLocation] = useState<[number, number] | null>(
         null,
     );
     const [map, setMap] = useState<L.Map | null>(null);
 
     const [objectId, setObjectId] = useState<string | null>(null);
+    const [isGettingLocation, setIsGettingLocation] = useState(false);
 
     // Add new state for modal
     const [isModalOpen, setIsModalOpen] = useState(true);
@@ -37,6 +44,7 @@ function Map() {
 
     const getUserLocation = () => {
         if (navigator.geolocation) {
+            setIsGettingLocation(true);
             navigator.geolocation.getCurrentPosition(
                 (position) => {
                     const newLocation: [number, number] = [
@@ -45,6 +53,7 @@ function Map() {
                     ];
                     setUserLocation(newLocation);
                     map?.flyTo(newLocation, 18);
+                    setIsGettingLocation(false);
                 },
                 (error) => {
                     console.log('Error getting location:', error);
@@ -52,11 +61,13 @@ function Map() {
                         'Please enable location services to use this feature.',
                     );
                     setUserLocation(null);
+                    setIsGettingLocation(false);
                 },
             );
         } else {
             alert('Geolocation is not supported by your browser.');
             setUserLocation(null);
+            setIsGettingLocation(false);
         }
     };
 
@@ -87,6 +98,8 @@ function Map() {
                 zoomControl={false}
                 maxZoom={22}
                 wheelPxPerZoomLevel={100}
+                maxBounds={bounds}
+                maxBoundsViscosity={1.0}
             >
                 <TileLayer
                     attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
@@ -124,7 +137,8 @@ function Map() {
 
             <button
                 onClick={getUserLocation}
-                className="text-white absolute bottom-4 right-4 bg-green-accent p-2 rounded-full shadow-md hover:bg-green-accent/80 z-[1000]"
+                disabled={isGettingLocation}
+                className="text-white absolute bottom-4 right-4 bg-green-accent p-2 rounded-full shadow-md hover:bg-green-accent/80 z-[1000] disabled:opacity-50 disabled:cursor-not-allowed"
             >
                 <Icon icon="mdi:map-marker" width="24" height="24" />
             </button>
