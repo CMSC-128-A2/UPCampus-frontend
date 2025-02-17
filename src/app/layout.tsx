@@ -30,9 +30,9 @@ export default function RootLayout({
                 className={`${geistSans.variable} ${geistMono.variable} antialiased`}
             >
                 <Navbar />
-                <main className="h-[calc(100vh-62px)] overflow-y-auto">
+                <div className="h-[calc(100vh-62px)] overflow-y-auto">
                     {children}
-                </main>
+                </div>
             </body>
         </html>
     );

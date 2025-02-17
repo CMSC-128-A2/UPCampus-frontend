@@ -1,5 +1,6 @@
 'use client';
 
+import { Icon } from '@iconify/react/dist/iconify.js';
 import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 
@@ -15,10 +16,6 @@ const navItems = [
     {
         label: 'About',
         href: '/about',
-    },
-    {
-        label: 'Contact',
-        href: '/contact',
     },
 ];
 
@@ -47,18 +44,8 @@ export default function Navbar() {
                         {item.label}
                     </a>
                 ))}
-                <div className="w-8 h-8 rounded-full bg-gray-300 flex items-center justify-center">
-                    <svg
-                        className="w-4 h-4 text-gray-600"
-                        fill="currentColor"
-                        viewBox="0 0 20 20"
-                    >
-                        <path
-                            fillRule="evenodd"
-                            d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"
-                            clipRule="evenodd"
-                        />
-                    </svg>
+                <div className="w-8 h-8 rounded-full bg-green-accent flex items-center justify-center">
+                    <Icon icon="iconamoon:profile" width="24" height="24" />
                 </div>
             </div>
         </nav>
