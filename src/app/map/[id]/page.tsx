@@ -1,5 +1,5 @@
 import React from 'react';
-import BuildingView from '@/app/components/BuildingView';
+import BuildingView from '@/components/map/BuildingView';
 
 function Page() {
     return (

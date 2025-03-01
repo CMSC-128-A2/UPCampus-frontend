@@ -1,6 +1,8 @@
 import Image from 'next/image';
 import Link from 'next/link';
 
+import { Button } from '@/components/ui/button';
+
 export default function Home() {
     return (
         <div className="flex flex-col items-center justify-center h-full gap-2">
@@ -18,11 +20,8 @@ export default function Home() {
             <p className="text-center text-gray-500 mb-4">
                 This will be a landing page
             </p>
-            <Link
-                href="/map"
-                className="bg-green-accent text-white px-4 py-2 rounded-md"
-            >
-                View Map
+            <Link href="/map">
+                <Button>View Map</Button>
             </Link>
         </div>
     );

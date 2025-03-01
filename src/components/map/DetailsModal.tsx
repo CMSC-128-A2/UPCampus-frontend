@@ -1,6 +1,8 @@
 import { Icon } from '@iconify/react';
 import Link from 'next/link';
 
+import { Button } from '@/components/ui/button';
+
 interface DetailsModalProps {
     isOpen: boolean;
     objectId: string | null;
@@ -19,7 +21,7 @@ function DetailsModal({ isOpen, objectId, onClose }: DetailsModalProps) {
 
     return (
         <div className="fixed inset-0 z-[2000]" onClick={handleClickOutside}>
-            <div className="absolute right-0 top-[70px] rounded-lg h-full max-h-[calc(100vh-80px)] max-w-[400px] min-w-[300px] w-full bg-white shadow-lg animate-slide-left flex flex-col">
+            <div className="absolute right-0 top-[70px] rounded-2xl h-full max-h-[calc(100vh-80px)] max-w-[400px] min-w-[300px] w-full bg-white shadow-lg animate-slide-left flex flex-col">
                 <button
                     onClick={onClose}
                     className="absolute top-2 right-2 p-2 hover:bg-gray-100 rounded-full"
@@ -38,7 +40,7 @@ function DetailsModal({ isOpen, objectId, onClose }: DetailsModalProps) {
                                     key={index}
                                     src="/assets/images/random-building.jpg"
                                     alt={`Building image ${index + 1}`}
-                                    className="w-[200px] h-[150px] object-cover rounded-lg flex-shrink-0"
+                                    className="w-[200px] h-[150px] object-cover rounded-2xl flex-shrink-0"
                                 />
                             ))}
                         </div>
@@ -83,9 +85,9 @@ function DetailsModal({ isOpen, objectId, onClose }: DetailsModalProps) {
                 <div className="actions p-4 w-full flex">
                     <Link
                         href={`/map/${objectId}`}
-                        className="bg-green-accent text-white p-2 rounded-lg flex-grow flex justify-center items-center"
+                        className="w-full flex justify-center"
                     >
-                        View Building
+                        <Button className="w-full">View Building</Button>
                     </Link>
                 </div>
             </div>
