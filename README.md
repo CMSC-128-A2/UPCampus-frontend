@@ -10,8 +10,8 @@
 ### 1. Clone the Repository
 
 ```
-git clone git@github.com:CMSC-128-A2/UPCampus-backend.git
-cd UPCampus-backend
+git clone git@github.com:CMSC-128-A2/UPCampus-frontend.git
+cd UPCampus-frontend
 ```
 
 ### 2. Install Dependencies
