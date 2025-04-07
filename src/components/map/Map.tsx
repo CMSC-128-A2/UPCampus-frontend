@@ -26,7 +26,7 @@ const MapboxExample = () => {
                         // Move map to user location
                         mapRef.current.flyTo({
                             center: [longitude, latitude],
-                            zoom: 17,
+                            zoom: 19,
                         });
 
                         // Remove previous marker and popup if they exist
@@ -109,15 +109,15 @@ const MapboxExample = () => {
         // At this latitude, 0.018 degrees ≈ 2km in both directions
         const center = [123.898731, 10.322466];
         const bounds = new mapboxgl.LngLatBounds(
-            [center[0] - 0.0018, center[1] - 0.0018], // Southwest: 2km west and south from center
-            [center[0] + 0.0018, center[1] + 0.0018], // Northeast: 2km east and north from center
+            [center[0] - 0.0019, center[1] - 0.0019], // Southwest: 2km west and south from center
+            [center[0] + 0.0019, center[1] + 0.0019], // Northeast: 2km east and north from center
         );
 
         mapRef.current = new mapboxgl.Map({
             container: mapContainerRef.current!,
             style: 'mapbox://styles/mapbox/streets-v12',
             center: [123.898731, 10.322466],
-            zoom: 17,
+            zoom: 14,
             bearing: 80,
             maxBounds: bounds, // Set the map's boundary limits
         });
@@ -129,7 +129,10 @@ const MapboxExample = () => {
     }, []);
 
     return (
-        <div style={{ position: 'relative', height: '100%' }}>
+        <div
+            style={{ position: 'relative', height: '100%' }}
+            className="bg-[#FFF5E3]"
+        >
             <div ref={mapContainerRef} style={{ height: '100%' }}></div>
             <button
                 onClick={locateUser}
