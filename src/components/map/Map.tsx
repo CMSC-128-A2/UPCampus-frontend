@@ -122,8 +122,6 @@ const MapboxExample = () => {
             maxBounds: bounds, // Set the map's boundary limits
         });
 
-        mapRef.current.addControl(new mapboxgl.NavigationControl());
-
         return () => {
             mapRef.current?.remove();
             popupRef.current?.remove();
