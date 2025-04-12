@@ -12,22 +12,22 @@ const SearchBar = () => {
       />
 
 
-        <div className="flex items-center flex-1 bg-white text-black rounded-[8px] px-4 py-2">
-                <Image 
+        <div className="flex items-center flex-1 bg-white text-black rounded-[8px] px-4 py-2 border-2 border-transparent focus-within:border-[#FFAE1D]">
+            <Image 
                 src="/assets/icons/lucide_search.svg" 
                 alt="Search Icon" 
                 width={20} 
                 height={20} 
                 className="mr-2"
-                />
-                <input 
+            />
+            <input 
                 type="text" 
                 placeholder="Search" 
-                className="flex-1 bg-transparent outline-none"
-                />
+                className="flex-1 bg-transparent outline-none text-[#7F1532]"
+            />
         </div>
 
-        <div className='w-[49px] h-[49.2px] rounded-[5px] p-[10px] gap-[10px] bg-[#FFFFFF]'>
+        <div className='w-[49px] h-[49.2px] rounded-[5px] p-[10px] gap-[10px] bg-[#FFFFFF] cursor-pointer'>
             <Image 
                 src="/assets/icons/buildings.svg" 
                 alt="Search Icon" 
@@ -37,7 +37,7 @@ const SearchBar = () => {
             />
         </div>
 
-        <div className='w-[49px] h-[49.2px] rounded-[5px] p-[10px] gap-[10px] bg-[#FFFFFF]'>
+        <div className='w-[49px] h-[49.2px] rounded-[5px] p-[10px] gap-[10px] bg-[#FFFFFF] cursor-pointer'>
             <Image 
                 src="/assets/icons/activityarea.svg" 
                 alt="Activity Area Icon" 
