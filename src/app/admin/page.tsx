@@ -4,6 +4,74 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { Icon } from '@iconify/react';
 
+// Define TypeScript types for the data structure
+type ScheduleType = 'Lecture' | 'Laboratory';
+
+interface ClassSection {
+    section: string;
+    type: ScheduleType;
+    room: string;
+    schedule: string;
+}
+
+interface CourseSchedule {
+    id: string;
+    courseCode: string;
+    sections: ClassSection[];
+}
+
+// Mock data for class schedules
+const mockClassSchedules: CourseSchedule[] = [
+    {
+        id: '1',
+        courseCode: 'CMSC 126',
+        sections: [
+            {
+                section: 'A',
+                type: 'Lecture',
+                room: 'SCI 405',
+                schedule: 'M TH | 11:00 AM - 12:00 PM'
+            },
+            {
+                section: 'A1',
+                type: 'Laboratory',
+                room: 'SCI 402',
+                schedule: 'TH | 3:00 PM - 6:00 PM'
+            },
+            {
+                section: 'A2',
+                type: 'Laboratory',
+                room: 'SCI 402',
+                schedule: 'M | 3:00 PM - 6:00 PM'
+            }
+        ]
+    },
+    {
+        id: '2',
+        courseCode: 'CMSC 129',
+        sections: [
+            {
+                section: 'A',
+                type: 'Lecture',
+                room: 'SCI 405',
+                schedule: 'M TH | 9:00 AM - 10:00 AM'
+            },
+            {
+                section: 'A1',
+                type: 'Laboratory',
+                room: 'SCI 404',
+                schedule: 'T | 9:00 AM - 12:00 PM'
+            },
+            {
+                section: 'A2',
+                type: 'Laboratory',
+                room: 'SCI 404',
+                schedule: 'F | 9:00 AM - 12:00 PM'
+            }
+        ]
+    }
+];
+
 function AdminPage() {
     return (
         <div className="flex flex-col h-screen">
@@ -102,85 +170,39 @@ function AdminPage() {
                             </div>
 
                             {/* Class Schedules */}
-                            <div className="bg-white overflow-hidden mb-6">
-                                {/* CMSC 126 */}
-                                <div className="bg-[#CCE8FF] py-3 px-4 text-3xl">
-                                    CMSC 126
-                                </div>
+                            {mockClassSchedules.map((course) => (
+                                <div key={course.id} className="bg-white overflow-hidden mb-6 last:mb-0">
+                                    <div className="bg-[#CCE8FF] py-3 px-4 text-3xl">
+                                        {course.courseCode}
+                                    </div>
 
-                                <div className="overflow-x-auto">
-                                    <table className="min-w-full">
-                                        <thead>
-                                            <tr className="bg-[#F3F3F3]">
-                                                <th className="py-3 px-4 text-left font-medium text-gray-600">Section</th>
-                                                <th className="py-3 px-4 text-left font-medium text-gray-600">Type</th>
-                                                <th className="py-3 px-4 text-left font-medium text-gray-600">Room Assigned</th>
-                                                <th className="py-3 px-4 text-left font-medium text-gray-600">Schedule</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr className="border-t border-gray-300 hover:bg-[#f9f9f9] transition-colors duration-200">
-                                                <td className="py-3 px-4">A</td>
-                                                <td className="py-3 px-4">Lecture</td>
-                                                <td className="py-3 px-4">SCI 405</td>
-                                                <td className="py-3 px-4">M TH | 11:00 AM - 12:00 PM</td>
-                                            </tr>
-                                            <tr className="border-t border-gray-300 hover:bg-[#f9f9f9] transition-colors duration-200">
-                                                <td className="py-3 px-4">A1</td>
-                                                <td className="py-3 px-4">Laboratory</td>
-                                                <td className="py-3 px-4">SCI 402</td>
-                                                <td className="py-3 px-4">TH | 3:00 PM - 6:00 PM</td>
-                                            </tr>
-                                            <tr className="border-t border-gray-300 hover:bg-[#f9f9f9] transition-colors duration-200">
-                                                <td className="py-3 px-4">A2</td>
-                                                <td className="py-3 px-4">Laboratory</td>
-                                                <td className="py-3 px-4">SCI 402</td>
-                                                <td className="py-3 px-4">M | 3:00 AM - 6:00 PM</td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
+                                    <div className="overflow-x-auto">
+                                        <table className="min-w-full">
+                                            <thead>
+                                                <tr className="bg-[#F3F3F3]">
+                                                    <th className="py-3 px-4 text-left font-medium text-gray-600">Section</th>
+                                                    <th className="py-3 px-4 text-left font-medium text-gray-600">Type</th>
+                                                    <th className="py-3 px-4 text-left font-medium text-gray-600">Room Assigned</th>
+                                                    <th className="py-3 px-4 text-left font-medium text-gray-600">Schedule</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {course.sections.map((section, index) => (
+                                                    <tr
+                                                        key={`${course.id}-${section.section}`}
+                                                        className="border-t border-gray-300 hover:bg-[#f9f9f9] transition-colors duration-200"
+                                                    >
+                                                        <td className="py-3 px-4">{section.section}</td>
+                                                        <td className="py-3 px-4">{section.type}</td>
+                                                        <td className="py-3 px-4">{section.room}</td>
+                                                        <td className="py-3 px-4">{section.schedule}</td>
+                                                    </tr>
+                                                ))}
+                                            </tbody>
+                                        </table>
+                                    </div>
                                 </div>
-                            </div>
-
-                            {/* CMSC 129 */}
-                            <div className="bg-white overflow-hidden">
-                                <div className="bg-[#CCE8FF] py-3 px-4 text-3xl">
-                                    CMSC 129
-                                </div>
-
-                                <div className="overflow-x-auto">
-                                    <table className="min-w-full">
-                                        <thead>
-                                            <tr className="bg-[#F3F3F3]">
-                                                <th className="py-3 px-4 text-left font-medium text-gray-600">Section</th>
-                                                <th className="py-3 px-4 text-left font-medium text-gray-600">Type</th>
-                                                <th className="py-3 px-4 text-left font-medium text-gray-600">Room Assigned</th>
-                                                <th className="py-3 px-4 text-left font-medium text-gray-600">Schedule</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr className="border-t border-gray-300 hover:bg-[#f9f9f9] transition-colors duration-200">
-                                                <td className="py-3 px-4">A</td>
-                                                <td className="py-3 px-4">Lecture</td>
-                                                <td className="py-3 px-4">SCI 405</td>
-                                                <td className="py-3 px-4">M TH | 9:00 AM - 10:00 AM</td>
-                                            </tr>
-                                            <tr className="border-t border-gray-300 hover:bg-[#f9f9f9] transition-colors duration-200">
-                                                <td className="py-3 px-4">A1</td>
-                                                <td className="py-3 px-4">Laboratory</td>
-                                                <td className="py-3 px-4">SCI 404</td>
-                                                <td className="py-3 px-4">T | 9:00 AM - 12:00 PM</td>
-                                            </tr>
-                                            <tr className="border-t border-gray-300 hover:bg-[#f9f9f9] transition-colors duration-200">
-                                                <td className="py-3 px-4">A2</td>
-                                                <td className="py-3 px-4">Laboratory</td>
-                                                <td className="py-3 px-4">SCI 404</td>
-                                                <td className="py-3 px-4">F | 9:00 AM - 12:00 PM</td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
+                            ))}
                         </div>
                     </div>
                 </div>
