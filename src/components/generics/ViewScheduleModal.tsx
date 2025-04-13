@@ -135,25 +135,27 @@ const ViewScheduleModal: React.FC<ViewScheduleModalProps> = ({
 
             {/* Delete Confirmation Modal */}
             {showDeleteConfirm && (
-                <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-[60]">
-                    <div className="bg-white rounded-xl p-6 w-full max-w-md">
-                        <h3 className="text-xl font-semibold mb-4">Confirm Delete</h3>
-                        <p className="mb-6">
-                            Are you sure you want to delete this schedule for {courseCode} section {section}?
-                        </p>
-                        <div className="flex justify-end gap-4">
-                            <button
-                                onClick={cancelDelete}
-                                className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-100"
-                            >
-                                Cancel
-                            </button>
-                            <button
-                                onClick={confirmDelete}
-                                className="px-4 py-2 bg-[#FFD7D7] text-[#F14343] border border-[#F14343] rounded-lg hover:bg-[#ffbdbd]"
-                            >
-                                Delete
-                            </button>
+                <div className="fixed inset-0 bg-black bg-opacity-30 flex items-center justify-center z-[60]">
+                    <div className="bg-white rounded-3xl w-full max-w-md mx-4 overflow-hidden">
+                        <div className="p-6 pt-5">
+                            <div className="flex justify-between items-center mb-1">
+                                <h3 className="text-3xl text-[#EF8281]">Delete schedule?</h3>
+                                <button onClick={cancelDelete} className="text-gray-400 hover:text-gray-600">
+                                    <Icon icon="ph:x" width="24" height="24" />
+                                </button>
+                            </div>
+                            <p className="mb-10 text-lg">
+                                Are you sure you want to delete this class schedule assigned to you? This schedule cannot be restored after deleting.
+                            </p>
+                            <div className="flex justify-end">
+                                <button
+                                    onClick={confirmDelete}
+                                    className="flex items-center px-5 py-2 bg-[#F4DEDE] text-[#EF8281] text-lg rounded-xl border border-[#EF8281] hover:bg-[#ffd1d1] transition-colors duration-200"
+                                >
+                                    <Icon icon="ph:trash-bold" width="20" height="20" className="mr-2" />
+                                    Delete
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
