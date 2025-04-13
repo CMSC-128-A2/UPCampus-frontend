@@ -18,7 +18,7 @@ function AdminPage() {
                         style={{ objectFit: 'contain' }}
                     />
                 </div>
-                <Link href="/faculty" className="bg-green-500 hover:bg-green-600 text-white px-5 py-2 rounded-full flex items-center justify-center">
+                <Link href="/faculty" className=" text-[#008CFF] border border-[#008CFF] px-5 py-2 mr-3 text-xl rounded-lg flex items-center justify-center">
                     <Icon icon="ph:graduation-cap-bold" width="20" height="20" className="mr-2" />
                     Faculty
                 </Link>
@@ -68,12 +68,13 @@ function AdminPage() {
                 </div>
 
                 {/* Main Content */}
-                <div className="flex-1 bg-gray-50 overflow-y-auto">
-                    <div className="p-8">
+                <div className="flex-1 bg-[#F3F3F3] overflow-y-auto">
+                    <div className="m-8 bg-white border border-gray200 rounded-lg">
+                    <div className="p-6">
                         <h1 className="text-3xl font-semibold mb-6">Science Building</h1>
 
                         {/* Search and Floor Selection */}
-                        <div className="bg-white p-6 rounded-xl shadow-sm mb-6">
+                        <div className="mb-6">
                             <div className="mb-4">
                                 <div className="relative">
                                     <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
@@ -88,12 +89,12 @@ function AdminPage() {
                             </div>
 
                             <div className="flex justify-between items-center">
-                                <button className="flex items-center px-4 py-2 bg-[#E9F2E1] text-[#93BF6A] font-medium rounded-lg border-2 text-xl border-[#93BF6A]">
+                                <button className="flex items-center px-4 py-2 bg-[#E9F2E1] text-[#93BF6A] font-medium rounded-lg border-[1.5px] text-xl border-[#93BF6A]">
                                     <Icon icon="ph:caret-down-bold" width="20" height="20" className="mr-2" />
                                     4th Floor
                                 </button>
 
-                                <button className="flex items-center px-4 py-2 bg-[#CCE8FF] text-[#4392F1] font-medium rounded-lg border-2 text-xl border-[#4392F1]">
+                                <button className="flex items-center px-4 py-2 bg-[#CCE8FF] text-[#4392F1] font-medium rounded-lg border-[1.5px] text-xl border-[#4392F1]">
                                     <Icon icon="ph:plus-bold" width="20" height="20" className="mr-2" />
                                     Schedule
                                 </button>
@@ -101,16 +102,16 @@ function AdminPage() {
                         </div>
 
                         {/* Class Schedules */}
-                        <div className="bg-white rounded-xl shadow-sm overflow-hidden mb-6">
+                        <div className="bg-white overflow-hidden mb-6">
                             {/* CMSC 126 */}
-                            <div className="bg-blue-100 py-3 px-4 text-lg font-medium">
+                            <div className="bg-[#CCE8FF] py-3 px-4 text-3xl">
                                 CMSC 126
                             </div>
 
                             <div className="overflow-x-auto">
                                 <table className="min-w-full">
                                     <thead>
-                                        <tr className="bg-gray-50">
+                                        <tr className="bg-[#F3F3F3]">
                                             <th className="py-3 px-4 text-left font-medium text-gray-600">Section</th>
                                             <th className="py-3 px-4 text-left font-medium text-gray-600">Type</th>
                                             <th className="py-3 px-4 text-left font-medium text-gray-600">Room Assigned</th>
@@ -118,19 +119,19 @@ function AdminPage() {
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr className="border-t border-gray-200">
+                                        <tr className="border-t border-gray-300">
                                             <td className="py-3 px-4">A</td>
                                             <td className="py-3 px-4">Lecture</td>
                                             <td className="py-3 px-4">SCI 405</td>
                                             <td className="py-3 px-4">M TH | 11:00 AM - 12:00 PM</td>
                                         </tr>
-                                        <tr className="border-t border-gray-200">
+                                        <tr className="border-t border-gray-300">
                                             <td className="py-3 px-4">A1</td>
                                             <td className="py-3 px-4">Laboratory</td>
                                             <td className="py-3 px-4">SCI 402</td>
                                             <td className="py-3 px-4">TH | 3:00 PM - 6:00 PM</td>
                                         </tr>
-                                        <tr className="border-t border-gray-200">
+                                        <tr className="border-t border-gray-300">
                                             <td className="py-3 px-4">A2</td>
                                             <td className="py-3 px-4">Laboratory</td>
                                             <td className="py-3 px-4">SCI 402</td>
@@ -142,15 +143,15 @@ function AdminPage() {
                         </div>
 
                         {/* CMSC 129 */}
-                        <div className="bg-white rounded-xl shadow-sm overflow-hidden">
-                            <div className="bg-blue-100 py-3 px-4 text-lg font-medium">
+                        <div className="bg-white overflow-hidden">
+                            <div className="bg-[#CCE8FF] py-3 px-4 text-3xl">
                                 CMSC 129
                             </div>
 
                             <div className="overflow-x-auto">
                                 <table className="min-w-full">
                                     <thead>
-                                        <tr className="bg-gray-50">
+                                        <tr className="bg-[#F3F3F3]">
                                             <th className="py-3 px-4 text-left font-medium text-gray-600">Section</th>
                                             <th className="py-3 px-4 text-left font-medium text-gray-600">Type</th>
                                             <th className="py-3 px-4 text-left font-medium text-gray-600">Room Assigned</th>
@@ -158,19 +159,19 @@ function AdminPage() {
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr className="border-t border-gray-200">
+                                        <tr className="border-t border-gray-300">
                                             <td className="py-3 px-4">A</td>
                                             <td className="py-3 px-4">Lecture</td>
                                             <td className="py-3 px-4">SCI 405</td>
                                             <td className="py-3 px-4">M TH | 9:00 AM - 10:00 AM</td>
                                         </tr>
-                                        <tr className="border-t border-gray-200">
+                                        <tr className="border-t border-gray-300">
                                             <td className="py-3 px-4">A1</td>
                                             <td className="py-3 px-4">Laboratory</td>
                                             <td className="py-3 px-4">SCI 404</td>
                                             <td className="py-3 px-4">T | 9:00 AM - 12:00 PM</td>
                                         </tr>
-                                        <tr className="border-t border-gray-200">
+                                        <tr className="border-t border-gray-300">
                                             <td className="py-3 px-4">A2</td>
                                             <td className="py-3 px-4">Laboratory</td>
                                             <td className="py-3 px-4">SCI 404</td>
@@ -180,6 +181,7 @@ function AdminPage() {
                                 </table>
                             </div>
                         </div>
+                    </div>
                     </div>
                 </div>
             </div>
