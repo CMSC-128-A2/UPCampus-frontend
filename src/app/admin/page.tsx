@@ -4,6 +4,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { Icon } from '@iconify/react';
 import ScheduleModal from '@/components/generics/ScheduleModal';
+import ViewScheduleModal from '@/components/generics/ViewScheduleModal';
 
 // Define TypeScript types for the data structure
 type ScheduleType = 'Lecture' | 'Laboratory';
@@ -74,7 +75,10 @@ const mockClassSchedules: CourseSchedule[] = [
 ];
 
 function AdminPage() {
+    const [classSchedules, setClassSchedules] = useState(mockClassSchedules);
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [isViewModalOpen, setIsViewModalOpen] = useState(false);
+    const [selectedSchedule, setSelectedSchedule] = useState<{ course: CourseSchedule, section: ClassSection } | null>(null);
 
     const openModal = () => {
         setIsModalOpen(true);
@@ -82,6 +86,35 @@ function AdminPage() {
 
     const closeModal = () => {
         setIsModalOpen(false);
+    };
+
+    const openViewModal = (course: CourseSchedule, section: ClassSection) => {
+        setSelectedSchedule({ course, section });
+        setIsViewModalOpen(true);
+    };
+
+    const closeViewModal = () => {
+        setIsViewModalOpen(false);
+        setSelectedSchedule(null);
+    };
+
+    // Handle delete schedule - would connect to API in real application
+    const handleDeleteSchedule = (courseId: string, sectionName: string) => {
+        // Filter out the deleted section
+        const updatedSchedules = classSchedules.map(course => {
+            if (course.id === courseId) {
+                return {
+                    ...course,
+                    sections: course.sections.filter(section => section.section !== sectionName)
+                };
+            }
+            return course;
+        });
+
+        // Remove courses with no sections
+        const filteredSchedules = updatedSchedules.filter(course => course.sections.length > 0);
+
+        setClassSchedules(filteredSchedules);
     };
 
     return (
@@ -184,7 +217,7 @@ function AdminPage() {
                             </div>
 
                             {/* Class Schedules */}
-                            {mockClassSchedules.map((course) => (
+                            {classSchedules.map((course) => (
                                 <div key={course.id} className="bg-white overflow-hidden mb-6 last:mb-0">
                                     <div className="bg-[#CCE8FF] py-3 px-4 text-3xl">
                                         {course.courseCode}
@@ -204,7 +237,8 @@ function AdminPage() {
                                                 {course.sections.map((section, index) => (
                                                     <tr
                                                         key={`${course.id}-${section.section}`}
-                                                        className="border-t border-gray-300 hover:bg-[#f9f9f9] transition-colors duration-200"
+                                                        className="border-t border-gray-300 hover:bg-[#f9f9f9] transition-colors duration-200 cursor-pointer"
+                                                        onClick={() => openViewModal(course, section)}
                                                     >
                                                         <td className="py-3 px-4">{section.section}</td>
                                                         <td className="py-3 px-4">{section.type}</td>
@@ -222,8 +256,25 @@ function AdminPage() {
                 </div>
             </div>
 
-            {/* Schedule Modal */}
+            {/* Schedule Modals */}
             <ScheduleModal isOpen={isModalOpen} onClose={closeModal} />
+            {selectedSchedule && (
+                <ViewScheduleModal
+                    isOpen={isViewModalOpen}
+                    onClose={closeViewModal}
+                    courseCode={selectedSchedule.course.courseCode}
+                    section={selectedSchedule.section.section}
+                    type={selectedSchedule.section.type}
+                    room={selectedSchedule.section.room}
+                    schedule={selectedSchedule.section.schedule}
+                    onDelete={() => {
+                        if (selectedSchedule) {
+                            handleDeleteSchedule(selectedSchedule.course.id, selectedSchedule.section.section);
+                            closeViewModal();
+                        }
+                    }}
+                />
+            )}
         </div>
     );
 }
