@@ -26,7 +26,7 @@ function AdminPage() {
 
             <div className="flex flex-1 overflow-hidden">
                 {/* Sidebar - now starts below header */}
-                <div className="w-60 bg-white border-r overflow-y-auto">
+                <div className="w-60 bg-white border-r overflow-y-auto flex flex-col">
                     <nav className="flex-1">
                         <ul className="space-y-1">
                             <li>
@@ -59,7 +59,7 @@ function AdminPage() {
                         </ul>
                     </nav>
 
-                    <div className="mt-auto">
+                    <div className="mt-auto border-t border-gray-200">
                         <Link href="#" className="flex items-center px-4 py-3 text-gray-700 hover:bg-[#f0f0f0] hover:text-red-600 transition-colors duration-200">
                             <Icon icon="ph:sign-out-bold" width="24" height="24" className="mr-3" />
                             <span>Sign Out</span>
