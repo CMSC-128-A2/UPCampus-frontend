@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Icon } from '@iconify/react';
+import Image from 'next/image';
 
 interface ScheduleModalProps {
     isOpen: boolean;
@@ -123,7 +124,13 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({ isOpen, onClose }) => {
                     {/* Save Button - with significant top space */}
                     <div className="py-4 flex justify-end">
                         <button className="flex items-center px-5 py-2 bg-[#CCE8FF] text-[#4392F1] font-medium rounded-lg border-[1.5px] text-xl border-[#4392F1] hover:bg-[#b3dbff] hover:border-[#2b7ad9] transition-colors duration-200">
-                            <Icon icon="ph:floppy-disk" width="20" height="20" className="mr-2" />
+                            <Image
+                                src="/assets/icons/save-scehdule.svg"
+                                alt="Save Icon"
+                                width={24}
+                                height={24}
+                                className="mr-2"
+                            />
                             Save schedule
                         </button>
                     </div>
