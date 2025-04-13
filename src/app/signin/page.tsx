@@ -17,9 +17,9 @@ export default function SignIn() {
     return (
         <div className="flex h-screen w-full overflow-hidden">
             {/* Map/Campus Background */}
-            <div className="relative flex-grow h-full bg-[#FFF8E7]">
+            <div className="relative w-1/2 h-full bg-[#FFF8E7]">
                 <Image
-                    src="/assets/images/random-building.jpg"
+                    src="/assets/images/sign-in-map.svg"
                     alt="UP Campus Map"
                     fill
                     style={{ objectFit: 'cover' }}
@@ -28,13 +28,13 @@ export default function SignIn() {
             </div>
 
             {/* Sign In Form */}
-            <div className="flex flex-col items-center justify-center w-full max-w-md bg-white px-8">
-                <div className="w-full max-w-[350px] mx-auto">
+            <div className="flex flex-col items-center justify-center w-1/2 bg-white px-10">
+                <div className="w-full max-w-[500px] mx-auto">
                     {/* Logo */}
-                    <div className="flex justify-center mb-8">
-                        <div className="relative w-[180px] h-[120px]">
+                    <div className="flex justify-center mb-12">
+                        <div className="relative w-[320px] h-[200px]">
                             <Image
-                                src="/assets/images/logo.png"
+                                src="/assets/images/manager-logo.svg"
                                 alt="UP SEE Manager Logo"
                                 fill
                                 style={{ objectFit: 'contain' }}
@@ -43,9 +43,9 @@ export default function SignIn() {
                         </div>
                     </div>
 
-                    <form onSubmit={handleSignIn} className="w-full space-y-5">
-                        <div className="space-y-1">
-                            <label htmlFor="userId" className="block text-base font-normal text-gray-700">
+                    <form onSubmit={handleSignIn} className="w-full space-y-6">
+                        <div className="space-y-2">
+                            <label htmlFor="userId" className="block text-base font-normal text-[#0096FF]">
                                 User ID
                             </label>
                             <input
@@ -53,12 +53,13 @@ export default function SignIn() {
                                 type="text"
                                 value={userId}
                                 onChange={(e) => setUserId(e.target.value)}
-                                className="w-full p-3 border border-gray-300 rounded-md focus:outline-none"
+                                className="w-full p-4 border border-gray-300 rounded-lg focus:outline-none text-lg"
+                                placeholder="Enter your user ID"
                             />
                         </div>
 
-                        <div className="space-y-1">
-                            <label htmlFor="password" className="block text-base font-normal text-gray-700">
+                        <div className="space-y-2">
+                            <label htmlFor="password" className="block text-base font-normal text-[#0096FF]">
                                 Password
                             </label>
                             <input
@@ -66,14 +67,14 @@ export default function SignIn() {
                                 type="password"
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
-                                className="w-full p-3 border border-gray-300 rounded-md focus:outline-none"
+                                className="w-full p-4 border border-gray-300 rounded-lg focus:outline-none text-lg"
                                 placeholder="Enter your password"
                             />
                         </div>
 
                         <button
                             type="submit"
-                            className="w-full h-12 text-lg font-normal bg-[#0096FF] hover:bg-[#0088E8] text-white rounded-md mt-4"
+                            className="w-full h-14 text-xl font-medium bg-[#0096FF] hover:bg-[#0088E8] text-white rounded-lg mt-8"
                         >
                             Sign In
                         </button>
