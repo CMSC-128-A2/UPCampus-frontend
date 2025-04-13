@@ -354,40 +354,50 @@ function AdminPage() {
                             </div>
 
                             {/* Class Schedules */}
-                            {filteredSchedules.map((course) => (
-                                <div key={course.id} className="bg-white overflow-hidden mb-6 last:mb-0">
-                                    <div className="bg-[#CCE8FF] py-3 px-4 text-3xl">
-                                        {course.courseCode}
-                                    </div>
+                            {filteredSchedules.length > 0 ? (
+                                filteredSchedules.map((course) => (
+                                    <div key={course.id} className="bg-white overflow-hidden mb-6 last:mb-0">
+                                        <div className="bg-[#CCE8FF] py-3 px-4 text-3xl">
+                                            {course.courseCode}
+                                        </div>
 
-                                    <div className="overflow-x-auto">
-                                        <table className="min-w-full">
-                                            <thead>
-                                                <tr className="bg-[#F3F3F3]">
-                                                    <th className="py-3 px-4 text-left font-medium text-gray-600">Section</th>
-                                                    <th className="py-3 px-4 text-left font-medium text-gray-600">Type</th>
-                                                    <th className="py-3 px-4 text-left font-medium text-gray-600">Room Assigned</th>
-                                                    <th className="py-3 px-4 text-left font-medium text-gray-600">Schedule</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                {course.sections.map((section, index) => (
-                                                    <tr
-                                                        key={`${course.id}-${section.section}`}
-                                                        className="border-t border-gray-300 hover:bg-[#f9f9f9] transition-colors duration-200 cursor-pointer"
-                                                        onClick={() => openViewModal(course, section)}
-                                                    >
-                                                        <td className="py-3 px-4">{section.section}</td>
-                                                        <td className="py-3 px-4">{section.type}</td>
-                                                        <td className="py-3 px-4">{section.room}</td>
-                                                        <td className="py-3 px-4">{section.schedule}</td>
+                                        <div className="overflow-x-auto">
+                                            <table className="min-w-full">
+                                                <thead>
+                                                    <tr className="bg-[#F3F3F3]">
+                                                        <th className="py-3 px-4 text-left font-medium text-gray-600">Section</th>
+                                                        <th className="py-3 px-4 text-left font-medium text-gray-600">Type</th>
+                                                        <th className="py-3 px-4 text-left font-medium text-gray-600">Room Assigned</th>
+                                                        <th className="py-3 px-4 text-left font-medium text-gray-600">Schedule</th>
                                                     </tr>
-                                                ))}
-                                            </tbody>
-                                        </table>
+                                                </thead>
+                                                <tbody>
+                                                    {course.sections.map((section, index) => (
+                                                        <tr
+                                                            key={`${course.id}-${section.section}`}
+                                                            className="border-t border-gray-300 hover:bg-[#f9f9f9] transition-colors duration-200 cursor-pointer"
+                                                            onClick={() => openViewModal(course, section)}
+                                                        >
+                                                            <td className="py-3 px-4">{section.section}</td>
+                                                            <td className="py-3 px-4">{section.type}</td>
+                                                            <td className="py-3 px-4">{section.room}</td>
+                                                            <td className="py-3 px-4">{section.schedule}</td>
+                                                        </tr>
+                                                    ))}
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                ))
+                            ) : (
+                                <div className="bg-white p-8 rounded-lg text-center">
+                                    <div className="flex flex-col items-center">
+                                        <Icon icon="ph:magnifying-glass" width="48" height="48" className="text-gray-400 mb-4" />
+                                        <h3 className="text-xl font-medium text-gray-700 mb-2">No matching schedules found</h3>
+                                        <p className="text-gray-500">Try adjusting your search criteria or add a new schedule.</p>
                                     </div>
                                 </div>
-                            ))}
+                            )}
                         </div>
                     </div>
                 </div>
