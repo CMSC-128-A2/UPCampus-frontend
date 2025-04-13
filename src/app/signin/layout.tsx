@@ -18,12 +18,8 @@ export default function SignInLayout({
     children: React.ReactNode;
 }>) {
     return (
-        <html lang="en">
-            <body className={`${inter.variable} antialiased`}>
-                <div className="h-screen overflow-y-auto">
-                    {children}
-                </div>
-            </body>
-        </html>
+        <div className="h-screen overflow-y-auto">
+            {children}
+        </div>
     );
 } 
