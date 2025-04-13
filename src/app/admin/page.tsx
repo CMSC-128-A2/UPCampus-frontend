@@ -71,6 +71,48 @@ const mockClassSchedules: CourseSchedule[] = [
                 schedule: 'F | 9:00 AM - 12:00 PM'
             }
         ]
+    },
+    {
+        id: '3',
+        courseCode: 'MATH 101',
+        sections: [
+            {
+                section: 'B',
+                type: 'Lecture',
+                room: 'SCI 301',
+                schedule: 'T F | 1:00 PM - 2:30 PM'
+            },
+            {
+                section: 'B1',
+                type: 'Laboratory',
+                room: 'SCI 302',
+                schedule: 'W | 1:00 PM - 4:00 PM'
+            }
+        ]
+    },
+    {
+        id: '4',
+        courseCode: 'PHYS 105',
+        sections: [
+            {
+                section: 'C',
+                type: 'Lecture',
+                room: 'SCI 401',
+                schedule: 'M W | 2:00 PM - 3:30 PM'
+            },
+            {
+                section: 'C1',
+                type: 'Laboratory',
+                room: 'SCI 408',
+                schedule: 'F | 10:00 AM - 1:00 PM'
+            },
+            {
+                section: 'C2',
+                type: 'Laboratory',
+                room: 'SCI 408',
+                schedule: 'F | 2:00 PM - 5:00 PM'
+            }
+        ]
     }
 ];
 
