@@ -34,20 +34,20 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({ isOpen, onClose }) => {
 
     return (
         <div className="fixed inset-0 bg-black bg-opacity-30 flex items-center justify-center z-50">
-            <div className="bg-white rounded-lg w-full max-w-md relative">
+            <div className="bg-white rounded-xl w-full max-w-2xl relative">
                 {/* Modal Header */}
-                <div className="flex justify-between items-center p-5">
-                    <h2 className="text-2xl font-bold">New Schedule</h2>
+                <div className="flex justify-between items-center p-4">
+                    <h2 className="text-3xl">New Schedule</h2>
                     <button onClick={onClose} className="text-gray-400 hover:text-gray-600">
                         <Icon icon="ph:x" width="24" height="24" />
                     </button>
                 </div>
 
                 {/* Modal Content */}
-                <div className="px-5 pb-5">
+                <div className="px-4 pb-4">
                     <div className="space-y-0">
                         {/* Class Input */}
-                        <div className="flex justify-between items-center py-4 border-b">
+                        <div className="flex justify-between items-center py-2 border-b">
                             <label className="text-lg">Class</label>
                             <input
                                 type="text"
@@ -59,7 +59,7 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({ isOpen, onClose }) => {
                         </div>
 
                         {/* Section Input */}
-                        <div className="flex justify-between items-center py-4 border-b">
+                        <div className="flex justify-between items-center py-2 border-b">
                             <label className="text-lg">Section</label>
                             <input
                                 type="text"
@@ -71,7 +71,7 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({ isOpen, onClose }) => {
                         </div>
 
                         {/* Type Input */}
-                        <div className="flex justify-between items-center py-4 border-b">
+                        <div className="flex justify-between items-center py-2 border-b">
                             <label className="text-lg">Type</label>
                             <input
                                 type="text"
@@ -83,7 +83,7 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({ isOpen, onClose }) => {
                         </div>
 
                         {/* Room Assigned Input */}
-                        <div className="flex justify-between items-center py-4 border-b">
+                        <div className="flex justify-between items-center py-2 border-b">
                             <label className="text-lg">Room Assigned</label>
                             <input
                                 type="text"
@@ -95,7 +95,7 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({ isOpen, onClose }) => {
                         </div>
 
                         {/* Day Input */}
-                        <div className="flex justify-between items-center py-4 border-b">
+                        <div className="flex justify-between items-center py-2 border-b">
                             <label className="text-lg">Day</label>
                             <input
                                 type="text"
@@ -107,7 +107,7 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({ isOpen, onClose }) => {
                         </div>
 
                         {/* Time Input */}
-                        <div className="flex justify-between items-center py-4 border-b">
+                        <div className="flex justify-between items-center py-2 border-b">
                             <label className="text-lg">Time</label>
                             <input
                                 type="text"
@@ -119,7 +119,7 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({ isOpen, onClose }) => {
                         </div>
 
                         {/* Save Button */}
-                        <div className="flex justify-end mt-6">
+                        <div className="flex justify-end">
                             <button className="bg-[#008CFF] text-white px-5 py-2 rounded-lg flex items-center">
                                 <Icon icon="ph:floppy-disk" width="20" height="20" className="mr-2" />
                                 Save schedule
