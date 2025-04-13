@@ -79,6 +79,25 @@ function AdminPage() {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isViewModalOpen, setIsViewModalOpen] = useState(false);
     const [selectedSchedule, setSelectedSchedule] = useState<{ course: CourseSchedule, section: ClassSection } | null>(null);
+    const [searchQuery, setSearchQuery] = useState('');
+
+    // Filter class schedules based on search query
+    const filteredSchedules = searchQuery.trim() === ''
+        ? classSchedules
+        : classSchedules.filter(course => {
+            // Search in course code
+            if (course.courseCode.toLowerCase().includes(searchQuery.toLowerCase())) {
+                return true;
+            }
+
+            // Search in sections
+            return course.sections.some(section =>
+                section.section.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                section.type.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                section.room.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                section.schedule.toLowerCase().includes(searchQuery.toLowerCase())
+            );
+        });
 
     const openModal = () => {
         setIsModalOpen(true);
@@ -270,6 +289,8 @@ function AdminPage() {
                                             type="text"
                                             className="w-full pl-10 pr-4 py-3 text-lg border border-gray-300 rounded-lg focus:outline-none"
                                             placeholder="Search"
+                                            value={searchQuery}
+                                            onChange={(e) => setSearchQuery(e.target.value)}
                                         />
                                     </div>
                                 </div>
@@ -291,7 +312,7 @@ function AdminPage() {
                             </div>
 
                             {/* Class Schedules */}
-                            {classSchedules.map((course) => (
+                            {filteredSchedules.map((course) => (
                                 <div key={course.id} className="bg-white overflow-hidden mb-6 last:mb-0">
                                     <div className="bg-[#CCE8FF] py-3 px-4 text-3xl">
                                         {course.courseCode}
