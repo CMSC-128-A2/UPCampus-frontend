@@ -12,7 +12,7 @@ export default function SignIn() {
     const handleSignIn = (e: React.FormEvent) => {
         e.preventDefault();
         // Implement authentication logic here
-        router.push('/'); // Redirect to home page after sign-in
+        router.push('/admin'); // Redirect to admin page after sign-in
     };
 
     return (
