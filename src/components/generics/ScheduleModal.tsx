@@ -36,7 +36,7 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({ isOpen, onClose }) => {
         <div className="fixed inset-0 bg-black bg-opacity-30 flex items-center justify-center z-50">
             <div className="bg-white rounded-xl w-full max-w-2xl relative">
                 {/* Modal Header */}
-                <div className="flex justify-between items-center p-4">
+                <div className="flex justify-between items-center p-4 border-b">
                     <h2 className="text-3xl">New Schedule</h2>
                     <button onClick={onClose} className="text-gray-400 hover:text-gray-600">
                         <Icon icon="ph:x" width="24" height="24" />
@@ -44,8 +44,9 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({ isOpen, onClose }) => {
                 </div>
 
                 {/* Modal Content */}
-                <div className="px-4 pb-4">
-                    <div className="space-y-0">
+                <div className="px-4">
+                    {/* Form Fields */}
+                    <div className="py-2">
                         {/* Class Input */}
                         <div className="flex justify-between items-center py-2 border-b">
                             <label className="text-lg">Class</label>
@@ -117,14 +118,14 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({ isOpen, onClose }) => {
                                 placeholder="9:00 AM - 10:00 AM"
                             />
                         </div>
+                    </div>
 
-                        {/* Save Button */}
-                        <div className="flex justify-end">
-                            <button className="bg-[#008CFF] text-white px-5 py-2 rounded-lg flex items-center">
-                                <Icon icon="ph:floppy-disk" width="20" height="20" className="mr-2" />
-                                Save schedule
-                            </button>
-                        </div>
+                    {/* Save Button - with significant top space */}
+                    <div className="py-4 flex justify-end">
+                        <button className="flex items-center px-5 py-2 bg-[#CCE8FF] text-[#4392F1] font-medium rounded-lg border-[1.5px] text-xl border-[#4392F1] hover:bg-[#b3dbff] hover:border-[#2b7ad9] transition-colors duration-200">
+                            <Icon icon="ph:floppy-disk" width="20" height="20" className="mr-2" />
+                            Save schedule
+                        </button>
                     </div>
                 </div>
             </div>
