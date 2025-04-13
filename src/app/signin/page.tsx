@@ -45,7 +45,7 @@ export default function SignIn() {
 
                     <form onSubmit={handleSignIn} className="w-full space-y-6">
                         <div className="space-y-2">
-                            <label htmlFor="userId" className="block text-base font-normal text-[#0096FF]">
+                            <label htmlFor="userId" className="block text-base font-normal text-[#008CFF]">
                                 User ID
                             </label>
                             <input
@@ -53,13 +53,13 @@ export default function SignIn() {
                                 type="text"
                                 value={userId}
                                 onChange={(e) => setUserId(e.target.value)}
-                                className="w-full p-4 border border-gray-300 rounded-lg focus:outline-none text-lg"
+                                className="w-full p-4 border border-gray-300 rounded-lg focus:outline-none focus:border-[#008CFF] focus:ring-1 focus:ring-[#008CFF] text-lg"
                                 placeholder="Enter your user ID"
                             />
                         </div>
 
                         <div className="space-y-2">
-                            <label htmlFor="password" className="block text-base font-normal text-[#0096FF]">
+                            <label htmlFor="password" className="block text-base font-normal text-[#008CFF]">
                                 Password
                             </label>
                             <input
@@ -67,14 +67,14 @@ export default function SignIn() {
                                 type="password"
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
-                                className="w-full p-4 border border-gray-300 rounded-lg focus:outline-none text-lg"
+                                className="w-full p-4 border border-gray-300 rounded-lg focus:outline-none focus:border-[#008CFF] focus:ring-1 focus:ring-[#008CFF] text-lg"
                                 placeholder="Enter your password"
                             />
                         </div>
 
                         <button
                             type="submit"
-                            className="w-full h-14 text-xl font-medium bg-[#0096FF] hover:bg-[#0088E8] text-white rounded-lg mt-8"
+                            className="w-full h-14 text-xl font-medium bg-[#008CFF] hover:bg-[#0088E8] text-white rounded-lg mt-8"
                         >
                             Sign In
                         </button>
