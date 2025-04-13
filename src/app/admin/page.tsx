@@ -18,7 +18,7 @@ function AdminPage() {
                         style={{ objectFit: 'contain' }}
                     />
                 </div>
-                <Link href="/faculty" className=" text-[#008CFF] border border-[#008CFF] px-5 py-2 mr-3 text-xl rounded-lg flex items-center justify-center">
+                <Link href="/faculty" className="text-[#008CFF] border border-[#008CFF] px-5 py-2 mr-3 text-xl rounded-lg flex items-center justify-center hover:bg-[#E6F4FF] hover:border-[#0070cc] transition-colors duration-200">
                     <Icon icon="ph:graduation-cap-bold" width="20" height="20" className="mr-2" />
                     Faculty
                 </Link>
@@ -30,28 +30,28 @@ function AdminPage() {
                     <nav className="flex-1">
                         <ul className="space-y-1">
                             <li>
-                                <Link href="#" className="flex items-center px-4 py-3 text-gray-700">
+                                <Link href="#" className="flex items-center px-4 py-3 text-gray-700 hover:bg-[#f0f0f0] transition-colors duration-200">
                                     <Icon icon="ph:user-bold" width="24" height="24" />
                                 </Link>
                             </li>
                             <li>
-                                <Link href="#" className="flex items-center px-4 py-3 text-gray-700">
+                                <Link href="#" className="flex items-center px-4 py-3 text-gray-700 hover:bg-[#f0f0f0] transition-colors duration-200">
                                     <Icon icon="ph:users-bold" width="24" height="24" />
                                 </Link>
                             </li>
                             <li className="bg-[#E9F2E1]">
-                                <Link href="#" className="flex items-center px-4 py-3 text-gray-700">
+                                <Link href="#" className="flex items-center px-4 py-3 text-gray-700 hover:bg-[#dbe9ce] transition-colors duration-200">
                                     <Icon icon="ph:book-open-bold" width="24" height="24" className="mr-3" />
                                     <span>My Classes</span>
                                 </Link>
                             </li>
                             <li>
-                                <Link href="#" className="flex items-center px-4 py-3 text-gray-700">
+                                <Link href="#" className="flex items-center px-4 py-3 text-gray-700 hover:bg-[#f0f0f0] transition-colors duration-200">
                                     <Icon icon="ph:users-three-bold" width="24" height="24" />
                                 </Link>
                             </li>
                             <li>
-                                <Link href="#" className="flex items-center px-4 py-3 text-gray-700">
+                                <Link href="#" className="flex items-center px-4 py-3 text-gray-700 hover:bg-[#f0f0f0] transition-colors duration-200">
                                     <Icon icon="ph:map-trifold-bold" width="24" height="24" className="mr-3" />
                                     <span>Campus Map</span>
                                 </Link>
@@ -60,7 +60,7 @@ function AdminPage() {
                     </nav>
 
                     <div className="mt-auto">
-                        <Link href="#" className="flex items-center px-4 py-3 text-gray-700">
+                        <Link href="#" className="flex items-center px-4 py-3 text-gray-700 hover:bg-[#f0f0f0] hover:text-red-600 transition-colors duration-200">
                             <Icon icon="ph:sign-out-bold" width="24" height="24" className="mr-3" />
                             <span>Sign Out</span>
                         </Link>
@@ -89,12 +89,12 @@ function AdminPage() {
                                 </div>
 
                                 <div className="flex justify-between items-center">
-                                    <button className="flex items-center px-4 py-2 bg-[#E9F2E1] text-[#93BF6A] font-medium rounded-lg border-[1.5px] text-xl border-[#93BF6A]">
+                                    <button className="flex items-center px-4 py-2 bg-[#E9F2E1] text-[#93BF6A] font-medium rounded-lg border-[1.5px] text-xl border-[#93BF6A] hover:bg-[#dbe9ce] hover:border-[#7da054] transition-colors duration-200">
                                         <Icon icon="ph:caret-down-bold" width="20" height="20" className="mr-2" />
                                         4th Floor
                                     </button>
 
-                                    <button className="flex items-center px-4 py-2 bg-[#CCE8FF] text-[#4392F1] font-medium rounded-lg border-[1.5px] text-xl border-[#4392F1]">
+                                    <button className="flex items-center px-4 py-2 bg-[#CCE8FF] text-[#4392F1] font-medium rounded-lg border-[1.5px] text-xl border-[#4392F1] hover:bg-[#b3dbff] hover:border-[#2b7ad9] transition-colors duration-200">
                                         <Icon icon="ph:plus-bold" width="20" height="20" className="mr-2" />
                                         Schedule
                                     </button>
@@ -119,19 +119,19 @@ function AdminPage() {
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <tr className="border-t border-gray-300">
+                                            <tr className="border-t border-gray-300 hover:bg-[#f9f9f9] transition-colors duration-200">
                                                 <td className="py-3 px-4">A</td>
                                                 <td className="py-3 px-4">Lecture</td>
                                                 <td className="py-3 px-4">SCI 405</td>
                                                 <td className="py-3 px-4">M TH | 11:00 AM - 12:00 PM</td>
                                             </tr>
-                                            <tr className="border-t border-gray-300">
+                                            <tr className="border-t border-gray-300 hover:bg-[#f9f9f9] transition-colors duration-200">
                                                 <td className="py-3 px-4">A1</td>
                                                 <td className="py-3 px-4">Laboratory</td>
                                                 <td className="py-3 px-4">SCI 402</td>
                                                 <td className="py-3 px-4">TH | 3:00 PM - 6:00 PM</td>
                                             </tr>
-                                            <tr className="border-t border-gray-300">
+                                            <tr className="border-t border-gray-300 hover:bg-[#f9f9f9] transition-colors duration-200">
                                                 <td className="py-3 px-4">A2</td>
                                                 <td className="py-3 px-4">Laboratory</td>
                                                 <td className="py-3 px-4">SCI 402</td>
@@ -159,19 +159,19 @@ function AdminPage() {
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <tr className="border-t border-gray-300">
+                                            <tr className="border-t border-gray-300 hover:bg-[#f9f9f9] transition-colors duration-200">
                                                 <td className="py-3 px-4">A</td>
                                                 <td className="py-3 px-4">Lecture</td>
                                                 <td className="py-3 px-4">SCI 405</td>
                                                 <td className="py-3 px-4">M TH | 9:00 AM - 10:00 AM</td>
                                             </tr>
-                                            <tr className="border-t border-gray-300">
+                                            <tr className="border-t border-gray-300 hover:bg-[#f9f9f9] transition-colors duration-200">
                                                 <td className="py-3 px-4">A1</td>
                                                 <td className="py-3 px-4">Laboratory</td>
                                                 <td className="py-3 px-4">SCI 404</td>
                                                 <td className="py-3 px-4">T | 9:00 AM - 12:00 PM</td>
                                             </tr>
-                                            <tr className="border-t border-gray-300">
+                                            <tr className="border-t border-gray-300 hover:bg-[#f9f9f9] transition-colors duration-200">
                                                 <td className="py-3 px-4">A2</td>
                                                 <td className="py-3 px-4">Laboratory</td>
                                                 <td className="py-3 px-4">SCI 404</td>
