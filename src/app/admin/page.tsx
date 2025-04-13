@@ -117,6 +117,80 @@ function AdminPage() {
         setClassSchedules(filteredSchedules);
     };
 
+    // Handle save new schedule
+    const handleSaveSchedule = (scheduleData: {
+        courseCode: string;
+        section: string;
+        type: string;
+        room: string;
+        day: string;
+        time: string;
+    }) => {
+        // Check if all required fields are filled
+        if (!scheduleData.courseCode || !scheduleData.section || !scheduleData.type ||
+            !scheduleData.room || !scheduleData.day || !scheduleData.time) {
+            alert('Please fill in all fields');
+            return;
+        }
+
+        // Create the schedule string format
+        const scheduleString = `${scheduleData.day} | ${scheduleData.time}`;
+
+        // Find if the course already exists
+        const existingCourse = classSchedules.find(
+            course => course.courseCode === scheduleData.courseCode
+        );
+
+        if (existingCourse) {
+            // Add a new section to the existing course
+            const updatedSchedules = classSchedules.map(course => {
+                if (course.courseCode === scheduleData.courseCode) {
+                    // Check if section already exists
+                    const sectionExists = course.sections.some(
+                        section => section.section === scheduleData.section
+                    );
+
+                    if (sectionExists) {
+                        alert(`Section ${scheduleData.section} already exists for ${scheduleData.courseCode}`);
+                        return course;
+                    }
+
+                    return {
+                        ...course,
+                        sections: [
+                            ...course.sections,
+                            {
+                                section: scheduleData.section,
+                                type: scheduleData.type as ScheduleType,
+                                room: scheduleData.room,
+                                schedule: scheduleString
+                            }
+                        ]
+                    };
+                }
+                return course;
+            });
+
+            setClassSchedules(updatedSchedules);
+        } else {
+            // Create a new course with the section
+            const newCourse: CourseSchedule = {
+                id: `${Date.now()}`, // Generate a unique ID
+                courseCode: scheduleData.courseCode,
+                sections: [
+                    {
+                        section: scheduleData.section,
+                        type: scheduleData.type as ScheduleType,
+                        room: scheduleData.room,
+                        schedule: scheduleString
+                    }
+                ]
+            };
+
+            setClassSchedules([...classSchedules, newCourse]);
+        }
+    };
+
     return (
         <div className="flex flex-col h-screen">
             {/* Header with logo and faculty button */}
@@ -257,7 +331,11 @@ function AdminPage() {
             </div>
 
             {/* Schedule Modals */}
-            <ScheduleModal isOpen={isModalOpen} onClose={closeModal} />
+            <ScheduleModal
+                isOpen={isModalOpen}
+                onClose={closeModal}
+                onSave={handleSaveSchedule}
+            />
             {selectedSchedule && (
                 <ViewScheduleModal
                     isOpen={isViewModalOpen}

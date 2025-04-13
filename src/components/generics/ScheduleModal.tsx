@@ -5,9 +5,17 @@ import Image from 'next/image';
 interface ScheduleModalProps {
     isOpen: boolean;
     onClose: () => void;
+    onSave?: (scheduleData: {
+        courseCode: string;
+        section: string;
+        type: string;
+        room: string;
+        day: string;
+        time: string;
+    }) => void;
 }
 
-const ScheduleModal: React.FC<ScheduleModalProps> = ({ isOpen, onClose }) => {
+const ScheduleModal: React.FC<ScheduleModalProps> = ({ isOpen, onClose, onSave }) => {
     if (!isOpen) return null;
 
     // State for form inputs with empty initial values
@@ -31,6 +39,21 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({ isOpen, onClose }) => {
     // Function to determine background color
     const getInputStyle = (value: string) => {
         return value ? 'bg-gray-100' : 'bg-white';
+    };
+
+    // Function to handle save
+    const handleSave = () => {
+        if (onSave) {
+            onSave({
+                courseCode: formData.class,
+                section: formData.section,
+                type: formData.type,
+                room: formData.room,
+                day: formData.day,
+                time: formData.time
+            });
+        }
+        onClose();
     };
 
     return (
@@ -123,7 +146,9 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({ isOpen, onClose }) => {
 
                     {/* Save Button - with significant top space */}
                     <div className="py-4 flex justify-end">
-                        <button className="flex items-center px-5 py-2 bg-[#CCE8FF] text-[#4392F1] font-medium rounded-lg border-[1.5px] text-xl border-[#4392F1] hover:bg-[#b3dbff] hover:border-[#2b7ad9] transition-colors duration-200">
+                        <button
+                            onClick={handleSave}
+                            className="flex items-center px-5 py-2 bg-[#CCE8FF] text-[#4392F1] font-medium rounded-lg border-[1.5px] text-xl border-[#4392F1] hover:bg-[#b3dbff] hover:border-[#2b7ad9] transition-colors duration-200">
                             <Image
                                 src="/assets/icons/save-scehdule.svg"
                                 alt="Save Icon"
