@@ -1,8 +1,9 @@
 'use client';
-import React from 'react';
+import React, { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Icon } from '@iconify/react';
+import ScheduleModal from '@/components/generics/ScheduleModal';
 
 // Define TypeScript types for the data structure
 type ScheduleType = 'Lecture' | 'Laboratory';
@@ -73,6 +74,16 @@ const mockClassSchedules: CourseSchedule[] = [
 ];
 
 function AdminPage() {
+    const [isModalOpen, setIsModalOpen] = useState(false);
+
+    const openModal = () => {
+        setIsModalOpen(true);
+    };
+
+    const closeModal = () => {
+        setIsModalOpen(false);
+    };
+
     return (
         <div className="flex flex-col h-screen">
             {/* Header with logo and faculty button */}
@@ -162,7 +173,10 @@ function AdminPage() {
                                         4th Floor
                                     </button>
 
-                                    <button className="flex items-center px-4 py-2 bg-[#CCE8FF] text-[#4392F1] font-medium rounded-lg border-[1.5px] text-xl border-[#4392F1] hover:bg-[#b3dbff] hover:border-[#2b7ad9] transition-colors duration-200">
+                                    <button
+                                        onClick={openModal}
+                                        className="flex items-center px-4 py-2 bg-[#CCE8FF] text-[#4392F1] font-medium rounded-lg border-[1.5px] text-xl border-[#4392F1] hover:bg-[#b3dbff] hover:border-[#2b7ad9] transition-colors duration-200"
+                                    >
                                         <Icon icon="ph:plus-bold" width="20" height="20" className="mr-2" />
                                         Schedule
                                     </button>
@@ -207,6 +221,9 @@ function AdminPage() {
                     </div>
                 </div>
             </div>
+
+            {/* Schedule Modal */}
+            <ScheduleModal isOpen={isModalOpen} onClose={closeModal} />
         </div>
     );
 }
