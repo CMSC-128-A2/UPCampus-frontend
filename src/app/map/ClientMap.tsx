@@ -2,6 +2,7 @@
 
 import dynamic from 'next/dynamic';
 import SearchBar from '@/components/map/SearchBar';
+import SearchResults from '@/components/map/SearchResults';
 
 const Map = dynamic(() => import('@/components/map/Map'), {
     ssr: false,
@@ -12,7 +13,8 @@ const Map = dynamic(() => import('@/components/map/Map'), {
 export default function ClientMap() {
     return (
         <div>
-            <SearchBar />  
+            <SearchBar />
+            <SearchResults/>
             <Map />
         </div>
     );
