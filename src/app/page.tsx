@@ -20,9 +20,14 @@ export default function Home() {
             <p className="text-center text-gray-500 mb-4">
                 This will be a landing page
             </p>
-            <Link href="/map">
-                <Button>View Map</Button>
-            </Link>
+            <div className="flex gap-4">
+                <Link href="/map">
+                    <Button>View Map</Button>
+                </Link>
+                <Link href="/signin">
+                    <Button variant="outline">Sign In as Admin</Button>
+                </Link>
+            </div>
         </div>
     );
 }

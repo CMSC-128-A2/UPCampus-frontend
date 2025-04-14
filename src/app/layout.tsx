@@ -2,8 +2,6 @@ import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import './globals.css';
 
-import Navbar from '@/components/generics/Navbar';
-
 const inter = Inter({
     subsets: ['latin'],
     variable: '--font-inter',
@@ -22,8 +20,7 @@ export default function RootLayout({
     return (
         <html lang="en">
             <body className={`${inter.variable} antialiased`}>
-                <Navbar />
-                <div className="h-[calc(100vh-62px)] overflow-y-auto">
+                <div className="h-screen overflow-y-auto">
                     {children}
                 </div>
             </body>
