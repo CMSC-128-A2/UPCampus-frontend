@@ -24,7 +24,7 @@ const MapboxExample = () => {
             id: 9,
             icon: <Building />,
             name: 'Building 9',
-            coordinates: [123.898036, 10.323917],
+            coordinates: [123.898096, 10.323937],
         },
     ];
 
@@ -34,6 +34,7 @@ const MapboxExample = () => {
         const markerEl = document.createElement('div');
         markerEl.className = 'custom-marker';
         markerEl.style.cursor = 'pointer';
+        markerEl.style.transform = 'scale(0.85)'; // Overall scale reduction
 
         // Create marker content
         const markerContent = document.createElement('div');
@@ -44,21 +45,22 @@ const MapboxExample = () => {
         markerContent.style.backgroundColor = '#8A1438'; // rose-500
         markerContent.style.color = 'maroon';
         markerContent.style.borderRadius = '9999px';
-        markerContent.style.padding = '4px 8px';
+        markerContent.style.padding = '2px 6px'; // Reduced padding
         markerContent.style.boxShadow = '0 2px 4px rgba(0,0,0,0.2)';
         markerContent.style.border = '2px solid maroon';
 
         // Building icon
         const iconSpan = document.createElement('span');
         iconSpan.innerHTML =
-            '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2" width="16" height="20" rx="2" ry="2"/><path d="M9 22v-4h6v4"/><path d="M8 6h.01"/><path d="M16 6h.01"/><path d="M12 6h.01"/><path d="M12 10h.01"/><path d="M12 14h.01"/><path d="M16 10h.01"/><path d="M16 14h.01"/><path d="M8 10h.01"/><path d="M8 14h.01"/></svg>';
+            '<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2" width="16" height="20" rx="2" ry="2"/><path d="M9 22v-4h6v4"/><path d="M8 6h.01"/><path d="M16 6h.01"/><path d="M12 6h.01"/><path d="M12 10h.01"/><path d="M12 14h.01"/><path d="M16 10h.01"/><path d="M16 14h.01"/><path d="M8 10h.01"/><path d="M8 14h.01"/></svg>';
         iconSpan.style.display = 'flex';
-        iconSpan.style.marginRight = '4px';
+        iconSpan.style.marginRight = '3px'; // Reduced margin
 
         // Add id text
         const idSpan = document.createElement('span');
         idSpan.textContent = mark.id.toString();
         idSpan.style.fontWeight = 'bold';
+        idSpan.style.fontSize = '12px'; // Smaller font size
 
         markerContent.appendChild(iconSpan);
         markerContent.appendChild(idSpan);
@@ -240,8 +242,8 @@ const MapboxExample = () => {
                 // maxBounds: bounds, // Set the map's boundary limits
             });
 
-            // Add navigation controls
-            mapRef.current.addControl(new mapboxgl.NavigationControl());
+            // Remove navigation controls comment - we don't want these controls
+            // mapRef.current.addControl(new mapboxgl.NavigationControl());
 
             // Resize map on container resize and setup SVG overlay
             mapRef.current.on('load', () => {
