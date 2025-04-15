@@ -113,14 +113,32 @@ const MapboxExample = () => {
             [center[0] + 0.0019, center[1] + 0.0019], // Northeast: 2km east and north from center
         );
 
-        mapRef.current = new mapboxgl.Map({
-            container: mapContainerRef.current!,
-            style: 'mapbox://styles/mapbox/streets-v12',
-            center: [123.898731, 10.322466],
-            zoom: 14,
-            bearing: 80,
-            maxBounds: bounds, // Set the map's boundary limits
-        });
+        // Check if container is available
+        if (!mapContainerRef.current) {
+            console.error('Map container ref is not available');
+            return;
+        }
+
+        try {
+            mapRef.current = new mapboxgl.Map({
+                container: mapContainerRef.current,
+                style: 'mapbox://styles/mapbox/streets-v12',
+                center: [123.898731, 10.322466],
+                zoom: 14,
+                bearing: 80,
+                maxBounds: bounds, // Set the map's boundary limits
+            });
+
+            // Add navigation controls
+            mapRef.current.addControl(new mapboxgl.NavigationControl());
+
+            // Resize map on container resize
+            mapRef.current.on('load', () => {
+                mapRef.current?.resize();
+            });
+        } catch (error) {
+            console.error('Error initializing map:', error);
+        }
 
         return () => {
             mapRef.current?.remove();
@@ -130,14 +148,24 @@ const MapboxExample = () => {
 
     return (
         <div
-            style={{ position: 'relative', height: '100%' }}
-            className="bg-[#FFF5E3]"
+            style={{ position: 'relative', width: '100%', height: '100%' }}
+            className="bg-[#FFF5E3] w-full h-full"
         >
-            <div ref={mapContainerRef} style={{ height: '100%' }}></div>
+            <div
+                ref={mapContainerRef}
+                style={{
+                    width: '100%',
+                    height: '100%',
+                    position: 'absolute',
+                    top: 0,
+                    left: 0,
+                }}
+                className="w-full h-full"
+            ></div>
             <button
                 onClick={locateUser}
                 disabled={isLocating}
-                className="absolute bottom-4 right-4 bg-green-accent text-white rounded-full p-2 shadow-md"
+                className="absolute bottom-4 right-4 bg-green-accent text-white rounded-full p-2 shadow-md z-10"
             >
                 <Icon icon="mdi:location-outline" width="24" height="24" />
             </button>

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Icon } from '@iconify/react';
 import Image from 'next/image';
+import { Save } from 'lucide-react';
 
 interface ScheduleModalProps {
     isOpen: boolean;
@@ -15,7 +16,11 @@ interface ScheduleModalProps {
     }) => void;
 }
 
-const ScheduleModal: React.FC<ScheduleModalProps> = ({ isOpen, onClose, onSave }) => {
+const ScheduleModal: React.FC<ScheduleModalProps> = ({
+    isOpen,
+    onClose,
+    onSave,
+}) => {
     if (!isOpen) return null;
 
     // State for form inputs with empty initial values
@@ -25,14 +30,14 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({ isOpen, onClose, onSave }
         type: '',
         room: '',
         day: '',
-        time: ''
+        time: '',
     });
 
     // Function to handle input changes
     const handleChange = (field: keyof typeof formData, value: string) => {
         setFormData({
             ...formData,
-            [field]: value
+            [field]: value,
         });
     };
 
@@ -50,7 +55,7 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({ isOpen, onClose, onSave }
                 type: formData.type,
                 room: formData.room,
                 day: formData.day,
-                time: formData.time
+                time: formData.time,
             });
         }
         onClose();
@@ -62,7 +67,10 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({ isOpen, onClose, onSave }
                 {/* Modal Header */}
                 <div className="flex justify-between items-center p-4 border-b">
                     <h2 className="text-3xl">New Schedule</h2>
-                    <button onClick={onClose} className="text-gray-400 hover:text-gray-600">
+                    <button
+                        onClick={onClose}
+                        className="text-gray-400 hover:text-gray-600"
+                    >
                         <Icon icon="ph:x" width="24" height="24" />
                     </button>
                 </div>
@@ -76,9 +84,13 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({ isOpen, onClose, onSave }
                             <label className="text-lg">Class</label>
                             <input
                                 type="text"
-                                className={`p-2 rounded-lg text-right ${getInputStyle(formData.class)}`}
+                                className={`p-2 rounded-lg text-right ${getInputStyle(
+                                    formData.class,
+                                )}`}
                                 value={formData.class}
-                                onChange={(e) => handleChange('class', e.target.value)}
+                                onChange={(e) =>
+                                    handleChange('class', e.target.value)
+                                }
                                 placeholder="CMSC 126"
                             />
                         </div>
@@ -88,9 +100,13 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({ isOpen, onClose, onSave }
                             <label className="text-lg">Section</label>
                             <input
                                 type="text"
-                                className={`p-2 rounded-lg text-right ${getInputStyle(formData.section)}`}
+                                className={`p-2 rounded-lg text-right ${getInputStyle(
+                                    formData.section,
+                                )}`}
                                 value={formData.section}
-                                onChange={(e) => handleChange('section', e.target.value)}
+                                onChange={(e) =>
+                                    handleChange('section', e.target.value)
+                                }
                                 placeholder="A"
                             />
                         </div>
@@ -100,9 +116,13 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({ isOpen, onClose, onSave }
                             <label className="text-lg">Type</label>
                             <input
                                 type="text"
-                                className={`p-2 rounded-lg text-right ${getInputStyle(formData.type)}`}
+                                className={`p-2 rounded-lg text-right ${getInputStyle(
+                                    formData.type,
+                                )}`}
                                 value={formData.type}
-                                onChange={(e) => handleChange('type', e.target.value)}
+                                onChange={(e) =>
+                                    handleChange('type', e.target.value)
+                                }
                                 placeholder="Lecture"
                             />
                         </div>
@@ -112,9 +132,13 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({ isOpen, onClose, onSave }
                             <label className="text-lg">Room Assigned</label>
                             <input
                                 type="text"
-                                className={`p-2 rounded-lg text-right ${getInputStyle(formData.room)}`}
+                                className={`p-2 rounded-lg text-right ${getInputStyle(
+                                    formData.room,
+                                )}`}
                                 value={formData.room}
-                                onChange={(e) => handleChange('room', e.target.value)}
+                                onChange={(e) =>
+                                    handleChange('room', e.target.value)
+                                }
                                 placeholder="SCI 405"
                             />
                         </div>
@@ -124,9 +148,13 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({ isOpen, onClose, onSave }
                             <label className="text-lg">Day</label>
                             <input
                                 type="text"
-                                className={`p-2 rounded-lg text-right ${getInputStyle(formData.day)}`}
+                                className={`p-2 rounded-lg text-right ${getInputStyle(
+                                    formData.day,
+                                )}`}
                                 value={formData.day}
-                                onChange={(e) => handleChange('day', e.target.value)}
+                                onChange={(e) =>
+                                    handleChange('day', e.target.value)
+                                }
                                 placeholder="M TH"
                             />
                         </div>
@@ -136,9 +164,13 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({ isOpen, onClose, onSave }
                             <label className="text-lg">Time</label>
                             <input
                                 type="text"
-                                className={`p-2 rounded-lg text-right ${getInputStyle(formData.time)}`}
+                                className={`p-2 rounded-lg text-right ${getInputStyle(
+                                    formData.time,
+                                )}`}
                                 value={formData.time}
-                                onChange={(e) => handleChange('time', e.target.value)}
+                                onChange={(e) =>
+                                    handleChange('time', e.target.value)
+                                }
                                 placeholder="9:00 AM - 10:00 AM"
                             />
                         </div>
@@ -148,14 +180,9 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({ isOpen, onClose, onSave }
                     <div className="py-4 flex justify-end">
                         <button
                             onClick={handleSave}
-                            className="flex items-center px-5 py-2 bg-[#CCE8FF] text-[#4392F1] font-medium rounded-lg border-[1.5px] text-xl border-[#4392F1] hover:bg-[#b3dbff] hover:border-[#2b7ad9] transition-colors duration-200">
-                            <Image
-                                src="/assets/icons/save-scehdule.svg"
-                                alt="Save Icon"
-                                width={24}
-                                height={24}
-                                className="mr-2"
-                            />
+                            className="flex items-center px-5 py-2 bg-[#CCE8FF] text-[#4392F1] font-medium rounded-lg border-[1.5px] text-xl border-[#4392F1] hover:bg-[#b3dbff] hover:border-[#2b7ad9] transition-colors duration-200"
+                        >
+                            <Save size={24} className="mr-2 text-[#4392F1]" />
                             Save schedule
                         </button>
                     </div>
@@ -165,4 +192,4 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({ isOpen, onClose, onSave }
     );
 };
 
-export default ScheduleModal; 
+export default ScheduleModal;
