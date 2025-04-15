@@ -25,7 +25,7 @@ export const metadata: Metadata = {
         title: 'UPsee - UP Cebu Campus Explorer',
         description:
             'Interactive map and navigation for UP Cebu campus buildings and facilities',
-        url: 'https://upcampus.vercel.app',
+        url: 'https://upsee.sheldonarthursagrado.site',
         siteName: 'UPsee',
         images: '/assets/images/og-image.png',
         locale: 'en_US',
