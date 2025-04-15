@@ -1,20 +1,23 @@
 import React, { useState } from 'react';
 import Image from 'next/image';
+import Link from 'next/link';
 import { Search, Building, Map, X } from 'lucide-react';
 
 const SearchBar = () => {
     const [showSearchInput, setShowSearchInput] = useState(false);
 
     return (
-        <div className="flex flex-row max-w-[calc(100vw-20px)] w-[518px] h-[69.2px] m-[10px] rounded-[10px] p-[10px] gap-[10px] bg-[#7F1532] z-10 absolute top-0 left-0">
+        <div className="flex items-center max-w-[calc(100vw-20px)] w-[518px] h-[69.2px] m-[10px] rounded-[10px] p-[10px] gap-[10px] bg-[#7F1532] z-10 absolute top-0 left-0">
             {!showSearchInput && (
                 <>
-                    <Image
-                        src="/assets/images/upseelogo.png"
-                        alt="Upsee Logo"
-                        width={80}
-                        height={40}
-                    />
+                    <Link href="/">
+                        <Image
+                            src="/assets/images/upseelogo.png"
+                            alt="Upsee Logo"
+                            width={60}
+                            height={30}
+                        />
+                    </Link>
 
                     <div className="hidden md:flex items-center flex-1 bg-white text-black rounded-[8px] px-4 py-2 border-2 border-transparent focus-within:border-[#FFAE1D]">
                         <Search size={20} className="mr-2 text-[#7F1532]" />

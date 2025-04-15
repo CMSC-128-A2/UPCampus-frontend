@@ -8,8 +8,44 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-    title: 'UPCampus Explorer',
-    description: 'UPCampus Explorer',
+    title: 'UPsee',
+    description: 'UP Cebu Campus Explorer',
+    keywords: [
+        'UP Cebu',
+        'campus map',
+        'university',
+        'navigation',
+        'buildings',
+        'campus explorer',
+    ],
+    authors: [{ name: 'UP Cebu' }],
+    creator: 'UP Cebu',
+    publisher: 'UP Cebu',
+    openGraph: {
+        title: 'UPsee - UP Cebu Campus Explorer',
+        description:
+            'Interactive map and navigation for UP Cebu campus buildings and facilities',
+        url: 'https://upcampus.vercel.app',
+        siteName: 'UPsee',
+        images: '/og-image.png',
+        locale: 'en_US',
+        type: 'website',
+    },
+    twitter: {
+        card: 'summary_large_image',
+        title: 'UPsee - UP Cebu Campus Explorer',
+        description:
+            'Interactive map and navigation for UP Cebu campus buildings and facilities',
+        images: '/og-image.png',
+    },
+    viewport: {
+        width: 'device-width',
+        initialScale: 1,
+    },
+    robots: {
+        index: true,
+        follow: true,
+    },
 };
 
 export default function RootLayout({
@@ -20,9 +56,7 @@ export default function RootLayout({
     return (
         <html lang="en">
             <body className={`${inter.variable} antialiased`}>
-                <div className="h-screen overflow-y-auto">
-                    {children}
-                </div>
+                <div className="h-screen overflow-y-auto">{children}</div>
             </body>
         </html>
     );
