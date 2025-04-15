@@ -15,6 +15,7 @@ const MapboxExample = () => {
     const [isLocating, setIsLocating] = useState(false);
     const [mapLoaded, setMapLoaded] = useState(false);
     const svgOverlayRef = useRef<HTMLDivElement>(null);
+    const markersRef = useRef<{ [key: number]: mapboxgl.Marker }>({});
 
     const [selectedMark, setSelectedMark] = useState<number | null>(null);
 
@@ -26,6 +27,85 @@ const MapboxExample = () => {
             coordinates: [123.898036, 10.323917],
         },
     ];
+
+    // Function to create a custom marker element
+    const createCustomMarkerElement = (mark: (typeof marks)[0]) => {
+        // Create marker element
+        const markerEl = document.createElement('div');
+        markerEl.className = 'custom-marker';
+        markerEl.style.cursor = 'pointer';
+
+        // Create marker content
+        const markerContent = document.createElement('div');
+        markerContent.className =
+            'flex items-center bg-maroon-accent text-white rounded-full px-2 py-1';
+        markerContent.style.display = 'flex';
+        markerContent.style.alignItems = 'center';
+        markerContent.style.backgroundColor = '#8A1438'; // rose-500
+        markerContent.style.color = 'maroon';
+        markerContent.style.borderRadius = '9999px';
+        markerContent.style.padding = '4px 8px';
+        markerContent.style.boxShadow = '0 2px 4px rgba(0,0,0,0.2)';
+        markerContent.style.border = '2px solid maroon';
+
+        // Building icon
+        const iconSpan = document.createElement('span');
+        iconSpan.innerHTML =
+            '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2" width="16" height="20" rx="2" ry="2"/><path d="M9 22v-4h6v4"/><path d="M8 6h.01"/><path d="M16 6h.01"/><path d="M12 6h.01"/><path d="M12 10h.01"/><path d="M12 14h.01"/><path d="M16 10h.01"/><path d="M16 14h.01"/><path d="M8 10h.01"/><path d="M8 14h.01"/></svg>';
+        iconSpan.style.display = 'flex';
+        iconSpan.style.marginRight = '4px';
+
+        // Add id text
+        const idSpan = document.createElement('span');
+        idSpan.textContent = mark.id.toString();
+        idSpan.style.fontWeight = 'bold';
+
+        markerContent.appendChild(iconSpan);
+        markerContent.appendChild(idSpan);
+        markerEl.appendChild(markerContent);
+
+        // Add click handler
+        markerEl.addEventListener('click', () => {
+            setSelectedMark(mark.id);
+
+            // Visual feedback for selection
+            document.querySelectorAll('.custom-marker').forEach((el) => {
+                (el as HTMLElement).style.zIndex = '1';
+            });
+            markerEl.style.zIndex = '2';
+
+            if (mark.id === selectedMark) {
+                setSelectedMark(null);
+            } else {
+                setSelectedMark(mark.id);
+                // You could show more info or highlight the selected marker here
+            }
+        });
+
+        return markerEl;
+    };
+
+    // Function to add markers to the map
+    const addMarkersToMap = () => {
+        if (!mapRef.current) return;
+
+        // Clear any existing markers
+        Object.values(markersRef.current).forEach((marker) => marker.remove());
+        markersRef.current = {};
+
+        // Add markers for each location
+        marks.forEach((mark) => {
+            const markerEl = createCustomMarkerElement(mark);
+            const marker = new mapboxgl.Marker({
+                element: markerEl,
+                anchor: 'bottom',
+            })
+                .setLngLat(mark.coordinates as [number, number])
+                .addTo(mapRef.current!);
+
+            markersRef.current[mark.id] = marker;
+        });
+    };
 
     // Function to get and show user's location
     const locateUser = () => {
@@ -106,26 +186,6 @@ const MapboxExample = () => {
         }
     };
 
-    // Function to update SVG overlay position and scale
-    const updateSvgOverlay = () => {
-        if (!mapRef.current || !svgOverlayRef.current) return;
-
-        const map = mapRef.current;
-        // Get the bounds of the current map view
-        const bounds = map.getBounds();
-        if (!bounds) return;
-
-        // Calculate the position and scale for the SVG overlay
-        const width = mapContainerRef.current?.offsetWidth || 0;
-        const height = mapContainerRef.current?.offsetHeight || 0;
-
-        // Apply transformation to the SVG container
-        svgOverlayRef.current.style.width = `${width}px`;
-        svgOverlayRef.current.style.height = `${height}px`;
-        svgOverlayRef.current.style.left = '0';
-        svgOverlayRef.current.style.top = '0';
-    };
-
     useEffect(() => {
         // Get access token from environment variable
         const accessToken = process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN;
@@ -161,8 +221,20 @@ const MapboxExample = () => {
         try {
             mapRef.current = new mapboxgl.Map({
                 container: mapContainerRef.current,
-                style: 'mapbox://styles/mapbox/streets-v12',
-                center: [123.898731, 10.322466],
+                style: {
+                    version: 8,
+                    sources: {},
+                    layers: [
+                        {
+                            id: 'background',
+                            type: 'background',
+                            paint: {
+                                'background-color': '#FFF5E3',
+                            },
+                        },
+                    ],
+                },
+                center: [123.898675, 10.322775],
                 zoom: 18,
                 bearing: 80,
                 // maxBounds: bounds, // Set the map's boundary limits
@@ -188,7 +260,6 @@ const MapboxExample = () => {
                     ),
                 });
 
-                // If needed, you can adjust the layer to use the rotation
                 mapRef.current?.addLayer({
                     id: 'svg-overlay-layer',
                     type: 'raster',
@@ -196,13 +267,10 @@ const MapboxExample = () => {
                     paint: {
                         'raster-opacity': 1,
                     },
-                    layout: {
-                        visibility: 'visible',
-                    },
                 });
 
-                // If rotation is needed in the future, we can implement it using CSS transforms
-                // on the SVG overlay container or by using a custom layer
+                // Add markers to the map
+                addMarkersToMap();
 
                 // Update overlay when map moves
                 mapRef.current?.on('move', updateSvgOverlay);
@@ -224,6 +292,55 @@ const MapboxExample = () => {
             popupRef.current?.remove();
         };
     }, []);
+
+    // Effect to handle marker updates when selectedMark changes
+    useEffect(() => {
+        if (mapLoaded) {
+            // Update marker appearance based on selection
+            Object.entries(markersRef.current).forEach(([id, marker]) => {
+                const element = marker.getElement();
+                const markerContent = element.querySelector('div');
+
+                if (parseInt(id) === selectedMark) {
+                    element.style.zIndex = '2';
+                    if (markerContent) {
+                        markerContent.style.backgroundColor = '#8A1438'; // maroon-accent
+                        markerContent.style.transform = 'scale(1.1)';
+                        markerContent.style.color = 'white';
+                        markerContent.style.border = '2px solid white';
+                    }
+                } else {
+                    element.style.zIndex = '1';
+                    if (markerContent) {
+                        markerContent.style.backgroundColor = '#FFFFFF'; //
+                        markerContent.style.transform = 'scale(1)';
+                        markerContent.style.color = 'maroon';
+                        markerContent.style.border = '2px solid maroon';
+                    }
+                }
+            });
+        }
+    }, [selectedMark, mapLoaded]);
+
+    // Function to update SVG overlay position and scale
+    const updateSvgOverlay = () => {
+        if (!mapRef.current || !svgOverlayRef.current) return;
+
+        const map = mapRef.current;
+        // Get the bounds of the current map view
+        const bounds = map.getBounds();
+        if (!bounds) return;
+
+        // Calculate the position and scale for the SVG overlay
+        const width = mapContainerRef.current?.offsetWidth || 0;
+        const height = mapContainerRef.current?.offsetHeight || 0;
+
+        // Apply transformation to the SVG container
+        svgOverlayRef.current.style.width = `${width}px`;
+        svgOverlayRef.current.style.height = `${height}px`;
+        svgOverlayRef.current.style.left = '0';
+        svgOverlayRef.current.style.top = '0';
+    };
 
     // Add this function to calculate rotated coordinates
     function calculateRotatedCoordinates(
@@ -276,8 +393,13 @@ const MapboxExample = () => {
 
     return (
         <div
-            style={{ position: 'relative', width: '100%', height: '100%' }}
-            className="bg-[#FFF5E3] w-full h-full"
+            style={{
+                position: 'relative',
+                width: '100%',
+                height: '100%',
+                backgroundColor: '#FFF5E3',
+            }}
+            className="w-full h-full"
         >
             <div
                 ref={mapContainerRef}
@@ -287,6 +409,7 @@ const MapboxExample = () => {
                     position: 'absolute',
                     top: 0,
                     left: 0,
+                    backgroundColor: '#FFF5E3',
                 }}
                 className="w-full h-full"
             ></div>
