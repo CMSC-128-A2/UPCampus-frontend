@@ -1,6 +1,6 @@
 import React from 'react';
 import Image from 'next/image';
-import { ArrowLeft } from 'lucide-react';
+import { ArrowLeft, ArrowLeftToLine } from 'lucide-react';
 
 interface BuildingDetail {
     id: number;
@@ -33,17 +33,11 @@ const BuildingDetailsSidebar: React.FC<BuildingDetailsSidebarProps> = ({
         >
             {/* Header */}
             <div className="relative">
-                <div className="absolute top-2 left-2 z-10">
-                    <button
-                        onClick={onClose}
-                        className="p-1 rounded-full bg-white/20 hover:bg-white/30 backdrop-blur-sm"
-                    >
-                        <ArrowLeft size={20} className="text-white" />
-                    </button>
-                </div>
-
-                <div className="p-4 pt-10 pb-3 flex items-center">
+                <div className="px-4 py-2 my-2 flex items-start gap-4 bg-maroon-accent">
                     <h2 className="text-xl font-semibold">{building.name}</h2>
+                    <button onClick={onClose} className="">
+                        <ArrowLeftToLine size={24} className="text-white" />
+                    </button>
                 </div>
 
                 {/* Building Image */}
@@ -55,20 +49,19 @@ const BuildingDetailsSidebar: React.FC<BuildingDetailsSidebarProps> = ({
                         style={{ objectFit: 'cover' }}
                         className="border-y border-white/20"
                     />
-                    <div className="absolute bottom-0 left-0 bg-maroon-accent px-2 py-1">
-                        <span className="font-bold text-sm">{building.id}</span>
-                    </div>
                 </div>
             </div>
 
             {/* Facilities Section */}
-            <div className="p-4 pt-2">
-                <h3 className="text-xl mb-1">Facilities</h3>
+            <div className="pt-2">
+                <h3 className="text-xl mb-1 px-2">Facilities</h3>
 
                 {building.floors.map((floor, index) => (
                     <div key={index} className="mb-4">
-                        <h4 className="font-semibold">{floor.name}</h4>
-                        <ul className="space-y-1 text-sm">
+                        <h4 className="font-semibold bg-white/20 px-2 my-2 py-2">
+                            {floor.name}
+                        </h4>
+                        <ul className="space-y-1 text-sm px-4">
                             {floor.facilities.map((facility, facilityIndex) => (
                                 <li key={facilityIndex} className="pl-2">
                                     {facility}
