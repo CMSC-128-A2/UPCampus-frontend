@@ -27,7 +27,7 @@ export const metadata: Metadata = {
             'Interactive map and navigation for UP Cebu campus buildings and facilities',
         url: 'https://upcampus.vercel.app',
         siteName: 'UPsee',
-        images: '/og-image.png',
+        images: '/assets/images/og-image.png',
         locale: 'en_US',
         type: 'website',
     },
@@ -36,7 +36,7 @@ export const metadata: Metadata = {
         title: 'UPsee - UP Cebu Campus Explorer',
         description:
             'Interactive map and navigation for UP Cebu campus buildings and facilities',
-        images: '/og-image.png',
+        images: '/assets/images/og-image.png',
     },
     viewport: {
         width: 'device-width',
