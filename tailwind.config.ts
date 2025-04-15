@@ -15,7 +15,10 @@ export default {
             colors: {
                 background: 'hsl(var(--background))',
                 foreground: 'hsl(var(--foreground))',
-                'maroon-accent': '#8A1438',
+                'maroon-accent': {
+                    DEFAULT: '#8A1438',
+                    light: '#D45756',
+                },
                 'green-accent': {
                     DEFAULT: '#0C573F',
                     light: '#0C573F',

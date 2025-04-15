@@ -4,8 +4,84 @@ import React, { useEffect, useRef, useState } from 'react';
 import mapboxgl from 'mapbox-gl';
 import { Icon } from '@iconify/react';
 import { Building } from 'lucide-react';
+import BuildingDetailsSidebar from './BuildingDetailsSidebar';
 
 import 'mapbox-gl/dist/mapbox-gl.css';
+
+// Building data with details
+const buildingsData = {
+    9: {
+        id: 9,
+        name: 'College of Science Building',
+        image: '/assets/images/random-building.jpg',
+        floors: [
+            {
+                name: '1st Floor',
+                facilities: [
+                    'Office of the University Registrar',
+                    'Cashier Office',
+                    'College of Science Dean Office',
+                    'College of Science Secretary Office',
+                    'Bids and Awards Committee Office',
+                    'Comfort Rooms',
+                ],
+            },
+            {
+                name: 'Mezzanine Floor',
+                facilities: [
+                    'Legal Office',
+                    'Resident Psychologist Office',
+                    'Faculty Lounge',
+                    'Human Resources and Development Office',
+                    'Stock Room',
+                ],
+            },
+            {
+                name: '2nd Floor',
+                facilities: [
+                    'Math and Statistics Office',
+                    'Math-Stat Laboratory Rooms',
+                    'Comfort Rooms',
+                ],
+            },
+            {
+                name: '3rd Floor',
+                facilities: [
+                    'Department of Computer Science (DCS) Faculty Room',
+                    'DCS Laboratory Rooms',
+                    'DCS Mini Library',
+                    'DCS Mini Conference Room',
+                    'Comfort Rooms',
+                ],
+            },
+            {
+                name: '4th Floor',
+                facilities: [
+                    'DCS Lecture Rooms',
+                    'DCS Teaching Labs',
+                    'Comfort Rooms',
+                ],
+            },
+            {
+                name: '5th Floor',
+                facilities: [
+                    'Biology Faculty Room',
+                    'Biology Lecture Rooms',
+                    'Comfort Rooms',
+                ],
+            },
+            {
+                name: '6th Floor',
+                facilities: [
+                    'Histology Laboratory',
+                    'Botany Laboratory',
+                    'Zoology Laboratory',
+                    'Molecular Biology and Genetics Laboratory',
+                ],
+            },
+        ],
+    },
+};
 
 const MapboxExample = () => {
     const mapContainerRef = useRef<HTMLDivElement>(null);
@@ -18,6 +94,7 @@ const MapboxExample = () => {
     const markersRef = useRef<{ [key: number]: mapboxgl.Marker }>({});
 
     const [selectedMark, setSelectedMark] = useState<number | null>(null);
+    const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
     const marks = [
         {
@@ -27,6 +104,29 @@ const MapboxExample = () => {
             coordinates: [123.898096, 10.323937],
         },
     ];
+
+    // Show/hide sidebar when selected mark changes
+    useEffect(() => {
+        if (selectedMark !== null) {
+            setIsSidebarOpen(true);
+        } else {
+            setIsSidebarOpen(false);
+        }
+    }, [selectedMark]);
+
+    // Function to close sidebar
+    const handleCloseSidebar = () => {
+        setSelectedMark(null);
+        setIsSidebarOpen(false);
+    };
+
+    // Get building details for selected marker
+    const getSelectedBuildingDetails = () => {
+        if (selectedMark === null) return null;
+        return (
+            buildingsData[selectedMark as keyof typeof buildingsData] || null
+        );
+    };
 
     // Function to create a custom marker element
     const createCustomMarkerElement = (mark: (typeof marks)[0]) => {
@@ -430,6 +530,13 @@ const MapboxExample = () => {
             >
                 <Icon icon="mdi:location-outline" width="24" height="24" />
             </button>
+
+            {/* Building Details Sidebar */}
+            <BuildingDetailsSidebar
+                building={getSelectedBuildingDetails()}
+                onClose={handleCloseSidebar}
+                isOpen={isSidebarOpen}
+            />
         </div>
     );
 };
