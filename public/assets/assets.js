@@ -1,141 +1,87 @@
-import Actvity_Area from './icons/Actvity_Area.svg';
-import Add from './icons/Add.svg';
-import Admin from './icons/Admin.svg';
-import Back from './icons/Back.svg';
-import Buildings from "./icons/Buildings.svg";
-import Cafeteria from "./icons/Cafeteria.svg";
-import Campus_Map from "./icons/Campus_Map.svg";
-import Close from "./icons/Close.svg";
-import Dropdown from "./icons/Dropdown.svg";
-import Faculty from "./icons/Faculty.svg";
-import Fit_to_Screen from "./icons/Fit_to_Screen.svg";
-import House from "./icons/House.svg";
-import Library from "./icons/Library.svg";
-import Location from "./icons/Location.svg";
-import Menu from "./icons/Menu.svg";
-import Minus from "./icons/Minus.svg";
-import My_Classes from "./icons/My_Classes.svg";
-import Next from "./icons/Next.svg";
-import Save_schedule from "./icons/Save_schedule.svg";
-import Sign_Out from "./icons/Sign_Out.svg";
-import Trash from "./icons/Trash.svg";
-import Clinic from "./icons/Clinic.svg";
-import Cottage from "./icons/Cottage.svg";
-import Security from "./icons/Security.svg";
-import Car from "./icons/Car.svg";
-import Basketball from "./icons/Basketball.svg";
-import Soccer from "./icons/Soccer.svg";
-import Volleyball from "./icons/Volleyball.svg";
-import Star from "./icons/Star.svg";
+import {Notebook, MapPinned, LogOut, Menu, Trash2, ChevronDown, Plus, Minus, X, ClockArrowDown,
+        GraduationCap, UserCog, Building, Expand, MapPin, Goal, ArrowRightToLine, ArrowLeftToLine,
+        Utensils, BookOpen, House, Cross, Tent, ShieldUser, Car, Icon, Volleyball, Star
+        } from 'lucide-react';
 
-export const assets = {
-    Actvity_Area,
-    Add,
-    Admin,
-    Back,
-    Buildings,
-    Cafeteria,
-    Campus_Map,
-    Close,
-    Dropdown,
-    Faculty,
-    Fit_to_Screen,
-    House,
-    Library,
-    Location,
-    Menu,
-    Minus,
-    My_Classes,
-    Next,
-    Save_schedule,
-    Sign_Out,
-    Trash,
-    Clinic,
-    Cottage,
-    Security,
-    Car,
-    Basketball,
-    Soccer,
-    Volleyball,
-    Star
-}
+import { basketball, soccerBall } from '@lucide/lab';
+{/* <Icon iconNode={basketball} /> */}
 
 
 export const buildingsData = [
-    {name:"Administration Building", index: "1", icon: assets.Buildings},
-    {name:"Science Building", index: "2", icon: assets.Buildings},
+    {name:"Administration Building", index: "1", icon: <Building/>},
+    {name:"Science Building", index: "2", icon: <Building/>},
     {   
         name:"Technology Innovation Center Bldg.", 
         index: "3", 
-        icon: assets.Cafeteria,
+        icon: <Utensils/>,
         children:[
-            {name:"Cafeteria", index: "3a", icon: assets.Cafeteria},
-            {name:"Clinic", index: "3b", icon: assets.Clinic},
+            {name:"Cafeteria", index: "3a", icon: <Utensils/>},
+            {name:"Clinic", index: "3b", icon: <Cross/>},
         ],
     },
-    {name:"Library Building", index: "4", icon: assets.Library},
+    {name:"Library Building", index: "4", icon: <BookOpen/>},
     {
         name: "Residence Halls",
         index: "5",
-        icon: assets.House,
+        icon: <House/>,
         children: [
-          { name: "Balay Varangao", index: "5a", icon: assets.House },
-          { name: "Lalahon Hall", index: "5b", icon: assets.House },
-          { name: "Liadlaw Hall", index: "5c", icon: assets.House },
-          { name: "Lihangin Hall", index: "5d", icon: assets.House },
+          { name: "Balay Varangao", index: "5a", icon: <House/> },
+          { name: "Lalahon Hall", index: "5b", icon: <House/> },
+          { name: "Liadlaw Hall", index: "5c", icon: <House/> },
+          { name: "Lihangin Hall", index: "5d", icon: <House/> },
         ],
     },
     {
         name: "School of Management",
         index: "6",
-        icon: assets.Buildings,
+        icon: <Building/>,
         children: [
-          { name: "Management Administration", index: "6a", icon: assets.Buildings },
-          { name: "Management Bldg. 1", index: "6b", icon: assets.Buildings },
-          { name: "Management Bldg. 2", index: "6c", icon: assets.Buildings },
+          { name: "Management Administration", index: "6a", icon: <Building/> },
+          { name: "Management Bldg. 1", index: "6b", icon: <Building/> },
+          { name: "Management Bldg. 2", index: "6c", icon: <Building/> },
         ],
     },
-    {name:"Undergraduate Building", index: "7", icon: assets.Buildings},
-    {name:"Arts and Design Workshop Bldg.", index: "8", icon: assets.Buildings},
-    {name:"Arts and Design Workshop Bldg. 2", index: "9", icon: assets.Buildings},
-    {name:"Arts and Science Extension Bldg. (ASX)", index: "10", icon: assets.Buildings},
+    {name:"Undergraduate Building", index: "7", icon: <Building/>},
+    {name:"Arts and Design Workshop Bldg.", index: "8", icon: <Building/>},
+    {name:"Arts and Design Workshop Bldg. 2", index: "9", icon: <Building/>},
+    {name:"Arts and Science Extension Bldg. (ASX)", index: "10", icon: <Building/>},
     {
         name: "Arts and Sciences (AS) Bldg.",
         index: "11",
-        icon: assets.Buildings,
+        icon: <Building/>,
         children: [
-          { name: "AS Conference Hall", index: "11a", icon: assets.Buildings },
-          { name: "AS East Wing", index: "11b", icon: assets.Buildings },
-          { name: "AS West Wing", index: "11c", icon: assets.Buildings },
+          { name: "AS Conference Hall", index: "11a", icon: <Building/> },
+          { name: "AS East Wing", index: "11b", icon: <Building/> },
+          { name: "AS West Wing", index: "11c", icon: <Building/> },
         ],
     },
-    {name:"Union Building", index: "12", icon: assets.Buildings},
-    {name:"Cebu Cultural Center", index: "13", icon: assets.Buildings},
-    {name: "High School Area", index: "14", icon: assets.Buildings}
+    {name:"Union Building", index: "12", icon: <Building/>},
+    {name:"Cebu Cultural Center", index: "13", icon: <Building/>},
+    {name: "High School Area", index: "14", icon: <Building/>}
 ]
 
 export const activityAreaData = [
-    {name:"Oblation Square", index: "A1", icon: assets.Buildings},
-    {name:"Admin Cottages", index: "A2", icon: assets.Cottage},
-    {name:"Malacañang Cottage", index: "A3", icon: assets.Cottage},
-    {name:"Admin Field", index: "A4", icon: assets.Actvity_Area},
-    {name:"College Mini Stage", index: "A5", icon: assets.Star},
-    {name:"Undergraduate Cottages", index: "A6", icon: assets.Cottage},
-    {name:"SOM Basketball Court", index: "A7", icon: assets.Basketball},
-    {name:"Volleyball Court", index: "A8", icon: assets.Volleyball},
-    {name:"Amphitheater/Sunset Garden", index: "A9", icon: assets.Star},
-    {name:"High School Open Field", index: "A10", icon: assets.Actvity_Area},
-    {name:"High School Open Court", index: "A11", icon: assets.Star},
-    {name:"High School Covered Court", index: "A12", icon: assets.Star},
-    {name:"Soccer Field", index: "A13", icon: assets.Soccer}
+    {name:"Oblation Square", index: "A1", icon: <Building/>},
+    {name:"Admin Cottages", index: "A2", icon: <Tent/>},
+    {name:"Malacañang Cottage", index: "A3", icon: <Tent/>},
+    {name:"Admin Field", index: "A4", icon: <Goal/>},
+    {name:"College Mini Stage", index: "A5", icon: <Star/>},
+    {name:"Undergraduate Cottages", index: "A6", icon: <Tent/>},
+    {name:"SOM Basketball Court", index: "A7", icon: <Icon iconNode={basketball}/>},
+    {name:"Volleyball Court", index: "A8", icon: <Volleyball/>},
+    {name:"Amphitheater/Sunset Garden", index: "A9", icon: <Star/>},
+    {name:"High School Open Field", index: "A10", icon: <Goal/>},
+    {name:"High School Open Court", index: "A11", icon: <Star/>},
+    {name:"High School Covered Court", index: "A12", icon: <Star/>},
+    {name:"Soccer Field", index: "A13", icon: <Icon iconNode={soccerBall}/>}
 ]
 
 export const securityAndParkingData = [
-    {name:"Entrance Gate Guard House", index: "G1", icon: assets.Security},
-    {name:"Exit Gate Guard House", index: "G2", icon: assets.Security},
-    {name:"High School Guard House", index: "G3", icon: assets.Security},
-    {name:"AS Guard House", index: "G4", icon: assets.Security},
-    {name:"Parking Lot", index: "P1", icon: assets.Car},
+    {name:"Entrance Gate Guard House", index: "G1", icon: <ShieldUser/>},
+    {name:"Exit Gate Guard House", index: "G2", icon: <ShieldUser/>},
+    {name:"High School Guard House", index: "G3", icon: <ShieldUser/>},
+    {name:"AS Guard House", index: "G4", icon: <ShieldUser/>},
+    {name:"Parking Lot", index: "P1", icon: <Car/>},
 ]
 
 export const libraryBuildingData = [
