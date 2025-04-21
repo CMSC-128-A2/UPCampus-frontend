@@ -6,17 +6,21 @@ import SearchResults from '@/components/map/SearchResults';
 
 const Map = dynamic(() => import('@/components/map/Map'), {
     ssr: false,
-    loading: () => <div>Loading map...</div>,
-    
+    loading: () => (
+        <div className="h-full flex items-center justify-center">
+            Loading map...
+        </div>
+    ),
 });
 
 export default function ClientMap() {
     return (
-        <div>
+        <div className="h-screen w-screen relative">
             <SearchBar />
-            <SearchResults/>
-            <Map />
+            {/* <SearchResults /> */}
+            <div className="h-full w-full">
+                <Map />
+            </div>
         </div>
     );
-
 }

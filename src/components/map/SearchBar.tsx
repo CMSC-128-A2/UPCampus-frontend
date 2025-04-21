@@ -1,36 +1,71 @@
-import React from 'react'
-import Image from 'next/image'
-import {Building, Goal, Search} from 'lucide-react'
+import React, { useState } from 'react';
+import Image from 'next/image';
+import Link from 'next/link';
+import { Search, Building, Map, X } from 'lucide-react';
 
 const SearchBar = () => {
-  return (
-    <div className="flex flex-row w-[518px] h-[69.2px] rounded-[10px] p-[10px] gap-[10px] bg-[#7F1532] m-[10px] cursor-pointer">
-      <Image 
-        src="/assets/images/upseelogo.png" 
-        alt="Upsee Logo"
-        width={80} 
-        height={40} 
-      />
+    const [showSearchInput, setShowSearchInput] = useState(false);
 
-        <div className="flex items-center flex-1 bg-white text-black rounded-[8px] px-4 py-2 border-2 border-transparent focus-within:border-[#FFAE1D]">
-            <Search width={20} height={20} className='mr-2' color='#C8C8C8'/>
-            <input 
-                type="text" 
-                placeholder="Search" 
-                className="flex-1 bg-transparent outline-none text-[#7F1532]"
-            />
+    return (
+        <div className="flex items-center max-w-[calc(100vw-20px)] w-[518px] h-[69.2px] m-[10px] rounded-[10px] p-[10px] gap-[10px] bg-[#7F1532] z-10 absolute top-0 left-0">
+            {!showSearchInput && (
+                <>
+                    <Link href="/">
+                        <Image
+                            src="/assets/images/upseelogo.png"
+                            alt="Upsee Logo"
+                            width={60}
+                            height={30}
+                        />
+                    </Link>
+
+                    <div className="hidden md:flex items-center flex-1 bg-white text-black rounded-[8px] px-4 py-2 border-2 border-transparent focus-within:border-[#FFAE1D]">
+                        <Search size={20} className="mr-2 text-[#7F1532]" />
+                        <input
+                            type="text"
+                            placeholder="Search"
+                            className="flex-1 bg-transparent outline-none text-[#7F1532]"
+                        />
+                    </div>
+
+                    <div
+                        className="md:hidden w-[49px] h-[49.2px] rounded-[5px] p-[10px] gap-[10px] bg-[#FFFFFF] cursor-pointer flex items-center justify-center ml-auto"
+                        onClick={() => setShowSearchInput(true)}
+                    >
+                        <Search size={24} className="text-[#7F1532]" />
+                    </div>
+
+                    <div className="w-[49px] h-[49.2px] rounded-[5px] p-[10px] gap-[10px] bg-[#FFFFFF] cursor-pointer flex items-center justify-center">
+                        <Building size={24} className="text-[#7F1532]" />
+                    </div>
+
+                    <div className="w-[49px] h-[49.2px] rounded-[5px] p-[10px] gap-[10px] bg-[#FFFFFF] cursor-pointer flex items-center justify-center">
+                        <Map size={24} className="text-[#7F1532]" />
+                    </div>
+                </>
+            )}
+
+            {showSearchInput && (
+                <div className="flex items-center w-full">
+                    <div className="flex items-center flex-1 bg-white text-black rounded-[8px] px-4 py-2 border-2 border-transparent focus-within:border-[#FFAE1D]">
+                        <Search size={20} className="mr-2 text-[#7F1532]" />
+                        <input
+                            type="text"
+                            placeholder="Search"
+                            className="flex-1 bg-transparent outline-none text-[#7F1532]"
+                            autoFocus
+                        />
+                    </div>
+                    <div
+                        className="w-[49px] h-[49.2px] rounded-[5px] ml-2 p-[10px] gap-[10px] bg-[#FFFFFF] cursor-pointer flex items-center justify-center"
+                        onClick={() => setShowSearchInput(false)}
+                    >
+                        <X size={24} className="text-[#7F1532]" />
+                    </div>
+                </div>
+            )}
         </div>
+    );
+};
 
-        <div className='group w-[49px] h-[49.2px] rounded-[5px] p-[10px] gap-[10px] bg-[#FFFFFF] cursor-pointer transform transition-transform duration-200 hover:scale-110'>
-          <Building className="w-[29px] h-[29px] text-[#7F1532] group-hover:text-[#FFAE1D]" />
-        </div>
-
-        <div className='group w-[49px] h-[49.2px] rounded-[5px] p-[10px] gap-[10px] bg-[#FFFFFF] cursor-pointer transform transition-transform duration-200 hover:scale-110'>
-          <Goal className="w-[29px] h-[29px] text-[#7F1532] group-hover:text-[#FFAE1D]" />
-        </div>
-
-    </div>
-  )
-}
-
-export default SearchBar
+export default SearchBar;
