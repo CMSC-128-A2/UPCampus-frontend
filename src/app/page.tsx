@@ -16,9 +16,6 @@ export default function Home() {
                 <Link href="/map">
                     <Button>View Map</Button>
                 </Link>
-                <Link href="/signin">
-                    <Button variant="outline">Sign In as Admin</Button>
-                </Link>
             </div>
         </div>
     );
