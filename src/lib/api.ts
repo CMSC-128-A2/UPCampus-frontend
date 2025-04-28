@@ -35,6 +35,14 @@ export const mapCourseToFrontend = (course: Course) => {
     };
 };
 
+// Helper function to parse schedule string to day and time
+export const parseSchedule = (schedule: string) => {
+    const parts = schedule.split('|');
+    const day = parts[0]?.trim() || '';
+    const time = parts[1]?.trim() || '';
+    return { day, time };
+};
+
 // Schedules API
 export const schedulesApi = {
     // Get all courses with their sections
@@ -121,6 +129,52 @@ export const schedulesApi = {
             return await response.json();
         } catch (error) {
             console.error('Failed to create section:', error);
+            throw error;
+        }
+    },
+
+    // Update an existing section
+    updateSection: async (
+        sectionId: string,
+        sectionData: {
+            course_code?: string;
+            section: string;
+            type: string;
+            room: string;
+            day: string;
+            time: string;
+        }
+    ) => {
+        try {
+            console.log(`Updating section ${sectionId} with data:`, sectionData);
+            const response = await fetch(`${API_BASE_URL}/api/schedules/sections/${sectionId}/`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json',
+                },
+                body: JSON.stringify(sectionData),
+            });
+
+            console.log('Update section response status:', response.status);
+
+            if (!response.ok) {
+                const errorText = await response.text();
+                console.error('Error response body:', errorText);
+                
+                let errorData;
+                try {
+                    errorData = JSON.parse(errorText);
+                } catch (e) {
+                    throw new Error(`Error: ${response.status} - ${errorText}`);
+                }
+                
+                throw new Error(errorData.detail || `Error: ${response.status}`);
+            }
+
+            return await response.json();
+        } catch (error) {
+            console.error('Failed to update section:', error);
             throw error;
         }
     },
