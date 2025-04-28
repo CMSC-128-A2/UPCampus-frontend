@@ -3,6 +3,8 @@ import config from './config';
 
 const API_BASE_URL = config.apiUrl;
 
+console.log('API_BASE_URL:', API_BASE_URL); // Debug the API URL
+
 // Types
 export interface ClassSection {
     id: string;
@@ -20,6 +22,7 @@ export interface Course {
 
 // Convert backend course format to frontend format
 export const mapCourseToFrontend = (course: Course) => {
+    console.log('Mapping course:', course); // Debug course mapping
     return {
         id: course.id,
         courseCode: course.course_code,
@@ -37,12 +40,42 @@ export const schedulesApi = {
     // Get all courses with their sections
     getCourses: async () => {
         try {
-            const response = await fetch(`${API_BASE_URL}/api/schedules/courses/`);
+            console.log('Fetching courses from:', `${API_BASE_URL}/api/schedules/courses/`);
+            const response = await fetch(`${API_BASE_URL}/api/schedules/courses/`, {
+                headers: {
+                    'Accept': 'application/json',
+                },
+            });
+            
+            console.log('Response status:', response.status);
+            
             if (!response.ok) {
                 throw new Error(`Error: ${response.status}`);
             }
-            const data = await response.json();
-            return data.results.map(mapCourseToFrontend);
+            
+            const rawData = await response.text();
+            console.log('Raw API response:', rawData);
+            
+            let data;
+            try {
+                data = JSON.parse(rawData);
+            } catch (e) {
+                console.error('Failed to parse JSON:', e);
+                throw new Error('Invalid JSON response from server');
+            }
+            
+            console.log('Parsed data:', data);
+            
+            // Handle both paginated and non-paginated responses
+            const courses = data.results ? data.results : data;
+            console.log('Courses data:', courses);
+            
+            if (!Array.isArray(courses)) {
+                console.error('Courses is not an array:', courses);
+                return [];
+            }
+            
+            return courses.map(mapCourseToFrontend);
         } catch (error) {
             console.error('Failed to fetch courses:', error);
             throw error;
@@ -59,16 +92,29 @@ export const schedulesApi = {
         time: string;
     }) => {
         try {
+            console.log('Creating section with data:', sectionData);
             const response = await fetch(`${API_BASE_URL}/api/schedules/sections/`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
+                    'Accept': 'application/json',
                 },
                 body: JSON.stringify(sectionData),
             });
 
+            console.log('Create section response status:', response.status);
+
             if (!response.ok) {
-                const errorData = await response.json();
+                const errorText = await response.text();
+                console.error('Error response body:', errorText);
+                
+                let errorData;
+                try {
+                    errorData = JSON.parse(errorText);
+                } catch (e) {
+                    throw new Error(`Error: ${response.status} - ${errorText}`);
+                }
+                
                 throw new Error(errorData.detail || `Error: ${response.status}`);
             }
 
@@ -82,9 +128,12 @@ export const schedulesApi = {
     // Delete a section
     deleteSection: async (courseId: string, sectionName: string) => {
         try {
+            console.log(`Deleting section: courseId=${courseId}, sectionName=${sectionName}`);
             const response = await fetch(`${API_BASE_URL}/api/schedules/courses/${courseId}/sections/${sectionName}/`, {
                 method: 'DELETE',
             });
+
+            console.log('Delete section response status:', response.status);
 
             if (!response.ok) {
                 throw new Error(`Error: ${response.status}`);
