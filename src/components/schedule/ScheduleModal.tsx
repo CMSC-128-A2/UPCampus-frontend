@@ -132,13 +132,29 @@ function ScheduleModal({ isOpen, onClose, onSave }: ScheduleModalProps) {
 
                         <div className="space-y-2">
                             <label className="block text-gray-700">Day</label>
-                            <input
-                                type="text"
-                                value={day}
-                                onChange={(e) => setDay(e.target.value)}
-                                className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                placeholder="e.g., M TH or W"
-                            />
+                            <div className="flex flex-wrap gap-2">
+                                {['M', 'T', 'W', 'Th', 'F', 'S'].map((dayOption) => (
+                                    <button
+                                        key={dayOption}
+                                        type="button"
+                                        onClick={() => {
+                                            const currentDays = day.split(' ');
+                                            if (currentDays.includes(dayOption)) {
+                                                setDay(currentDays.filter(d => d !== dayOption).join(' '));
+                                            } else {
+                                                setDay([...currentDays, dayOption].join(' '));
+                                            }
+                                        }}
+                                        className={`px-4 py-2 rounded-lg border transition-colors duration-200 ${
+                                            day.split(' ').includes(dayOption)
+                                                ? 'bg-blue-500 text-white border-blue-500'
+                                                : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-100'
+                                        }`}
+                                    >
+                                        {dayOption}
+                                    </button>
+                                ))}
+                            </div>
                         </div>
 
                         <div className="space-y-2">

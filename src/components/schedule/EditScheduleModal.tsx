@@ -29,7 +29,7 @@ function EditScheduleModal({ isOpen, onClose, sectionId, initialData, onSave }: 
     const [section, setSection] = useState('');
     const [type, setType] = useState<'Lecture' | 'Laboratory'>('Lecture');
     const [room, setRoom] = useState('');
-    const [day, setDay] = useState('');
+    const [day, setDay] = useState<string[]>([]);
     const [time, setTime] = useState('');
     const [isSaving, setIsSaving] = useState(false);
 
@@ -43,7 +43,8 @@ function EditScheduleModal({ isOpen, onClose, sectionId, initialData, onSave }: 
             
             // Parse schedule string into day and time
             const { day: scheduleDay, time: scheduleTime } = parseSchedule(initialData.schedule);
-            setDay(scheduleDay);
+            // Split the day string into an array of days and filter out empty strings
+            setDay(scheduleDay.split(' ').filter(Boolean));
             setTime(scheduleTime);
         }
     }, [isOpen, initialData]);
@@ -68,7 +69,7 @@ function EditScheduleModal({ isOpen, onClose, sectionId, initialData, onSave }: 
                 section,
                 type,
                 room,
-                day,
+                day: day.join(' '), // Join the array back into a space-separated string
                 time
             });
             handleClose();
@@ -141,13 +142,28 @@ function EditScheduleModal({ isOpen, onClose, sectionId, initialData, onSave }: 
 
                         <div className="space-y-2">
                             <label className="block text-gray-700">Day</label>
-                            <input
-                                type="text"
-                                value={day}
-                                onChange={(e) => setDay(e.target.value)}
-                                className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                placeholder="e.g., M TH or W"
-                            />
+                            <div className="flex flex-wrap gap-2">
+                                {['M', 'T', 'W', 'TH', 'F', 'S'].map((dayOption) => (
+                                    <button
+                                        key={dayOption}
+                                        type="button"
+                                        onClick={() => {
+                                            if (day.includes(dayOption)) {
+                                                setDay(day.filter(d => d !== dayOption));
+                                            } else {
+                                                setDay([...day, dayOption]);
+                                            }
+                                        }}
+                                        className={`px-4 py-2 rounded-lg border transition-colors duration-200 ${
+                                            day.includes(dayOption)
+                                                ? 'bg-blue-500 text-white border-blue-500'
+                                                : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-100'
+                                        }`}
+                                    >
+                                        {dayOption}
+                                    </button>
+                                ))}
+                            </div>
                         </div>
 
                         <div className="space-y-2">
