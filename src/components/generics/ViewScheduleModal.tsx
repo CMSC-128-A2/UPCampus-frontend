@@ -23,9 +23,10 @@ const ViewScheduleModal: React.FC<ViewScheduleModalProps> = ({
     schedule,
     onDelete
 }) => {
-    if (!isOpen) return null;
-
     const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+    const [isDeleting, setIsDeleting] = useState(false);
+
+    if (!isOpen) return null;
 
     // Parse schedule string to separate day and time
     const { day, time } = useMemo(() => {
@@ -36,8 +37,17 @@ const ViewScheduleModal: React.FC<ViewScheduleModalProps> = ({
         return { day, time };
     }, [schedule]);
 
-    const handleDelete = () => {
-        setShowDeleteConfirm(true);
+    const handleDelete = async () => {
+        if (!onDelete) return;
+        
+        try {
+            setIsDeleting(true);
+            await onDelete();
+        } catch (error) {
+            console.error('Error during delete:', error);
+        } finally {
+            setIsDeleting(false);
+        }
     };
 
     const confirmDelete = () => {
@@ -117,10 +127,17 @@ const ViewScheduleModal: React.FC<ViewScheduleModalProps> = ({
                     <div className="py-4 flex justify-between gap-4">
                         <button
                             onClick={handleDelete}
+                            disabled={isDeleting}
                             className="flex items-center px-5 py-2 bg-[#F4DEDE] text-[#EF8281] font-medium rounded-lg border-[1.5px] text-xl border-[#EF8281] hover:bg-[#ffd1d1] hover:border-[#ff6b6b] transition-colors duration-200"
                         >
-                            <Icon icon="ph:trash-bold" width="24" height="24" className="mr-2" />
-                            Delete
+                            {isDeleting ? (
+                                <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
+                            ) : (
+                                <>
+                                    <Icon icon="ph:trash-bold" width="24" height="24" className="mr-2" />
+                                    Delete
+                                </>
+                            )}
                         </button>
                         <button
                             onClick={handleViewInMap}
