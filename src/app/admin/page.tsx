@@ -3,14 +3,16 @@ import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Icon } from '@iconify/react';
-import ScheduleModal from '@/components/generics/ScheduleModal';
-import ViewScheduleModal from '@/components/generics/ViewScheduleModal';
-import { schedulesApi } from '@/lib/api';
+import ScheduleModal from '@/components/schedule/ScheduleModal';
+import ViewScheduleModal from '@/components/schedule/ViewScheduleModal';
+import EditScheduleModal from '@/components/schedule/EditScheduleModal';
+import { schedulesApi, parseSchedule, Course, ClassSection as ApiClassSection } from '@/lib/api';
 
 // Define TypeScript types for the data structure
 type ScheduleType = 'Lecture' | 'Laboratory';
 
 interface ClassSection {
+    id: string; // Remove the optional marker (?) to make id required
     section: string;
     type: ScheduleType;
     room: string;
@@ -27,6 +29,7 @@ function AdminPage() {
     const [classSchedules, setClassSchedules] = useState<CourseSchedule[]>([]);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isViewModalOpen, setIsViewModalOpen] = useState(false);
+    const [isEditModalOpen, setIsEditModalOpen] = useState(false);
     const [selectedSchedule, setSelectedSchedule] = useState<{ course: CourseSchedule, section: ClassSection } | null>(null);
     const [searchQuery, setSearchQuery] = useState('');
     const [isLoading, setIsLoading] = useState(true);
@@ -87,6 +90,15 @@ function AdminPage() {
         setSelectedSchedule(null);
     };
 
+    const openEditModal = () => {
+        setIsViewModalOpen(false);
+        setIsEditModalOpen(true);
+    };
+
+    const closeEditModal = () => {
+        setIsEditModalOpen(false);
+    };
+
     // Handle delete schedule
     const handleDeleteSchedule = async (courseId: string, sectionName: string) => {
         try {
@@ -103,9 +115,18 @@ function AdminPage() {
                 return course;
             });
 
-            // Remove courses with no sections
-            const filteredSchedules = updatedSchedules.filter(course => course.sections.length > 0);
-            setClassSchedules(filteredSchedules);
+            // Check if the course has any sections left
+            const course = updatedSchedules.find(c => c.id === courseId);
+            if (course && course.sections.length === 0) {
+                // If no sections left, delete the course
+                await schedulesApi.deleteCourse(courseId);
+                // Remove the course from the list
+                const filteredSchedules = updatedSchedules.filter(c => c.id !== courseId);
+                setClassSchedules(filteredSchedules);
+            } else {
+                // Otherwise just update the schedules
+                setClassSchedules(updatedSchedules);
+            }
         } catch (error) {
             console.error('Error deleting section:', error);
             alert('Failed to delete section. Please try again.');
@@ -132,9 +153,9 @@ function AdminPage() {
             // Format data for API
             const apiData = {
                 course_code: scheduleData.courseCode,
-                section: scheduleData.section,
+                                section: scheduleData.section,
                 type: scheduleData.type,
-                room: scheduleData.room,
+                                room: scheduleData.room,
                 day: scheduleData.day,
                 time: scheduleData.time
             };
@@ -148,6 +169,27 @@ function AdminPage() {
         } catch (error: any) {
             console.error('Error saving schedule:', error);
             alert(error.message || 'Failed to save schedule. Please try again.');
+        }
+    };
+
+    // Handle edit schedule
+    const handleEditSchedule = async (sectionId: string, scheduleData: {
+        course_code?: string;
+        section: string;
+        type: string;
+        room: string;
+        day: string;
+        time: string;
+    }) => {
+        try {
+            await schedulesApi.updateSection(sectionId, scheduleData);
+            
+            // Refresh the course list to get updated data
+            const courses = await schedulesApi.getCourses();
+            setClassSchedules(courses);
+        } catch (error: any) {
+            console.error('Error updating schedule:', error);
+            alert(error.message || 'Failed to update schedule. Please try again.');
         }
     };
 
@@ -349,6 +391,22 @@ function AdminPage() {
                             closeViewModal();
                         }
                     }}
+                    onEdit={openEditModal}
+                />
+            )}
+            {selectedSchedule && selectedSchedule.section.id && (
+                <EditScheduleModal
+                    isOpen={isEditModalOpen}
+                    onClose={closeEditModal}
+                    sectionId={selectedSchedule.section.id}
+                    initialData={{
+                        courseCode: selectedSchedule.course.courseCode,
+                        section: selectedSchedule.section.section,
+                        type: selectedSchedule.section.type,
+                        room: selectedSchedule.section.room,
+                        schedule: selectedSchedule.section.schedule
+                    }}
+                    onSave={handleEditSchedule}
                 />
             )}
         </div>

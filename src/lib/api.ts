@@ -27,6 +27,7 @@ export const mapCourseToFrontend = (course: Course) => {
         id: course.id,
         courseCode: course.course_code,
         sections: course.sections.map(section => ({
+            id: section.id,
             section: section.section,
             type: section.type,
             room: section.room,
@@ -86,6 +87,27 @@ export const schedulesApi = {
             return courses.map(mapCourseToFrontend);
         } catch (error) {
             console.error('Failed to fetch courses:', error);
+            throw error;
+        }
+    },
+
+    // Delete a course
+    deleteCourse: async (courseId: string) => {
+        try {
+            console.log(`Deleting course: courseId=${courseId}`);
+            const response = await fetch(`${API_BASE_URL}/api/schedules/courses/${courseId}/`, {
+                method: 'DELETE',
+            });
+
+            console.log('Delete course response status:', response.status);
+
+            if (!response.ok) {
+                throw new Error(`Error: ${response.status}`);
+            }
+
+            return true;
+        } catch (error) {
+            console.error('Failed to delete course:', error);
             throw error;
         }
     },

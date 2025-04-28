@@ -83,19 +83,17 @@ function EditScheduleModal({ isOpen, onClose, sectionId, initialData, onSave }: 
     if (!isOpen) return null;
 
     return (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-            <div className="bg-white rounded-lg shadow-lg w-full max-w-md">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+            <div className="bg-white rounded-lg shadow-lg w-full max-w-lg mx-4">
                 <div className="p-6">
-                    {/* Header */}
                     <div className="flex justify-between items-center mb-6">
-                        <h2 className="text-2xl font-semibold">Edit Schedule</h2>
-                        <button onClick={handleClose} className="text-gray-400 hover:text-gray-600">
+                        <h2 className="text-2xl font-bold">Edit Schedule</h2>
+                        <button onClick={handleClose} className="text-gray-500 hover:text-gray-700">
                             <Icon icon="ph:x-bold" width="24" height="24" />
                         </button>
                     </div>
 
-                    {/* Form */}
-                    <div className="space-y-4 mb-6">
+                    <div className="space-y-4">
                         <div className="space-y-2">
                             <label className="block text-gray-700">Course Code</label>
                             <input
@@ -103,34 +101,31 @@ function EditScheduleModal({ isOpen, onClose, sectionId, initialData, onSave }: 
                                 value={courseCode}
                                 onChange={(e) => setCourseCode(e.target.value)}
                                 className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                placeholder="e.g., CMSC 126"
-                                readOnly // Usually course code shouldn't be editable
+                                placeholder="e.g., CMSC 123"
                             />
                         </div>
 
-                        <div className="grid grid-cols-2 gap-4">
-                            <div className="space-y-2">
-                                <label className="block text-gray-700">Section</label>
-                                <input
-                                    type="text"
-                                    value={section}
-                                    onChange={(e) => setSection(e.target.value)}
-                                    className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                    placeholder="e.g., A"
-                                />
-                            </div>
+                        <div className="space-y-2">
+                            <label className="block text-gray-700">Section</label>
+                            <input
+                                type="text"
+                                value={section}
+                                onChange={(e) => setSection(e.target.value)}
+                                className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                placeholder="e.g., A"
+                            />
+                        </div>
 
-                            <div className="space-y-2">
-                                <label className="block text-gray-700">Type</label>
-                                <select
-                                    value={type}
-                                    onChange={(e) => setType(e.target.value as 'Lecture' | 'Laboratory')}
-                                    className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                >
-                                    <option value="Lecture">Lecture</option>
-                                    <option value="Laboratory">Laboratory</option>
-                                </select>
-                            </div>
+                        <div className="space-y-2">
+                            <label className="block text-gray-700">Type</label>
+                            <select
+                                value={type}
+                                onChange={(e) => setType(e.target.value as 'Lecture' | 'Laboratory')}
+                                className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            >
+                                <option value="Lecture">Lecture</option>
+                                <option value="Laboratory">Laboratory</option>
+                            </select>
                         </div>
 
                         <div className="space-y-2">
@@ -168,7 +163,7 @@ function EditScheduleModal({ isOpen, onClose, sectionId, initialData, onSave }: 
                     </div>
 
                     {/* Footer */}
-                    <div className="flex justify-end space-x-3">
+                    <div className="mt-8 flex justify-end space-x-3">
                         <button
                             onClick={handleClose}
                             className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-100 transition-colors duration-200"
