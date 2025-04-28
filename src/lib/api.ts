@@ -1,5 +1,7 @@
 // API constants and utility functions for backend communication
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
+import config from './config';
+
+const API_BASE_URL = config.apiUrl;
 
 // Types
 export interface ClassSection {
