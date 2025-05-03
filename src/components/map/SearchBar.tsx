@@ -1,9 +1,14 @@
+'use client';
 import React, { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Search, Building, Map, X } from 'lucide-react';
 
-const SearchBar = () => {
+interface SearchBarProps {
+    onBuildingClick:()=> void;
+}
+
+const SearchBar: React.FC<SearchBarProps> = ({onBuildingClick}) => {
     const [showSearchInput, setShowSearchInput] = useState(false);
 
     return (
@@ -35,8 +40,11 @@ const SearchBar = () => {
                         <Search size={24} className="text-[#7F1532]" />
                     </div>
 
-                    <div className="w-[49px] h-[49.2px] rounded-[5px] p-[10px] gap-[10px] bg-[#FFFFFF] cursor-pointer flex items-center justify-center">
-                        <Building size={24} className="text-[#7F1532]" />
+                    <div  
+                        onClick={onBuildingClick}
+                        className="w-[49px] h-[49.2px] rounded-[5px] p-[10px] gap-[10px] bg-[#FFFFFF] cursor-pointer flex items-center justify-center 
+                        hover:bg-[#FFAE1D] transition-colors duration-300 ease-in-out">
+                            <Building size={24} className="text-[#7F1532] transition-colors duration-300 ease-in-out hover:text-[#004D37]" />
                     </div>
 
                     <div className="w-[49px] h-[49.2px] rounded-[5px] p-[10px] gap-[10px] bg-[#FFFFFF] cursor-pointer flex items-center justify-center">

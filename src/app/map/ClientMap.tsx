@@ -1,8 +1,11 @@
 'use client';
 
+import {useState} from 'react';
 import dynamic from 'next/dynamic';
 import SearchBar from '@/components/map/SearchBar';
 import SearchResults from '@/components/map/SearchResults';
+import Drawer from '@/components/map/Drawer';
+
 
 const Map = dynamic(() => import('@/components/map/Map'), {
     ssr: false,
@@ -14,9 +17,16 @@ const Map = dynamic(() => import('@/components/map/Map'), {
 });
 
 export default function ClientMap() {
+    const [isBuildingOpen, setIsBuildingOpen] = useState(false);
+    const toggleDrawer = () => {
+        setIsBuildingOpen((prev) => !prev);
+    };
+    
     return (
         <div className="h-screen w-screen relative">
-            <SearchBar />
+            <SearchBar onBuildingClick={toggleDrawer}/>
+            
+            {isBuildingOpen && <Drawer title="Buildings" />}
             {/* <SearchResults /> */}
             <div className="h-full w-full">
                 <Map />
