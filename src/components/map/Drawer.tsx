@@ -1,7 +1,7 @@
 'use client';
 
 import { X } from 'lucide-react';
-import { buildingsData } from '@/assets/assets';
+import { buildingsData, activityAreaData, securityAndParkingData } from '@/assets/assets';
 import IndexButton from './IndexButton';
 import { useState } from 'react';
 
@@ -52,6 +52,18 @@ export default function Drawer({ title }: DrawerProps) {
             {title === 'Buildings' && (
                 <div className="p-4">
                     {renderBuildings(buildingsData)}
+                </div>
+            )}
+
+            {title === 'Activity Area' && (
+                <div className="p-4">
+                    {renderBuildings(activityAreaData)}
+                </div>
+            )}
+
+            {title === 'Security & Parking' && (
+                <div className="p-4">
+                    {renderBuildings(securityAndParkingData)}
                 </div>
             )}
         </div>
