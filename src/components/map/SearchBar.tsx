@@ -5,14 +5,20 @@ import Link from 'next/link';
 import { Search, Building, Map, X, Goal, ShieldUser } from 'lucide-react';
 
 interface SearchBarProps {
-    onBuildingClick:()=> void;
-    onActivityClick:()=> void;
-    onSecurityClick:()=> void;
+    onBuildingClick: () => void;
+    onActivityClick: () => void;
+    onSecurityClick: () => void;
+    openDrawer: 'buildings' | 'activity' | 'security' | null;
 }
 
-const SearchBar: React.FC<SearchBarProps> = ({onBuildingClick, onActivityClick, onSecurityClick}) => {
+const SearchBar: React.FC<SearchBarProps> = ({
+    onBuildingClick,
+    onActivityClick,
+    onSecurityClick,
+    openDrawer,
+}) => {
     const [showSearchInput, setShowSearchInput] = useState(false);
-
+    console.log(openDrawer, 'here');
     return (
         <div className="flex items-center max-w-[calc(100vw-20px)] w-[518px] h-[69.2px] m-[10px] rounded-[10px] p-[10px] gap-[10px] bg-[#7F1532] z-10 absolute top-0 left-0">
             {!showSearchInput && (
@@ -42,28 +48,44 @@ const SearchBar: React.FC<SearchBarProps> = ({onBuildingClick, onActivityClick, 
                         <Search size={24} className="text-[#7F1532]" />
                     </div>
 
-                    <div  
+                    <div
                         onClick={onBuildingClick}
-                        className="group w-[49px] h-[49.2px] rounded-[5px] p-[10px] gap-[10px] bg-[#FFFFFF] cursor-pointer flex items-center justify-center 
-                        hover:bg-[#FFAE1D] transition-colors duration-300 ease-in-out">
-                        <Building 
-                            size={24} 
-                            className="text-[#7F1532] group-hover:text-[#004D37] transition-colors duration-300 ease-in-out" 
+                        className={`group w-[49px] h-[49.2px] rounded-[5px] p-[10px] gap-[10px] cursor-pointer flex items-center justify-center 
+                        hover:bg-[#FFAE1D] transition-colors duration-300 ease-in-out ${
+                            openDrawer === 'buildings'
+                                ? 'bg-[#FFAE1D]'
+                                : 'bg-white'
+                        }`}
+                    >
+                        <Building
+                            size={24}
+                            className="text-[#7F1532] group-hover:text-[#004D37] transition-colors duration-300 ease-in-out"
                         />
                     </div>
 
                     <div
                         onClick={onActivityClick}
-                        className="group w-[49px] h-[49.2px] rounded-[5px] p-[10px] gap-[10px] bg-[#FFFFFF] cursor-pointer flex items-center justify-center 
-                        hover:bg-[#FFAE1D] transition-colors duration-300 ease-in-out"
+                        className={`group w-[49px] h-[49.2px] rounded-[5px] p-[10px] gap-[10px] bg-[#FFFFFF] cursor-pointer flex items-center justify-center 
+                        hover:bg-[#FFAE1D] transition-colors duration-300 ease-in-out ${
+                            openDrawer === 'activity' ? 'bg-[#FFAE1D]' : ''
+                        }`}
                     >
-                        <Goal size={24} className="text-[#7F1532] group-hover:text-[#004D37] transition-colors duration-300 ease-in-out" />
+                        <Goal
+                            size={24}
+                            className="text-[#7F1532] group-hover:text-[#004D37] transition-colors duration-300 ease-in-out"
+                        />
                     </div>
-                    <div 
+                    <div
                         onClick={onSecurityClick}
-                        className="group w-[49px] h-[49.2px] rounded-[5px] p-[10px] gap-[10px] bg-[#FFFFFF] cursor-pointer flex items-center justify-center 
-                        hover:bg-[#FFAE1D] transition-colors duration-300 ease-in-out">
-                        <ShieldUser size={24} className="text-[#7F1532] group-hover:text-[#004D37] transition-colors duration-300 ease-in-out" />
+                        className={`group w-[49px] h-[49.2px] rounded-[5px] p-[10px] gap-[10px] bg-[#FFFFFF] cursor-pointer flex items-center justify-center 
+                        hover:bg-[#FFAE1D] transition-colors duration-300 ease-in-out ${
+                            openDrawer === 'security' ? 'bg-[#FFAE1D]' : ''
+                        }`}
+                    >
+                        <ShieldUser
+                            size={24}
+                            className="text-[#7F1532] group-hover:text-[#004D37] transition-colors duration-300 ease-in-out"
+                        />
                     </div>
                 </>
             )}

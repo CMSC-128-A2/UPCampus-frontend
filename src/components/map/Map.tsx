@@ -3,8 +3,9 @@
 import React, { useEffect, useRef, useState } from 'react';
 import mapboxgl from 'mapbox-gl';
 import { Icon } from '@iconify/react';
-import { Building } from 'lucide-react';
+import { Building, Star } from 'lucide-react';
 import BuildingDetailsSidebar from './BuildingDetailsSidebar';
+import { useMapStore } from '@/store/mapStore';
 
 import 'mapbox-gl/dist/mapbox-gl.css';
 
@@ -91,45 +92,85 @@ const MapboxExample = () => {
     const [isLocating, setIsLocating] = useState(false);
     const [mapLoaded, setMapLoaded] = useState(false);
     const svgOverlayRef = useRef<HTMLDivElement>(null);
-    const markersRef = useRef<{ [key: number]: mapboxgl.Marker }>({});
+    const markersRef = useRef<{ [key: string]: mapboxgl.Marker }>({});
+    const testMarkerRef = useRef<mapboxgl.Marker | null>(null);
+    const clickPopupRef = useRef<mapboxgl.Popup | null>(null);
 
-    const [selectedMark, setSelectedMark] = useState<number | null>(null);
+    // Use the global store for selected mark
+    const { selectedMarkId, setSelectedMarkId } = useMapStore();
+
+    // Track if sidebar is open (no longer needs to be local state)
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+    const [clickedCoordinates, setClickedCoordinates] = useState<
+        [number, number] | null
+    >(null);
 
-    const marks = [
+    const buildings = [
         {
-            id: 9,
+            id: '9',
             icon: <Building />,
             name: 'Building 9',
             coordinates: [123.898096, 10.323937],
         },
+        {
+            id: '10',
+            icon: <Building />,
+            name: 'Building 10',
+            coordinates: [123.897949, 10.323871],
+        },
+        {
+            id: '8',
+            icon: <Building />,
+            name: 'Building 8',
+            coordinates: [123.898273, 10.323521],
+        },
+        {
+            id: '7',
+            icon: <Building />,
+            name: 'Building 7',
+            coordinates: [123.897928, 10.323404],
+        },
     ];
 
-    // Show/hide sidebar when selected mark changes
+    const featuredMarks = [
+        {
+            id: 'A9',
+            icon: <Star />,
+            name: 'Featured A9',
+            coordinates: [123.897727, 10.323369],
+        },
+    ];
+
+    // Update sidebar visibility when selectedMarkId changes
     useEffect(() => {
-        if (selectedMark !== null) {
+        if (selectedMarkId !== null) {
             setIsSidebarOpen(true);
         } else {
             setIsSidebarOpen(false);
         }
-    }, [selectedMark]);
+    }, [selectedMarkId]);
 
     // Function to close sidebar
     const handleCloseSidebar = () => {
-        setSelectedMark(null);
+        setSelectedMarkId(null); // Update the global state
         setIsSidebarOpen(false);
     };
 
     // Get building details for selected marker
     const getSelectedBuildingDetails = () => {
-        if (selectedMark === null) return null;
-        return (
-            buildingsData[selectedMark as keyof typeof buildingsData] || null
-        );
+        if (selectedMarkId === null) return null;
+
+        // Use a type assertion to handle string IDs
+        const numericId = parseInt(selectedMarkId);
+        if (isNaN(numericId)) return null;
+
+        return buildingsData[numericId as keyof typeof buildingsData] || null;
     };
 
     // Function to create a custom marker element
-    const createCustomMarkerElement = (mark: (typeof marks)[0]) => {
+    const createCustomMarkerElement = (
+        marker: (typeof buildings)[0] | (typeof featuredMarks)[0],
+    ) => {
         // Create marker element
         const markerEl = document.createElement('div');
         markerEl.className = 'custom-marker';
@@ -142,14 +183,14 @@ const MapboxExample = () => {
             'flex items-center bg-maroon-accent text-white rounded-full px-2 py-1';
         markerContent.style.display = 'flex';
         markerContent.style.alignItems = 'center';
-        markerContent.style.backgroundColor = '#8A1438'; // rose-500
+        markerContent.style.backgroundColor = '#8A1438'; // Rose color for all markers
         markerContent.style.color = 'maroon';
+        markerContent.style.border = '2px solid maroon';
         markerContent.style.borderRadius = '9999px';
         markerContent.style.padding = '2px 6px'; // Reduced padding
         markerContent.style.boxShadow = '0 2px 4px rgba(0,0,0,0.2)';
-        markerContent.style.border = '2px solid maroon';
 
-        // Building icon
+        // Building icon - same for all markers
         const iconSpan = document.createElement('span');
         iconSpan.innerHTML =
             '<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2" width="16" height="20" rx="2" ry="2"/><path d="M9 22v-4h6v4"/><path d="M8 6h.01"/><path d="M16 6h.01"/><path d="M12 6h.01"/><path d="M12 10h.01"/><path d="M12 14h.01"/><path d="M16 10h.01"/><path d="M16 14h.01"/><path d="M8 10h.01"/><path d="M8 14h.01"/></svg>';
@@ -158,7 +199,7 @@ const MapboxExample = () => {
 
         // Add id text
         const idSpan = document.createElement('span');
-        idSpan.textContent = mark.id.toString();
+        idSpan.textContent = marker.id.toString();
         idSpan.style.fontWeight = 'bold';
         idSpan.style.fontSize = '12px'; // Smaller font size
 
@@ -168,7 +209,7 @@ const MapboxExample = () => {
 
         // Add click handler
         markerEl.addEventListener('click', () => {
-            setSelectedMark(mark.id);
+            const markerId = marker.id.toString();
 
             // Visual feedback for selection
             document.querySelectorAll('.custom-marker').forEach((el) => {
@@ -176,11 +217,10 @@ const MapboxExample = () => {
             });
             markerEl.style.zIndex = '2';
 
-            if (mark.id === selectedMark) {
-                setSelectedMark(null);
+            if (markerId === selectedMarkId) {
+                setSelectedMarkId(null); // Update the global state
             } else {
-                setSelectedMark(mark.id);
-                // You could show more info or highlight the selected marker here
+                setSelectedMarkId(markerId); // Update the global state
             }
         });
 
@@ -195,17 +235,30 @@ const MapboxExample = () => {
         Object.values(markersRef.current).forEach((marker) => marker.remove());
         markersRef.current = {};
 
-        // Add markers for each location
-        marks.forEach((mark) => {
-            const markerEl = createCustomMarkerElement(mark);
+        // Add building markers
+        buildings.forEach((building) => {
+            const markerEl = createCustomMarkerElement(building);
             const marker = new mapboxgl.Marker({
                 element: markerEl,
                 anchor: 'bottom',
             })
-                .setLngLat(mark.coordinates as [number, number])
+                .setLngLat(building.coordinates as [number, number])
                 .addTo(mapRef.current!);
 
-            markersRef.current[mark.id] = marker;
+            markersRef.current[building.id] = marker;
+        });
+
+        // Add featured markers
+        featuredMarks.forEach((featured) => {
+            const markerEl = createCustomMarkerElement(featured);
+            const marker = new mapboxgl.Marker({
+                element: markerEl,
+                anchor: 'bottom',
+            })
+                .setLngLat(featured.coordinates as [number, number])
+                .addTo(mapRef.current!);
+
+            markersRef.current[featured.id] = marker;
         });
     };
 
@@ -288,6 +341,7 @@ const MapboxExample = () => {
         }
     };
 
+    // Setup map on component mount
     useEffect(() => {
         // Get access token from environment variable
         const accessToken = process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN;
@@ -342,9 +396,6 @@ const MapboxExample = () => {
                 // maxBounds: bounds, // Set the map's boundary limits
             });
 
-            // Remove navigation controls comment - we don't want these controls
-            // mapRef.current.addControl(new mapboxgl.NavigationControl());
-
             // Resize map on container resize and setup SVG overlay
             mapRef.current.on('load', () => {
                 mapRef.current?.resize();
@@ -379,6 +430,43 @@ const MapboxExample = () => {
                 mapRef.current?.on('zoom', updateSvgOverlay);
                 mapRef.current?.on('resize', updateSvgOverlay);
 
+                // Add click event to show coordinates
+                mapRef.current?.on('click', (e) => {
+                    // Remove existing popup if it exists
+                    if (clickPopupRef.current) {
+                        clickPopupRef.current.remove();
+                    }
+
+                    // Store clicked coordinates
+                    const coords: [number, number] = [
+                        e.lngLat.lng,
+                        e.lngLat.lat,
+                    ];
+                    setClickedCoordinates(coords);
+
+                    // Format coordinates with 6 decimal places
+                    const lng = coords[0].toFixed(6);
+                    const lat = coords[1].toFixed(6);
+
+                    // Create popup with coordinates in the requested format
+                    if (mapRef.current) {
+                        clickPopupRef.current = new mapboxgl.Popup({
+                            closeButton: true,
+                            closeOnClick: false,
+                        })
+                            .setLngLat(coords)
+                            .setHTML(
+                                `
+                                <div style="font-family: sans-serif; text-align: center;">
+                                    <h3 style="margin: 0 0 5px 0; font-weight: bold; font-size: 14px;">Coordinates</h3>
+                                    <p style="margin: 0; font-size: 13px; font-family: monospace;">[${lng}, ${lat}]</p>
+                                </div>
+                            `,
+                            )
+                            .addTo(mapRef.current);
+                    }
+                });
+
                 // Initial update
                 updateSvgOverlay();
             });
@@ -392,10 +480,11 @@ const MapboxExample = () => {
             mapRef.current?.off('resize', updateSvgOverlay);
             mapRef.current?.remove();
             popupRef.current?.remove();
+            clickPopupRef.current?.remove();
         };
     }, []);
 
-    // Effect to handle marker updates when selectedMark changes
+    // Effect to handle marker updates when selectedMarkId changes
     useEffect(() => {
         if (mapLoaded) {
             // Update marker appearance based on selection
@@ -403,7 +492,7 @@ const MapboxExample = () => {
                 const element = marker.getElement();
                 const markerContent = element.querySelector('div');
 
-                if (parseInt(id) === selectedMark) {
+                if (id === selectedMarkId) {
                     element.style.zIndex = '2';
                     if (markerContent) {
                         markerContent.style.backgroundColor = '#8A1438'; // maroon-accent
@@ -414,7 +503,7 @@ const MapboxExample = () => {
                 } else {
                     element.style.zIndex = '1';
                     if (markerContent) {
-                        markerContent.style.backgroundColor = '#FFFFFF'; //
+                        markerContent.style.backgroundColor = '#FFFFFF';
                         markerContent.style.transform = 'scale(1)';
                         markerContent.style.color = 'maroon';
                         markerContent.style.border = '2px solid maroon';
@@ -422,7 +511,7 @@ const MapboxExample = () => {
                 }
             });
         }
-    }, [selectedMark, mapLoaded]);
+    }, [selectedMarkId, mapLoaded]);
 
     // Function to update SVG overlay position and scale
     const updateSvgOverlay = () => {
@@ -523,6 +612,8 @@ const MapboxExample = () => {
                 }}
                 className="w-full h-full"
             />
+
+            {/* Location button */}
             <button
                 onClick={locateUser}
                 disabled={isLocating}
@@ -535,7 +626,6 @@ const MapboxExample = () => {
             <BuildingDetailsSidebar
                 building={getSelectedBuildingDetails()}
                 onClose={handleCloseSidebar}
-                isOpen={isSidebarOpen}
             />
         </div>
     );

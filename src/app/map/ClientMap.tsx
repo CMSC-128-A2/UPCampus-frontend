@@ -17,21 +17,20 @@ const Map = dynamic(() => import('@/components/map/Map'), {
 
 export default function ClientMap() {
     // State for drawer visibility
-    const [isBuildingOpen, setIsBuildingOpen] = useState(false);
-    const [isActivityOpen, setIsActivityOpen] = useState(false);
-    const [isSecurityOpen, setIsSecurityOpen] = useState(false);
+    type DrawerType = 'buildings' | 'activity' | 'security';
+    const [openDrawer, setOpenDrawer] = useState<DrawerType | null>(null);
 
     // Toggle functions
     const toggleBuilding = () => {
-        setIsBuildingOpen((prev) => !prev);
+        setOpenDrawer((prev) => (prev === 'buildings' ? null : 'buildings'));
     };
 
     const toggleActivity = () => {
-        setIsActivityOpen((prev) => !prev);
+        setOpenDrawer((prev) => (prev === 'activity' ? null : 'activity'));
     };
 
     const toggleSecurity = () => {
-        setIsSecurityOpen((prev) => !prev);
+        setOpenDrawer((prev) => (prev === 'security' ? null : 'security'));
     };
 
     return (
@@ -40,25 +39,26 @@ export default function ClientMap() {
                 onBuildingClick={toggleBuilding}
                 onActivityClick={toggleActivity}
                 onSecurityClick={toggleSecurity}
+                openDrawer={openDrawer}
             />
 
             {/* Always render drawers, but control visibility through isOpen prop */}
             <Drawer
                 title="Buildings"
-                onClose={() => setIsBuildingOpen(false)}
-                isOpen={isBuildingOpen}
+                onClose={() => setOpenDrawer(null)}
+                isOpen={openDrawer === 'buildings'}
             />
 
             <Drawer
                 title="Activity Area"
-                onClose={() => setIsActivityOpen(false)}
-                isOpen={isActivityOpen}
+                onClose={() => setOpenDrawer(null)}
+                isOpen={openDrawer === 'activity'}
             />
 
             <Drawer
                 title="Security & Parking"
-                onClose={() => setIsSecurityOpen(false)}
-                isOpen={isSecurityOpen}
+                onClose={() => setOpenDrawer(null)}
+                isOpen={openDrawer === 'security'}
             />
 
             {/* Map component */}

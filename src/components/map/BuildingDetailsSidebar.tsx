@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import Image from 'next/image';
 import { ArrowLeftToLine } from 'lucide-react';
+import { useMapStore } from '@/store/mapStore';
 
 interface BuildingDetail {
     id: number;
@@ -15,14 +16,18 @@ interface BuildingDetail {
 interface BuildingDetailsSidebarProps {
     building: BuildingDetail | null;
     onClose: () => void;
-    isOpen: boolean;
 }
 
 const BuildingDetailsSidebar: React.FC<BuildingDetailsSidebarProps> = ({
     building,
     onClose,
-    isOpen,
 }) => {
+    // Get the selected mark ID from the global store
+    const { selectedMarkId } = useMapStore();
+
+    // Derive isOpen from selectedMarkId (sidebar is open when a mark is selected)
+    const isOpen = selectedMarkId !== null && building !== null;
+
     // Handle body scroll lock when sidebar is open
     useEffect(() => {
         if (isOpen) {
@@ -39,7 +44,7 @@ const BuildingDetailsSidebar: React.FC<BuildingDetailsSidebarProps> = ({
     if (!building) {
         return (
             <div
-                className={`fixed top-0 right-0 w-80 h-full bg-maroon-accent-light text-white overflow-hidden shadow-lg z-20 transition-all duration-300 ease-in-out ${
+                className={`fixed top-0 right-0 w-full sm:w-[320px] md:w-[350px] h-full bg-maroon-accent-light text-white overflow-hidden shadow-lg z-60 transition-all duration-300 ease-in-out ${
                     isOpen
                         ? 'translate-x-0 opacity-100'
                         : 'translate-x-full opacity-0'
@@ -52,7 +57,7 @@ const BuildingDetailsSidebar: React.FC<BuildingDetailsSidebarProps> = ({
         <>
             {/* Backdrop overlay - only visible when sidebar is open */}
             <div
-                className={`fixed inset-0 bg-black/30 z-10 transition-opacity duration-300 ${
+                className={`fixed inset-0 z-40 transition-opacity duration-300 ${
                     isOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'
                 }`}
                 onClick={onClose}
@@ -60,7 +65,7 @@ const BuildingDetailsSidebar: React.FC<BuildingDetailsSidebarProps> = ({
 
             {/* Sidebar */}
             <div
-                className={`fixed top-0 right-0 w-80 h-full bg-maroon-accent-light text-white overflow-y-auto shadow-lg z-20 transition-all duration-300 ease-in-out ${
+                className={`fixed top-0 right-0 w-full sm:w-[320px] md:w-[350px] h-full bg-maroon-accent-light text-white overflow-y-auto shadow-lg z-50 transition-all duration-300 ease-in-out ${
                     isOpen
                         ? 'translate-x-0 opacity-100'
                         : 'translate-x-full opacity-0'
@@ -68,16 +73,16 @@ const BuildingDetailsSidebar: React.FC<BuildingDetailsSidebarProps> = ({
             >
                 {/* Header */}
                 <div className="relative">
-                    <div className="px-4 py-2 my-2 flex items-center justify-between bg-maroon-accent">
+                    <div className="px-4 py-3 bg-maroon-accent flex items-center justify-between font-medium text-xl tracking-tight font-inter sticky top-0 z-10">
                         <h2 className="text-xl font-semibold">
                             {building.name}
                         </h2>
                         <button
                             onClick={onClose}
-                            className="hover:bg-white/20 p-1 rounded-full transition-colors"
+                            className="p-1.5 hover:bg-white/20 rounded-full transition-colors"
                             aria-label="Close sidebar"
                         >
-                            <ArrowLeftToLine size={24} className="text-white" />
+                            <ArrowLeftToLine size={22} className="text-white" />
                         </button>
                     </div>
 
