@@ -1,71 +1,115 @@
 'use client';
 
 import { X } from 'lucide-react';
-import { buildingsData, activityAreaData, securityAndParkingData } from '@/assets/assets';
+import {
+    buildingsData,
+    activityAreaData,
+    securityAndParkingData,
+} from '@/assets/assets';
 import IndexButton from './IndexButton';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 interface DrawerProps {
     title: string;
+    onClose?: () => void;
+    isOpen?: boolean;
 }
 
 // Recursive rendering of buildings with dynamic padding based on the level
 const renderBuildings = (buildings: any[], level = 0) => {
     return buildings.map((building, index) => (
-        <div key={building.index} style={{ paddingLeft: `${level * 20}px` }} className="mb-5">
+        <div
+            key={building.index}
+            style={{ paddingLeft: `${level * 15}px` }}
+            className="mb-3"
+        >
             {/* Add margin-top to first child only */}
-            <div className={`flex flex-row cursor-pointer text-lg font-inter font-normal text-[28px] leading-[100%] tracking-[-0.05em] ${index === 0 && level > 0 ? 'mt-5' : ''}`}>
-                <div className='mr-2'>
-                    <IndexButton index={building.index} icon={building.icon}/>
+            <div
+                className={`flex items-center cursor-pointer ${
+                    index === 0 && level > 0 ? 'mt-2' : ''
+                }`}
+            >
+                <div className="mr-3 flex-shrink-0">
+                    <IndexButton index={building.index} icon={building.icon} />
                 </div>
-                <div className="font-inter font-normal text-[28px] leading-[100%] tracking-[-0.05em]">
+                <div className="font-inter font-normal text-lg tracking-tight">
                     {building.name}
                 </div>
-
-                
             </div>
             {/* Recursively render children with further increased indentation */}
-            {building.children && renderBuildings(building.children, level + 3)}
+            {building.children && renderBuildings(building.children, level + 2)}
         </div>
     ));
 };
 
-export default function Drawer({ title }: DrawerProps) {
-    const [isOpen, setIsOpen] = useState(true); // State to control visibility
+export default function Drawer({ title, onClose, isOpen = true }: DrawerProps) {
+    const [drawerOpen, setDrawerOpen] = useState(isOpen);
+
+    // Update internal state when isOpen prop changes
+    useEffect(() => {
+        setDrawerOpen(isOpen);
+    }, [isOpen]);
 
     const handleCloseDrawer = () => {
-        setIsOpen(false); // Close the Drawer when X is clicked
+        setDrawerOpen(false);
+
+        // Use setTimeout to allow animation to complete before calling onClose
+        setTimeout(() => {
+            if (onClose) {
+                onClose();
+            }
+        }, 300); // Match duration with CSS transition
     };
 
-    if (!isOpen) return null; // If Drawer is closed, don't render it
-
+    // Handle body scroll lock when drawer is open
+    useEffect(() => {
+        if (drawerOpen) {
+            document.body.style.overflow = 'hidden';
+        } else {
+            document.body.style.overflow = '';
+        }
+        return () => {
+            document.body.style.overflow = '';
+        };
+    }, [drawerOpen]);
 
     return (
-        <div className="absolute top-0 right-0 h-full w-[400px] rounded-[10px] text-[#FFFFFF] gap-[10px] bg-[#D45756] shadow-lg z-50 overflow-y-auto">
-            <div className="h-[71px] px-[20px] py-[10px] bg-[#7F1532] flex items-center justify-between mt-5 font-medium text-[38px] leading-[100%] tracking-[-0.05em] font-inter">
-                {title}
-                <button className="p-1 hover:opacity-80" onClick={handleCloseDrawer}>
-                    <X size={30} />
-                </button>
+        <>
+            {/* Backdrop overlay with fade transition */}
+            <div
+                className={`fixed inset-0 bg-black/30 z-40 transition-opacity duration-300 ${
+                    drawerOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'
+                }`}
+                onClick={handleCloseDrawer}
+            />
+
+            {/* Drawer with slide transition */}
+            <div
+                className={`absolute top-0 right-0 h-full w-full sm:w-[320px] md:w-[350px] text-[#FFFFFF] bg-[#D45756] shadow-lg z-50 overflow-y-auto
+                transition-all duration-300 ease-in-out ${
+                    drawerOpen
+                        ? 'translate-x-0 opacity-100'
+                        : 'translate-x-full opacity-0'
+                }`}
+            >
+                <div className="px-4 py-3 bg-[#7F1532] flex items-center justify-between font-medium text-xl tracking-tight font-inter sticky top-0 z-10">
+                    {title}
+                    <button
+                        className="p-1.5 hover:bg-white/20 rounded-full transition-colors"
+                        onClick={handleCloseDrawer}
+                    >
+                        <X size={22} />
+                    </button>
+                </div>
+
+                <div className="px-3 py-2">
+                    {title === 'Buildings' && renderBuildings(buildingsData)}
+                    {title === 'Activity Area' &&
+                        renderBuildings(activityAreaData)}
+                    {title === 'Security & Parking' &&
+                        renderBuildings(securityAndParkingData)}
+                </div>
             </div>
-
-            {title === 'Buildings' && (
-                <div className="p-4">
-                    {renderBuildings(buildingsData)}
-                </div>
-            )}
-
-            {title === 'Activity Area' && (
-                <div className="p-4">
-                    {renderBuildings(activityAreaData)}
-                </div>
-            )}
-
-            {title === 'Security & Parking' && (
-                <div className="p-4">
-                    {renderBuildings(securityAndParkingData)}
-                </div>
-            )}
-        </div>
+        </>
     );
 }

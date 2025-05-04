@@ -13,7 +13,7 @@ export default {
                 inter: ['Inter', 'sans-serif'],
             },
             colors: {
-                background: 'hsl(var(--background))',
+                background: '#FFF5E3',
                 foreground: 'hsl(var(--foreground))',
                 'maroon-accent': {
                     DEFAULT: '#8A1438',

@@ -6,7 +6,6 @@ import SearchBar from '@/components/map/SearchBar';
 import SearchResults from '@/components/map/SearchResults';
 import Drawer from '@/components/map/Drawer';
 
-
 const Map = dynamic(() => import('@/components/map/Map'), {
     ssr: false,
     loading: () => (
@@ -17,33 +16,52 @@ const Map = dynamic(() => import('@/components/map/Map'), {
 });
 
 export default function ClientMap() {
+    // State for drawer visibility
     const [isBuildingOpen, setIsBuildingOpen] = useState(false);
+    const [isActivityOpen, setIsActivityOpen] = useState(false);
+    const [isSecurityOpen, setIsSecurityOpen] = useState(false);
+
+    // Toggle functions
     const toggleBuilding = () => {
         setIsBuildingOpen((prev) => !prev);
     };
 
-    const [isActivityOpen, setIsActivityOpen] = useState(false);
     const toggleActivity = () => {
         setIsActivityOpen((prev) => !prev);
     };
 
-    const [isSecurityOpen, setIsSecurityOpen] = useState(false);
     const toggleSecurity = () => {
         setIsSecurityOpen((prev) => !prev);
     };
-    
+
     return (
         <div className="h-screen w-screen relative">
-            <SearchBar onBuildingClick={toggleBuilding} onActivityClick={toggleActivity} onSecurityClick={toggleSecurity} />
-            
-            {isBuildingOpen && <Drawer title="Buildings" />}
-            {/* <SearchResults /> */}
-            {isActivityOpen && <Drawer title="Activity Area" />}
+            <SearchBar
+                onBuildingClick={toggleBuilding}
+                onActivityClick={toggleActivity}
+                onSecurityClick={toggleSecurity}
+            />
 
-            {isSecurityOpen && <Drawer title="Security & Parking" />}
-            
+            {/* Always render drawers, but control visibility through isOpen prop */}
+            <Drawer
+                title="Buildings"
+                onClose={() => setIsBuildingOpen(false)}
+                isOpen={isBuildingOpen}
+            />
+
+            <Drawer
+                title="Activity Area"
+                onClose={() => setIsActivityOpen(false)}
+                isOpen={isActivityOpen}
+            />
+
+            <Drawer
+                title="Security & Parking"
+                onClose={() => setIsSecurityOpen(false)}
+                isOpen={isSecurityOpen}
+            />
+
             {/* Map component */}
-
             <div className="h-full w-full">
                 <Map />
             </div>
