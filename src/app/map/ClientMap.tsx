@@ -20,7 +20,7 @@ export default function ClientMap() {
     const { activeDrawer, setActiveDrawer } = useMapStore();
 
     return (
-        <div className="h-screen w-screen relative">
+        <div className="h-screen w-screen relative overflow-hidden">
             <SearchBar />
 
             {/* Always render drawers, but control visibility through isOpen prop */}
@@ -43,7 +43,7 @@ export default function ClientMap() {
             />
 
             {/* Map component */}
-            <div className="h-full w-full">
+            <div className="h-full w-full overflow-hidden">
                 <Map />
             </div>
         </div>

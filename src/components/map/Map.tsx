@@ -300,6 +300,18 @@ const MapboxExample = () => {
         }
 
         try {
+            // Add CSS to prevent mapbox canvas from causing scrollbars
+            const mapboxCanvasStyle = document.createElement('style');
+            mapboxCanvasStyle.textContent = `
+                .mapboxgl-canvas-container {
+                    overflow: hidden !important;
+                }
+                .mapboxgl-canvas {
+                    overflow: hidden !important;
+                }
+            `;
+            document.head.appendChild(mapboxCanvasStyle);
+
             mapRef.current = new mapboxgl.Map({
                 container: mapContainerRef.current,
                 style: {
@@ -544,6 +556,7 @@ const MapboxExample = () => {
                 width: '100%',
                 height: '100%',
                 backgroundColor: '#FFF5E3',
+                overflow: 'hidden',
             }}
             className="w-full h-full"
         >
@@ -556,6 +569,7 @@ const MapboxExample = () => {
                     top: 0,
                     left: 0,
                     backgroundColor: '#FFF5E3',
+                    overflow: 'hidden',
                 }}
                 className="w-full h-full"
             ></div>
@@ -564,6 +578,7 @@ const MapboxExample = () => {
                 style={{
                     position: 'absolute',
                     pointerEvents: 'none', // Allow interactions with the map below
+                    overflow: 'hidden',
                 }}
                 className="w-full h-full"
             />
