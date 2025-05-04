@@ -4,7 +4,7 @@ import { ArrowLeftToLine } from 'lucide-react';
 import { useMapStore } from '@/store/mapStore';
 
 interface BuildingDetail {
-    id: number;
+    id: string;
     name: string;
     image: string;
     floors: {

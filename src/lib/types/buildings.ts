@@ -1,0 +1,895 @@
+export const mapMarkers = [
+    {
+        id: '9',
+        type: 'building',
+        name: 'Building 9',
+        icon: 'building',
+        coordinates: [123.898096, 10.323937],
+    },
+    {
+        id: '10',
+        type: 'building',
+        name: 'Building 10',
+        icon: 'building',
+        coordinates: [123.897949, 10.323871],
+    },
+    {
+        id: '8',
+        type: 'building',
+        name: 'Building 8',
+        icon: 'building',
+        coordinates: [123.898273, 10.323521],
+    },
+    {
+        id: '7',
+        type: 'building',
+        name: 'Building 7',
+        icon: 'building',
+        coordinates: [123.897928, 10.323404],
+    },
+    {
+        id: '6b',
+        type: 'building',
+        name: 'Building 6b',
+        icon: 'building',
+        coordinates: [123.897771, 10.32311],
+    },
+    {
+        id: '6a',
+        type: 'building',
+        name: 'Building 6a',
+        icon: 'building',
+        coordinates: [123.897737, 10.32278],
+    },
+    {
+        id: '6c',
+        type: 'building',
+        name: 'Building 6c',
+        icon: 'building',
+        coordinates: [123.897714, 10.322545],
+    },
+    {
+        id: '6',
+        type: 'building',
+        name: 'Building 6',
+        icon: 'building',
+        coordinates: [123.8978, 10.322611],
+    },
+    {
+        id: '1',
+        type: 'building',
+        name: 'Building 1',
+        icon: 'building',
+        coordinates: [123.898199, 10.322329],
+    },
+    {
+        id: '2',
+        type: 'building',
+        icon: 'building',
+        name: 'Building 2',
+        coordinates: [123.897939, 10.322249],
+    },
+    {
+        id: '5d',
+        type: 'building',
+        name: 'Building 5d',
+        icon: 'building',
+        coordinates: [123.897523, 10.322135],
+    },
+    {
+        id: '5a',
+        type: 'building',
+        name: 'Building 5a',
+        icon: 'building',
+        coordinates: [123.897562, 10.321921],
+    },
+    {
+        id: '5',
+        type: 'building',
+        name: 'Building 5',
+        icon: 'building',
+        coordinates: [123.89759, 10.321825],
+    },
+    {
+        id: '5b',
+        type: 'building',
+        name: 'Building 5b',
+        icon: 'building',
+        coordinates: [123.897685, 10.321631],
+    },
+    {
+        id: '5c',
+        type: 'building',
+        name: 'Building 5c',
+        icon: 'building',
+        coordinates: [123.897555, 10.321638],
+    },
+    {
+        id: 'A9',
+        type: 'featured',
+        name: 'Featured A9',
+        icon: 'star',
+        coordinates: [123.897727, 10.323369],
+    },
+    {
+        id: '4',
+        type: 'building',
+        name: 'Building 4',
+        icon: 'book',
+        coordinates: [123.897985, 10.321434],
+    },
+    {
+        id: '3',
+        type: 'building',
+        name: 'Building 3',
+        icon: 'building',
+        coordinates: [123.897882, 10.321726],
+    },
+    {
+        id: '3b',
+        type: 'building',
+        name: 'Building 3',
+        icon: 'clinic',
+        coordinates: [123.897962, 10.321684],
+    },
+    {
+        id: '3a',
+        type: 'building',
+        name: 'Building 3',
+        icon: 'food',
+        coordinates: [123.897946, 10.321814],
+    },
+    {
+        id: '13',
+        type: 'building',
+        name: 'Building 13',
+        icon: 'building',
+        coordinates: [123.899158, 10.322484],
+    },
+    {
+        id: '11',
+        type: 'building',
+        name: 'Building 13',
+        icon: 'building',
+        coordinates: [123.899292, 10.323221],
+    },
+    {
+        id: '11a',
+        type: 'building',
+        name: 'Building 13',
+        icon: 'building',
+        coordinates: [123.899462, 10.323281],
+    },
+    {
+        id: '11b',
+        type: 'building',
+        name: 'Building 13',
+        icon: 'building',
+        coordinates: [123.89943, 10.323088],
+    },
+    {
+        id: '11c',
+        type: 'building',
+        name: 'Building 13',
+        icon: 'building',
+        coordinates: [123.899506, 10.323501],
+    },
+    {
+        id: '14',
+        type: 'building',
+        name: 'Building 13',
+        icon: 'building',
+        coordinates: [123.899711, 10.321967],
+    },
+];
+
+export const mockBuildingsData = {
+    '9': {
+        id: '9',
+        name: 'College of Science Building',
+        image: '/assets/images/random-building.jpg',
+        floors: [
+            {
+                name: '1st Floor',
+                facilities: [
+                    'Office of the University Registrar',
+                    'Cashier Office',
+                    'College of Science Dean Office',
+                    'College of Science Secretary Office',
+                    'Bids and Awards Committee Office',
+                    'Comfort Rooms',
+                ],
+            },
+            {
+                name: 'Mezzanine Floor',
+                facilities: [
+                    'Legal Office',
+                    'Resident Psychologist Office',
+                    'Faculty Lounge',
+                    'Human Resources and Development Office',
+                    'Stock Room',
+                ],
+            },
+            {
+                name: '2nd Floor',
+                facilities: [
+                    'Math and Statistics Office',
+                    'Math-Stat Laboratory Rooms',
+                    'Comfort Rooms',
+                ],
+            },
+            {
+                name: '3rd Floor',
+                facilities: [
+                    'Department of Computer Science (DCS) Faculty Room',
+                    'DCS Laboratory Rooms',
+                    'DCS Mini Library',
+                    'DCS Mini Conference Room',
+                    'Comfort Rooms',
+                ],
+            },
+            {
+                name: '4th Floor',
+                facilities: [
+                    'DCS Lecture Rooms',
+                    'DCS Teaching Labs',
+                    'Comfort Rooms',
+                ],
+            },
+            {
+                name: '5th Floor',
+                facilities: [
+                    'Biology Faculty Room',
+                    'Biology Lecture Rooms',
+                    'Comfort Rooms',
+                ],
+            },
+            {
+                name: '6th Floor',
+                facilities: [
+                    'Histology Laboratory',
+                    'Botany Laboratory',
+                    'Zoology Laboratory',
+                    'Molecular Biology and Genetics Laboratory',
+                ],
+            },
+        ],
+    },
+    '10': {
+        id: '10',
+        name: 'College of Engineering Building',
+        image: '/assets/images/random-building.jpg',
+        floors: [
+            {
+                name: '1st Floor',
+                facilities: [
+                    'Engineering Dean Office',
+                    'Student Affairs Office',
+                    'Engineering Student Council Room',
+                    'Lecture Halls',
+                    'Comfort Rooms',
+                ],
+            },
+            {
+                name: '2nd Floor',
+                facilities: [
+                    'Civil Engineering Department',
+                    'Civil Engineering Labs',
+                    'Computer Labs',
+                    'Comfort Rooms',
+                ],
+            },
+            {
+                name: '3rd Floor',
+                facilities: [
+                    'Mechanical Engineering Department',
+                    'Thermodynamics Laboratory',
+                    'Fluid Mechanics Laboratory',
+                    'Comfort Rooms',
+                ],
+            },
+            {
+                name: '4th Floor',
+                facilities: [
+                    'Electrical Engineering Department',
+                    'Electronics Laboratory',
+                    'Electrical Circuits Laboratory',
+                    'Comfort Rooms',
+                ],
+            },
+        ],
+    },
+    '8': {
+        id: '8',
+        name: 'University Library',
+        image: '/assets/images/random-building.jpg',
+        floors: [
+            {
+                name: '1st Floor',
+                facilities: [
+                    'Circulation Desk',
+                    'Reference Section',
+                    'Newspaper and Magazines Area',
+                    'Study Areas',
+                    'Comfort Rooms',
+                ],
+            },
+            {
+                name: '2nd Floor',
+                facilities: [
+                    'General Collection',
+                    'Computer Research Area',
+                    'Study Rooms',
+                    'Comfort Rooms',
+                ],
+            },
+            {
+                name: '3rd Floor',
+                facilities: [
+                    'Filipiniana Section',
+                    'Archives',
+                    'Special Collections',
+                    'Multimedia Room',
+                    'Comfort Rooms',
+                ],
+            },
+        ],
+    },
+    '7': {
+        id: '7',
+        name: 'College of Social Sciences Building',
+        image: '/assets/images/random-building.jpg',
+        floors: [
+            {
+                name: '1st Floor',
+                facilities: [
+                    'Social Sciences Dean Office',
+                    'Department of Psychology',
+                    'Lecture Rooms',
+                    'Comfort Rooms',
+                ],
+            },
+            {
+                name: '2nd Floor',
+                facilities: [
+                    'Department of Sociology',
+                    'Department of Political Science',
+                    'Research Labs',
+                    'Comfort Rooms',
+                ],
+            },
+            {
+                name: '3rd Floor',
+                facilities: [
+                    'Department of History',
+                    'Department of Anthropology',
+                    'Faculty Rooms',
+                    'Comfort Rooms',
+                ],
+            },
+        ],
+    },
+    '6b': {
+        id: '6b',
+        name: 'College of Arts and Sciences Building B',
+        image: '/assets/images/random-building.jpg',
+        floors: [
+            {
+                name: '1st Floor',
+                facilities: ['Art Gallery', 'Lecture Rooms', 'Comfort Rooms'],
+            },
+            {
+                name: '2nd Floor',
+                facilities: [
+                    'Department of Fine Arts',
+                    'Studios',
+                    'Comfort Rooms',
+                ],
+            },
+        ],
+    },
+    '6a': {
+        id: '6a',
+        name: 'College of Arts and Sciences Building A',
+        image: '/assets/images/random-building.jpg',
+        floors: [
+            {
+                name: '1st Floor',
+                facilities: [
+                    'CAS Dean Office',
+                    'Department of Languages',
+                    'Comfort Rooms',
+                ],
+            },
+            {
+                name: '2nd Floor',
+                facilities: [
+                    'Department of Literature',
+                    'Faculty Rooms',
+                    'Comfort Rooms',
+                ],
+            },
+        ],
+    },
+    '6c': {
+        id: '6c',
+        name: 'College of Arts and Sciences Building C',
+        image: '/assets/images/random-building.jpg',
+        floors: [
+            {
+                name: '1st Floor',
+                facilities: [
+                    'Performance Theater',
+                    'Music Rooms',
+                    'Comfort Rooms',
+                ],
+            },
+            {
+                name: '2nd Floor',
+                facilities: [
+                    'Department of Music',
+                    'Practice Rooms',
+                    'Comfort Rooms',
+                ],
+            },
+        ],
+    },
+    '6': {
+        id: '6',
+        name: 'College of Arts and Sciences Main Building',
+        image: '/assets/images/random-building.jpg',
+        floors: [
+            {
+                name: '1st Floor',
+                facilities: [
+                    'CAS Administration Office',
+                    'Student Lounge',
+                    'Conference Room',
+                    'Comfort Rooms',
+                ],
+            },
+            {
+                name: '2nd Floor',
+                facilities: [
+                    'Faculty Offices',
+                    'Research Centers',
+                    'Meeting Rooms',
+                    'Comfort Rooms',
+                ],
+            },
+        ],
+    },
+    '1': {
+        id: '1',
+        name: 'Administration Building',
+        image: '/assets/images/random-building.jpg',
+        floors: [
+            {
+                name: '1st Floor',
+                facilities: [
+                    'Office of the President',
+                    'Office of the Vice President',
+                    'University Board Room',
+                    'Office of Student Affairs',
+                    'Comfort Rooms',
+                ],
+            },
+            {
+                name: '2nd Floor',
+                facilities: [
+                    'Budget Office',
+                    'Finance Department',
+                    'Human Resources',
+                    'Planning and Development Office',
+                    'Comfort Rooms',
+                ],
+            },
+        ],
+    },
+    '2': {
+        id: '2',
+        name: 'College of Business Administration',
+        image: '/assets/images/random-building.jpg',
+        floors: [
+            {
+                name: '1st Floor',
+                facilities: [
+                    'Business Administration Dean Office',
+                    'Department of Management',
+                    'Faculty Rooms',
+                    'Comfort Rooms',
+                ],
+            },
+            {
+                name: '2nd Floor',
+                facilities: [
+                    'Department of Accounting',
+                    'Department of Marketing',
+                    'Lecture Rooms',
+                    'Comfort Rooms',
+                ],
+            },
+            {
+                name: '3rd Floor',
+                facilities: [
+                    'Department of Economics',
+                    'Business Research Center',
+                    'Comfort Rooms',
+                ],
+            },
+        ],
+    },
+    '5d': {
+        id: '5d',
+        name: 'College of Education Building D',
+        image: '/assets/images/random-building.jpg',
+        floors: [
+            {
+                name: '1st Floor',
+                facilities: [
+                    'Education Research Center',
+                    'Instructional Materials Center',
+                    'Comfort Rooms',
+                ],
+            },
+            {
+                name: '2nd Floor',
+                facilities: [
+                    'Education Technology Labs',
+                    'Model Classrooms',
+                    'Comfort Rooms',
+                ],
+            },
+        ],
+    },
+    '5a': {
+        id: '5a',
+        name: 'College of Education Building A',
+        image: '/assets/images/random-building.jpg',
+        floors: [
+            {
+                name: '1st Floor',
+                facilities: [
+                    'Education Dean Office',
+                    'Department of Elementary Education',
+                    'Comfort Rooms',
+                ],
+            },
+            {
+                name: '2nd Floor',
+                facilities: [
+                    'Department of Secondary Education',
+                    'Faculty Rooms',
+                    'Comfort Rooms',
+                ],
+            },
+        ],
+    },
+    '5': {
+        id: '5',
+        name: 'College of Education Main Building',
+        image: '/assets/images/random-building.jpg',
+        floors: [
+            {
+                name: '1st Floor',
+                facilities: [
+                    'Education Administration Office',
+                    'Lecture Halls',
+                    'Comfort Rooms',
+                ],
+            },
+            {
+                name: '2nd Floor',
+                facilities: [
+                    'Faculty Offices',
+                    'Department of Special Education',
+                    'Comfort Rooms',
+                ],
+            },
+        ],
+    },
+    '5b': {
+        id: '5b',
+        name: 'College of Education Building B',
+        image: '/assets/images/random-building.jpg',
+        floors: [
+            {
+                name: '1st Floor',
+                facilities: [
+                    'Department of Physical Education',
+                    'Sports Science Laboratory',
+                    'Comfort Rooms',
+                ],
+            },
+            {
+                name: '2nd Floor',
+                facilities: [
+                    'Department of Health Education',
+                    'Faculty Rooms',
+                    'Comfort Rooms',
+                ],
+            },
+        ],
+    },
+    '5c': {
+        id: '5c',
+        name: 'College of Education Building C',
+        image: '/assets/images/random-building.jpg',
+        floors: [
+            {
+                name: '1st Floor',
+                facilities: [
+                    'Guidance and Counseling Center',
+                    'Student Teaching Office',
+                    'Comfort Rooms',
+                ],
+            },
+            {
+                name: '2nd Floor',
+                facilities: [
+                    'Curriculum Development Center',
+                    'Conference Rooms',
+                    'Comfort Rooms',
+                ],
+            },
+        ],
+    },
+    A9: {
+        id: 'A9',
+        name: 'University Amphitheater',
+        image: '/assets/images/random-building.jpg',
+        floors: [
+            {
+                name: 'Main Level',
+                facilities: [
+                    'Outdoor Stage',
+                    'Seating Area',
+                    'Lighting Control Room',
+                    'Dressing Rooms',
+                    'Comfort Rooms',
+                ],
+            },
+        ],
+    },
+    '4': {
+        id: '4',
+        name: 'University Library and Research Center',
+        image: '/assets/images/random-building.jpg',
+        floors: [
+            {
+                name: '1st Floor',
+                facilities: [
+                    'Main Reading Area',
+                    'Book Circulation',
+                    'Reference Section',
+                    'Digital Catalog',
+                    'Comfort Rooms',
+                ],
+            },
+            {
+                name: '2nd Floor',
+                facilities: [
+                    'Research Databases',
+                    'Study Carrels',
+                    'Group Study Rooms',
+                    'Comfort Rooms',
+                ],
+            },
+            {
+                name: '3rd Floor',
+                facilities: [
+                    'Archives',
+                    'Rare Books Collection',
+                    'Multimedia Section',
+                    'Comfort Rooms',
+                ],
+            },
+        ],
+    },
+    '3': {
+        id: '3',
+        name: 'College of Health Sciences Building',
+        image: '/assets/images/random-building.jpg',
+        floors: [
+            {
+                name: '1st Floor',
+                facilities: [
+                    'Health Sciences Dean Office',
+                    'Department of Nursing',
+                    'Comfort Rooms',
+                ],
+            },
+            {
+                name: '2nd Floor',
+                facilities: [
+                    'Department of Public Health',
+                    'Laboratories',
+                    'Comfort Rooms',
+                ],
+            },
+        ],
+    },
+    '3b': {
+        id: '3b',
+        name: 'University Health Services',
+        image: '/assets/images/random-building.jpg',
+        floors: [
+            {
+                name: '1st Floor',
+                facilities: [
+                    'Emergency Room',
+                    'Outpatient Department',
+                    'Pharmacy',
+                    'Comfort Rooms',
+                ],
+            },
+            {
+                name: '2nd Floor',
+                facilities: [
+                    'Medical Records',
+                    'Laboratory',
+                    'X-Ray Room',
+                    'Comfort Rooms',
+                ],
+            },
+        ],
+    },
+    '3a': {
+        id: '3a',
+        name: 'University Food Court',
+        image: '/assets/images/random-building.jpg',
+        floors: [
+            {
+                name: 'Ground Floor',
+                facilities: [
+                    'Food Stalls',
+                    'Dining Area',
+                    'Kitchen',
+                    'Comfort Rooms',
+                ],
+            },
+        ],
+    },
+    '13': {
+        id: '13',
+        name: 'College of Law',
+        image: '/assets/images/random-building.jpg',
+        floors: [
+            {
+                name: '1st Floor',
+                facilities: ['Law Dean Office', 'Moot Court', 'Comfort Rooms'],
+            },
+            {
+                name: '2nd Floor',
+                facilities: ['Law Library', 'Faculty Rooms', 'Comfort Rooms'],
+            },
+            {
+                name: '3rd Floor',
+                facilities: ['Lecture Rooms', 'Study Halls', 'Comfort Rooms'],
+            },
+        ],
+    },
+    '11': {
+        id: '11',
+        name: 'College of Agriculture Building',
+        image: '/assets/images/random-building.jpg',
+        floors: [
+            {
+                name: '1st Floor',
+                facilities: [
+                    'Agriculture Dean Office',
+                    'Department of Agronomy',
+                    'Comfort Rooms',
+                ],
+            },
+            {
+                name: '2nd Floor',
+                facilities: [
+                    'Department of Horticulture',
+                    'Research Labs',
+                    'Comfort Rooms',
+                ],
+            },
+        ],
+    },
+    '11a': {
+        id: '11a',
+        name: 'Agricultural Research Center',
+        image: '/assets/images/random-building.jpg',
+        floors: [
+            {
+                name: '1st Floor',
+                facilities: [
+                    'Soil Testing Laboratory',
+                    'Plant Tissue Culture Lab',
+                    'Comfort Rooms',
+                ],
+            },
+            {
+                name: '2nd Floor',
+                facilities: [
+                    'Entomology Laboratory',
+                    'Plant Pathology Lab',
+                    'Comfort Rooms',
+                ],
+            },
+        ],
+    },
+    '11b': {
+        id: '11b',
+        name: 'Animal Science Building',
+        image: '/assets/images/random-building.jpg',
+        floors: [
+            {
+                name: '1st Floor',
+                facilities: [
+                    'Department of Animal Science',
+                    'Veterinary Clinic',
+                    'Comfort Rooms',
+                ],
+            },
+            {
+                name: '2nd Floor',
+                facilities: [
+                    'Animal Nutrition Laboratory',
+                    'Animal Genetics Lab',
+                    'Comfort Rooms',
+                ],
+            },
+        ],
+    },
+    '11c': {
+        id: '11c',
+        name: 'Agricultural Engineering Building',
+        image: '/assets/images/random-building.jpg',
+        floors: [
+            {
+                name: '1st Floor',
+                facilities: [
+                    'Department of Agricultural Engineering',
+                    'Farm Mechanics Workshop',
+                    'Comfort Rooms',
+                ],
+            },
+            {
+                name: '2nd Floor',
+                facilities: [
+                    'Irrigation and Drainage Laboratory',
+                    'Agricultural Machinery Lab',
+                    'Comfort Rooms',
+                ],
+            },
+        ],
+    },
+    '14': {
+        id: '14',
+        name: 'College of Communication',
+        image: '/assets/images/random-building.jpg',
+        floors: [
+            {
+                name: '1st Floor',
+                facilities: [
+                    'Communication Dean Office',
+                    'Radio Broadcasting Studio',
+                    'Comfort Rooms',
+                ],
+            },
+            {
+                name: '2nd Floor',
+                facilities: [
+                    'TV Production Studio',
+                    'Multimedia Lab',
+                    'Comfort Rooms',
+                ],
+            },
+            {
+                name: '3rd Floor',
+                facilities: [
+                    'Department of Journalism',
+                    'Department of Communication Studies',
+                    'Comfort Rooms',
+                ],
+            },
+        ],
+    },
+};
