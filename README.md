@@ -1,4 +1,6 @@
-# Next.js Project Setup Guide
+# UPSee
+
+UPSee is a University of the Philippines Cebu campus explorer web application that provides an interactive aerial map of the university. Users can navigate the campus virtually, click on buildings to view detailed information, enter buildings to explore classrooms, and access room-specific details such as schedules and availability. The platform features a powerful search functionality to quickly locate campus facilities. UPSee also includes an admin interface that allows authorized personnel to manage and update room information, schedules, contact details, and other relevant data.
 
 ## Prerequisites
 
