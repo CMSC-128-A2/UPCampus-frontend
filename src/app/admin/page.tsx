@@ -1,15 +1,18 @@
 'use client';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Icon } from '@iconify/react';
-import ScheduleModal from '@/components/generics/ScheduleModal';
-import ViewScheduleModal from '@/components/generics/ViewScheduleModal';
+import ScheduleModal from '@/components/schedule/ScheduleModal';
+import ViewScheduleModal from '@/components/schedule/ViewScheduleModal';
+import EditScheduleModal from '@/components/schedule/EditScheduleModal';
+import { schedulesApi, parseSchedule, Course, ClassSection as ApiClassSection } from '@/lib/api';
 
 // Define TypeScript types for the data structure
 type ScheduleType = 'Lecture' | 'Laboratory';
 
 interface ClassSection {
+    id: string; // Remove the optional marker (?) to make id required
     section: string;
     type: ScheduleType;
     room: string;
@@ -22,106 +25,34 @@ interface CourseSchedule {
     sections: ClassSection[];
 }
 
-// Mock data for class schedules
-const mockClassSchedules: CourseSchedule[] = [
-    {
-        id: '1',
-        courseCode: 'CMSC 126',
-        sections: [
-            {
-                section: 'A',
-                type: 'Lecture',
-                room: 'SCI 405',
-                schedule: 'M TH | 11:00 AM - 12:00 PM'
-            },
-            {
-                section: 'A1',
-                type: 'Laboratory',
-                room: 'SCI 402',
-                schedule: 'TH | 3:00 PM - 6:00 PM'
-            },
-            {
-                section: 'A2',
-                type: 'Laboratory',
-                room: 'SCI 402',
-                schedule: 'M | 3:00 PM - 6:00 PM'
-            }
-        ]
-    },
-    {
-        id: '2',
-        courseCode: 'CMSC 129',
-        sections: [
-            {
-                section: 'A',
-                type: 'Lecture',
-                room: 'SCI 405',
-                schedule: 'M TH | 9:00 AM - 10:00 AM'
-            },
-            {
-                section: 'A1',
-                type: 'Laboratory',
-                room: 'SCI 404',
-                schedule: 'T | 9:00 AM - 12:00 PM'
-            },
-            {
-                section: 'A2',
-                type: 'Laboratory',
-                room: 'SCI 404',
-                schedule: 'F | 9:00 AM - 12:00 PM'
-            }
-        ]
-    },
-    {
-        id: '3',
-        courseCode: 'MATH 101',
-        sections: [
-            {
-                section: 'B',
-                type: 'Lecture',
-                room: 'SCI 301',
-                schedule: 'T F | 1:00 PM - 2:30 PM'
-            },
-            {
-                section: 'B1',
-                type: 'Laboratory',
-                room: 'SCI 302',
-                schedule: 'W | 1:00 PM - 4:00 PM'
-            }
-        ]
-    },
-    {
-        id: '4',
-        courseCode: 'PHYS 105',
-        sections: [
-            {
-                section: 'C',
-                type: 'Lecture',
-                room: 'SCI 401',
-                schedule: 'M W | 2:00 PM - 3:30 PM'
-            },
-            {
-                section: 'C1',
-                type: 'Laboratory',
-                room: 'SCI 408',
-                schedule: 'F | 10:00 AM - 1:00 PM'
-            },
-            {
-                section: 'C2',
-                type: 'Laboratory',
-                room: 'SCI 408',
-                schedule: 'F | 2:00 PM - 5:00 PM'
-            }
-        ]
-    }
-];
-
 function AdminPage() {
-    const [classSchedules, setClassSchedules] = useState(mockClassSchedules);
+    const [classSchedules, setClassSchedules] = useState<CourseSchedule[]>([]);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isViewModalOpen, setIsViewModalOpen] = useState(false);
+    const [isEditModalOpen, setIsEditModalOpen] = useState(false);
     const [selectedSchedule, setSelectedSchedule] = useState<{ course: CourseSchedule, section: ClassSection } | null>(null);
     const [searchQuery, setSearchQuery] = useState('');
+    const [isLoading, setIsLoading] = useState(true);
+    const [error, setError] = useState<string | null>(null);
+
+    // Fetch data from API
+    useEffect(() => {
+        const fetchCourses = async () => {
+            try {
+                setIsLoading(true);
+                const courses = await schedulesApi.getCourses();
+                setClassSchedules(courses);
+                setError(null);
+            } catch (err) {
+                console.error('Error fetching courses:', err);
+                setError('Failed to load schedules. Please try again later.');
+            } finally {
+                setIsLoading(false);
+            }
+        };
+
+        fetchCourses();
+    }, []);
 
     // Filter class schedules based on search query
     const filteredSchedules = searchQuery.trim() === ''
@@ -159,27 +90,51 @@ function AdminPage() {
         setSelectedSchedule(null);
     };
 
-    // Handle delete schedule - would connect to API in real application
-    const handleDeleteSchedule = (courseId: string, sectionName: string) => {
-        // Filter out the deleted section
-        const updatedSchedules = classSchedules.map(course => {
-            if (course.id === courseId) {
-                return {
-                    ...course,
-                    sections: course.sections.filter(section => section.section !== sectionName)
-                };
+    const openEditModal = () => {
+        setIsViewModalOpen(false);
+        setIsEditModalOpen(true);
+    };
+
+    const closeEditModal = () => {
+        setIsEditModalOpen(false);
+    };
+
+    // Handle delete schedule
+    const handleDeleteSchedule = async (courseId: string, sectionName: string) => {
+        try {
+            await schedulesApi.deleteSection(courseId, sectionName);
+            
+            // Update local state after successful API call
+            const updatedSchedules = classSchedules.map(course => {
+                if (course.id === courseId) {
+                    return {
+                        ...course,
+                        sections: course.sections.filter(section => section.section !== sectionName)
+                    };
+                }
+                return course;
+            });
+
+            // Check if the course has any sections left
+            const course = updatedSchedules.find(c => c.id === courseId);
+            if (course && course.sections.length === 0) {
+                // If no sections left, delete the course
+                await schedulesApi.deleteCourse(courseId);
+                // Remove the course from the list
+                const filteredSchedules = updatedSchedules.filter(c => c.id !== courseId);
+                setClassSchedules(filteredSchedules);
+            } else {
+                // Otherwise just update the schedules
+                setClassSchedules(updatedSchedules);
             }
-            return course;
-        });
-
-        // Remove courses with no sections
-        const filteredSchedules = updatedSchedules.filter(course => course.sections.length > 0);
-
-        setClassSchedules(filteredSchedules);
+        } catch (error) {
+            console.error('Error deleting section:', error);
+            alert('Failed to delete section. Please try again.');
+        }
     };
 
     // Handle save new schedule
-    const handleSaveSchedule = (scheduleData: {
+    const handleSaveSchedule = async (scheduleData: {
         courseCode: string;
         section: string;
         type: string;
@@ -194,61 +149,47 @@ function AdminPage() {
             return;
         }
 
-        // Create the schedule string format
-        const scheduleString = `${scheduleData.day} | ${scheduleData.time}`;
-
-        // Find if the course already exists
-        const existingCourse = classSchedules.find(
-            course => course.courseCode === scheduleData.courseCode
-        );
-
-        if (existingCourse) {
-            // Add a new section to the existing course
-            const updatedSchedules = classSchedules.map(course => {
-                if (course.courseCode === scheduleData.courseCode) {
-                    // Check if section already exists
-                    const sectionExists = course.sections.some(
-                        section => section.section === scheduleData.section
-                    );
-
-                    if (sectionExists) {
-                        alert(`Section ${scheduleData.section} already exists for ${scheduleData.courseCode}`);
-                        return course;
-                    }
-
-                    return {
-                        ...course,
-                        sections: [
-                            ...course.sections,
-                            {
+        try {
+            // Format data for API
+            const apiData = {
+                course_code: scheduleData.courseCode,
                                 section: scheduleData.section,
-                                type: scheduleData.type as ScheduleType,
+                type: scheduleData.type,
                                 room: scheduleData.room,
-                                schedule: scheduleString
-                            }
-                        ]
-                    };
-                }
-                return course;
-            });
-
-            setClassSchedules(updatedSchedules);
-        } else {
-            // Create a new course with the section
-            const newCourse: CourseSchedule = {
-                id: `${Date.now()}`, // Generate a unique ID
-                courseCode: scheduleData.courseCode,
-                sections: [
-                    {
-                        section: scheduleData.section,
-                        type: scheduleData.type as ScheduleType,
-                        room: scheduleData.room,
-                        schedule: scheduleString
-                    }
-                ]
+                day: scheduleData.day,
+                time: scheduleData.time
             };
 
-            setClassSchedules([...classSchedules, newCourse]);
+            // Call API to create section
+            await schedulesApi.createSection(apiData);
+            
+            // Refresh the course list to get updated data
+            const courses = await schedulesApi.getCourses();
+            setClassSchedules(courses);
+        } catch (error: any) {
+            console.error('Error saving schedule:', error);
+            alert(error.message || 'Failed to save schedule. Please try again.');
+        }
+    };
+
+    // Handle edit schedule
+    const handleEditSchedule = async (sectionId: string, scheduleData: {
+        course_code?: string;
+        section: string;
+        type: string;
+        room: string;
+        day: string;
+        time: string;
+    }) => {
+        try {
+            await schedulesApi.updateSection(sectionId, scheduleData);
+            
+            // Refresh the course list to get updated data
+            const courses = await schedulesApi.getCourses();
+            setClassSchedules(courses);
+        } catch (error: any) {
+            console.error('Error updating schedule:', error);
+            alert(error.message || 'Failed to update schedule. Please try again.');
         }
     };
 
@@ -353,8 +294,34 @@ function AdminPage() {
                                 </div>
                             </div>
 
+                            {/* Loading State */}
+                            {isLoading && (
+                                <div className="bg-white p-8 rounded-lg text-center">
+                                    <div className="flex flex-col items-center">
+                                        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#4392F1] mb-4"></div>
+                                        <h3 className="text-xl font-medium text-gray-700">Loading schedules...</h3>
+                                    </div>
+                                </div>
+                            )}
+
+                            {/* Error State */}
+                            {error && !isLoading && (
+                                <div className="bg-white p-8 rounded-lg text-center">
+                                    <div className="flex flex-col items-center">
+                                        <Icon icon="ph:warning-circle" width="48" height="48" className="text-red-500 mb-4" />
+                                        <h3 className="text-xl font-medium text-gray-700 mb-2">{error}</h3>
+                                        <button 
+                                            className="mt-4 px-4 py-2 bg-[#4392F1] text-white rounded-lg"
+                                            onClick={() => window.location.reload()}
+                                        >
+                                            Retry
+                                        </button>
+                                    </div>
+                                </div>
+                            )}
+
                             {/* Class Schedules */}
-                            {filteredSchedules.length > 0 ? (
+                            {!isLoading && !error && filteredSchedules.length > 0 ? (
                                 filteredSchedules.map((course) => (
                                     <div key={course.id} className="bg-white overflow-hidden mb-6 last:mb-0">
                                         <div className="bg-[#CCE8FF] py-3 px-4 text-3xl">
@@ -389,7 +356,7 @@ function AdminPage() {
                                         </div>
                                     </div>
                                 ))
-                            ) : (
+                            ) : !isLoading && !error && (
                                 <div className="bg-white p-8 rounded-lg text-center">
                                     <div className="flex flex-col items-center">
                                         <Icon icon="ph:magnifying-glass" width="48" height="48" className="text-gray-400 mb-4" />
@@ -424,6 +391,22 @@ function AdminPage() {
                             closeViewModal();
                         }
                     }}
+                    onEdit={openEditModal}
+                />
+            )}
+            {selectedSchedule && selectedSchedule.section.id && (
+                <EditScheduleModal
+                    isOpen={isEditModalOpen}
+                    onClose={closeEditModal}
+                    sectionId={selectedSchedule.section.id}
+                    initialData={{
+                        courseCode: selectedSchedule.course.courseCode,
+                        section: selectedSchedule.section.section,
+                        type: selectedSchedule.section.type,
+                        room: selectedSchedule.section.room,
+                        schedule: selectedSchedule.section.schedule
+                    }}
+                    onSave={handleEditSchedule}
                 />
             )}
         </div>
