@@ -1,9 +1,16 @@
+'use client';
 import React, { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { Search, Building, Map, X } from 'lucide-react';
+import { Search, Building, Map, X, Goal, ShieldUser } from 'lucide-react';
 
-const SearchBar = () => {
+interface SearchBarProps {
+    onBuildingClick:()=> void;
+    onActivityClick:()=> void;
+    onSecurityClick:()=> void;
+}
+
+const SearchBar: React.FC<SearchBarProps> = ({onBuildingClick, onActivityClick, onSecurityClick}) => {
     const [showSearchInput, setShowSearchInput] = useState(false);
 
     return (
@@ -35,12 +42,28 @@ const SearchBar = () => {
                         <Search size={24} className="text-[#7F1532]" />
                     </div>
 
-                    <div className="w-[49px] h-[49.2px] rounded-[5px] p-[10px] gap-[10px] bg-[#FFFFFF] cursor-pointer flex items-center justify-center">
-                        <Building size={24} className="text-[#7F1532]" />
+                    <div  
+                        onClick={onBuildingClick}
+                        className="group w-[49px] h-[49.2px] rounded-[5px] p-[10px] gap-[10px] bg-[#FFFFFF] cursor-pointer flex items-center justify-center 
+                        hover:bg-[#FFAE1D] transition-colors duration-300 ease-in-out">
+                        <Building 
+                            size={24} 
+                            className="text-[#7F1532] group-hover:text-[#004D37] transition-colors duration-300 ease-in-out" 
+                        />
                     </div>
 
-                    <div className="w-[49px] h-[49.2px] rounded-[5px] p-[10px] gap-[10px] bg-[#FFFFFF] cursor-pointer flex items-center justify-center">
-                        <Map size={24} className="text-[#7F1532]" />
+                    <div
+                        onClick={onActivityClick}
+                        className="group w-[49px] h-[49.2px] rounded-[5px] p-[10px] gap-[10px] bg-[#FFFFFF] cursor-pointer flex items-center justify-center 
+                        hover:bg-[#FFAE1D] transition-colors duration-300 ease-in-out"
+                    >
+                        <Goal size={24} className="text-[#7F1532] group-hover:text-[#004D37] transition-colors duration-300 ease-in-out" />
+                    </div>
+                    <div 
+                        onClick={onSecurityClick}
+                        className="group w-[49px] h-[49.2px] rounded-[5px] p-[10px] gap-[10px] bg-[#FFFFFF] cursor-pointer flex items-center justify-center 
+                        hover:bg-[#FFAE1D] transition-colors duration-300 ease-in-out">
+                        <ShieldUser size={24} className="text-[#7F1532] group-hover:text-[#004D37] transition-colors duration-300 ease-in-out" />
                     </div>
                 </>
             )}
