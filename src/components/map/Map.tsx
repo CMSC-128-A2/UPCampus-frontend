@@ -105,36 +105,115 @@ const MapboxExample = () => {
         [number, number] | null
     >(null);
 
-    const buildings = [
+    const mapMarkers = [
         {
             id: '9',
+            type: 'building',
             icon: <Building />,
             name: 'Building 9',
             coordinates: [123.898096, 10.323937],
         },
         {
             id: '10',
+            type: 'building',
             icon: <Building />,
             name: 'Building 10',
             coordinates: [123.897949, 10.323871],
         },
         {
             id: '8',
+            type: 'building',
             icon: <Building />,
             name: 'Building 8',
             coordinates: [123.898273, 10.323521],
         },
         {
             id: '7',
+            type: 'building',
             icon: <Building />,
             name: 'Building 7',
             coordinates: [123.897928, 10.323404],
         },
-    ];
-
-    const featuredMarks = [
+        {
+            id: '6b',
+            type: 'building',
+            icon: <Building />,
+            name: 'Building 6b',
+            coordinates: [123.897771, 10.32311],
+        },
+        {
+            id: '6a',
+            type: 'building',
+            icon: <Building />,
+            name: 'Building 6a',
+            coordinates: [123.897737, 10.32278],
+        },
+        {
+            id: '6c',
+            type: 'building',
+            icon: <Building />,
+            name: 'Building 6a',
+            coordinates: [123.897714, 10.322545],
+        },
+        {
+            id: '6',
+            type: 'building',
+            icon: <Building />,
+            name: 'Building 6a',
+            coordinates: [123.8978, 10.322611],
+        },
+        {
+            id: '1',
+            type: 'building',
+            icon: <Building />,
+            name: 'Building 6a',
+            coordinates: [123.898199, 10.322329],
+        },
+        {
+            id: '2',
+            type: 'building',
+            icon: <Building />,
+            name: 'Building 6a',
+            coordinates: [123.897939, 10.322249],
+        },
+        {
+            id: '5d',
+            type: 'building',
+            icon: <Building />,
+            name: 'Building 6a',
+            coordinates: [123.897523, 10.322135],
+        },
+        {
+            id: '5a',
+            type: 'building',
+            icon: <Building />,
+            name: 'Building 6a',
+            coordinates: [123.897562, 10.321921],
+        },
+        {
+            id: '5',
+            type: 'building',
+            icon: <Building />,
+            name: 'Building 6a',
+            coordinates: [123.89759, 10.321825],
+        },
+        {
+            id: '5b',
+            type: 'building',
+            icon: <Building />,
+            name: 'Building 6a',
+            coordinates: [123.897685, 10.321631],
+        },
+        {
+            id: '5c',
+            type: 'building',
+            icon: <Building />,
+            name: 'Building 6a',
+            coordinates: [123.897555, 10.321638],
+        },
         {
             id: 'A9',
+            type: 'featured',
             icon: <Star />,
             name: 'Featured A9',
             coordinates: [123.897727, 10.323369],
@@ -168,9 +247,7 @@ const MapboxExample = () => {
     };
 
     // Function to create a custom marker element
-    const createCustomMarkerElement = (
-        marker: (typeof buildings)[0] | (typeof featuredMarks)[0],
-    ) => {
+    const createCustomMarkerElement = (marker: (typeof mapMarkers)[0]) => {
         // Create marker element
         const markerEl = document.createElement('div');
         markerEl.className = 'custom-marker';
@@ -183,14 +260,16 @@ const MapboxExample = () => {
             'flex items-center bg-maroon-accent text-white rounded-full px-2 py-1';
         markerContent.style.display = 'flex';
         markerContent.style.alignItems = 'center';
-        markerContent.style.backgroundColor = '#8A1438'; // Rose color for all markers
+
+        // Same styling for all markers
+        markerContent.style.backgroundColor = '#8A1438'; // Maroon color for all markers
         markerContent.style.color = 'maroon';
         markerContent.style.border = '2px solid maroon';
         markerContent.style.borderRadius = '9999px';
         markerContent.style.padding = '2px 6px'; // Reduced padding
         markerContent.style.boxShadow = '0 2px 4px rgba(0,0,0,0.2)';
 
-        // Building icon - same for all markers
+        // Building icon for all markers
         const iconSpan = document.createElement('span');
         iconSpan.innerHTML =
             '<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2" width="16" height="20" rx="2" ry="2"/><path d="M9 22v-4h6v4"/><path d="M8 6h.01"/><path d="M16 6h.01"/><path d="M12 6h.01"/><path d="M12 10h.01"/><path d="M12 14h.01"/><path d="M16 10h.01"/><path d="M16 14h.01"/><path d="M8 10h.01"/><path d="M8 14h.01"/></svg>';
@@ -235,30 +314,17 @@ const MapboxExample = () => {
         Object.values(markersRef.current).forEach((marker) => marker.remove());
         markersRef.current = {};
 
-        // Add building markers
-        buildings.forEach((building) => {
-            const markerEl = createCustomMarkerElement(building);
-            const marker = new mapboxgl.Marker({
+        // Add all markers (buildings and featured)
+        mapMarkers.forEach((mapMarker) => {
+            const markerEl = createCustomMarkerElement(mapMarker);
+            const mapboxMarker = new mapboxgl.Marker({
                 element: markerEl,
                 anchor: 'bottom',
             })
-                .setLngLat(building.coordinates as [number, number])
+                .setLngLat(mapMarker.coordinates as [number, number])
                 .addTo(mapRef.current!);
 
-            markersRef.current[building.id] = marker;
-        });
-
-        // Add featured markers
-        featuredMarks.forEach((featured) => {
-            const markerEl = createCustomMarkerElement(featured);
-            const marker = new mapboxgl.Marker({
-                element: markerEl,
-                anchor: 'bottom',
-            })
-                .setLngLat(featured.coordinates as [number, number])
-                .addTo(mapRef.current!);
-
-            markersRef.current[featured.id] = marker;
+            markersRef.current[mapMarker.id] = mapboxMarker;
         });
     };
 
@@ -459,7 +525,16 @@ const MapboxExample = () => {
                                 `
                                 <div style="font-family: sans-serif; text-align: center;">
                                     <h3 style="margin: 0 0 5px 0; font-weight: bold; font-size: 14px;">Coordinates</h3>
-                                    <p style="margin: 0; font-size: 13px; font-family: monospace;">[${lng}, ${lat}]</p>
+                                    <p style="margin: 0 0 5px 0; font-size: 13px; font-family: monospace;">[${lng}, ${lat}]</p>
+                                    <button 
+                                        id="copy-coords-btn" 
+                                        style="background-color: #8A1438; color: white; border: none; border-radius: 4px; padding: 4px 8px; font-size: 12px; cursor: pointer; margin-top: 2px;"
+                                        onclick="navigator.clipboard.writeText('[${lng}, ${lat}]').then(() => { 
+                                            const btn = document.getElementById('copy-coords-btn');
+                                            btn.textContent = 'Copied!';
+                                            setTimeout(() => { btn.textContent = 'Copy' }, 2000);
+                                        })"
+                                    >Copy</button>
                                 </div>
                             `,
                             )
@@ -510,6 +585,26 @@ const MapboxExample = () => {
                     }
                 }
             });
+        }
+    }, [selectedMarkId, mapLoaded]);
+
+    // Effect to zoom to selected marker when selectedMarkId changes
+    useEffect(() => {
+        if (mapLoaded && selectedMarkId && mapRef.current) {
+            // Find the selected marker in mapMarkers
+            const selectedMarker = mapMarkers.find(
+                (marker) => marker.id === selectedMarkId,
+            );
+
+            // If marker exists, zoom to its coordinates
+            if (selectedMarker) {
+                mapRef.current.flyTo({
+                    center: selectedMarker.coordinates as [number, number],
+                    zoom: 19,
+                    duration: 1000, // Animation duration in milliseconds
+                    essential: true, // This animation is considered essential
+                });
+            }
         }
     }, [selectedMarkId, mapLoaded]);
 

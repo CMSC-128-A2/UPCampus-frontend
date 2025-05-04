@@ -3,22 +3,12 @@ import React, { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Search, Building, Map, X, Goal, ShieldUser } from 'lucide-react';
+import { useMapStore, MapDrawerType } from '@/store/mapStore';
 
-interface SearchBarProps {
-    onBuildingClick: () => void;
-    onActivityClick: () => void;
-    onSecurityClick: () => void;
-    openDrawer: 'buildings' | 'activity' | 'security' | null;
-}
-
-const SearchBar: React.FC<SearchBarProps> = ({
-    onBuildingClick,
-    onActivityClick,
-    onSecurityClick,
-    openDrawer,
-}) => {
+const SearchBar: React.FC = () => {
     const [showSearchInput, setShowSearchInput] = useState(false);
-    console.log(openDrawer, 'here');
+    const { activeDrawer, toggleDrawer } = useMapStore();
+
     return (
         <div className="flex items-center max-w-[calc(100vw-20px)] w-[518px] h-[69.2px] m-[10px] rounded-[10px] p-[10px] gap-[10px] bg-[#7F1532] z-10 absolute top-0 left-0">
             {!showSearchInput && (
@@ -49,10 +39,10 @@ const SearchBar: React.FC<SearchBarProps> = ({
                     </div>
 
                     <div
-                        onClick={onBuildingClick}
+                        onClick={() => toggleDrawer('buildings')}
                         className={`group w-[49px] h-[49.2px] rounded-[5px] p-[10px] gap-[10px] cursor-pointer flex items-center justify-center 
                         hover:bg-[#FFAE1D] transition-colors duration-300 ease-in-out ${
-                            openDrawer === 'buildings'
+                            activeDrawer === 'buildings'
                                 ? 'bg-[#FFAE1D]'
                                 : 'bg-white'
                         }`}
@@ -64,10 +54,10 @@ const SearchBar: React.FC<SearchBarProps> = ({
                     </div>
 
                     <div
-                        onClick={onActivityClick}
+                        onClick={() => toggleDrawer('activity')}
                         className={`group w-[49px] h-[49.2px] rounded-[5px] p-[10px] gap-[10px] bg-[#FFFFFF] cursor-pointer flex items-center justify-center 
                         hover:bg-[#FFAE1D] transition-colors duration-300 ease-in-out ${
-                            openDrawer === 'activity' ? 'bg-[#FFAE1D]' : ''
+                            activeDrawer === 'activity' ? 'bg-[#FFAE1D]' : ''
                         }`}
                     >
                         <Goal
@@ -76,10 +66,10 @@ const SearchBar: React.FC<SearchBarProps> = ({
                         />
                     </div>
                     <div
-                        onClick={onSecurityClick}
+                        onClick={() => toggleDrawer('security')}
                         className={`group w-[49px] h-[49.2px] rounded-[5px] p-[10px] gap-[10px] bg-[#FFFFFF] cursor-pointer flex items-center justify-center 
                         hover:bg-[#FFAE1D] transition-colors duration-300 ease-in-out ${
-                            openDrawer === 'security' ? 'bg-[#FFAE1D]' : ''
+                            activeDrawer === 'security' ? 'bg-[#FFAE1D]' : ''
                         }`}
                     >
                         <ShieldUser

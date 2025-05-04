@@ -27,7 +27,7 @@ const renderBuildings = (buildings: any[], level = 0) => {
         >
             {/* Add margin-top to first child only */}
             <button
-                className={`flex items-center text-left ${
+                className={`flex items-start text-left ${
                     index === 0 && level > 0 ? 'mt-2' : ''
                 }`}
                 onClick={() => {
