@@ -101,10 +101,22 @@ const MapboxExample = () => {
                 '<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path></svg>';
         } else if (marker.icon === 'clinic') {
             iconSpan.innerHTML =
-                '<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L12 22"/><path d="M2 12L22 12"/></svg>';
+                '<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><path d="M12 11v4m2-2h-4m6-7V4a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2m10 0v14M6 6v14"/><rect width="20" height="14" x="2" y="6" rx="2"/></g></svg>';
         } else if (marker.icon === 'food') {
             iconSpan.innerHTML =
                 '<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2"/><path d="M7 2v20"/><path d="M21 15V2v0a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3Zm0 0v7"/></svg>';
+        } else if (marker.icon === 'volleyball') {
+            iconSpan.innerHTML =
+                '<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><path d="M11.1 7.1a16.55 16.55 0 0 1 10.9 4M12 12a12.6 12.6 0 0 1-8.7 5m13.5-3.4a16.55 16.55 0 0 1-9 7.5"/><path d="M20.7 17a12.8 12.8 0 0 0-8.7-5a13.3 13.3 0 0 1 0-10M6.3 3.8a16.55 16.55 0 0 0 1.9 11.5"/><circle cx="12" cy="12" r="10"/></g></svg>';
+        } else if (marker.icon === 'tent') {
+            iconSpan.innerHTML =
+                '<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.5 21L14 3m6.5 18L10 3m5.5 18L12 15l-3.5 6M2 21h20"/></svg>';
+        } else if (marker.icon === 'target') {
+            iconSpan.innerHTML =
+                '<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><path d="M19 2v3h3m-8.6 5.6L22 2"/><circle cx="12" cy="12" r="2"/><path d="M12.3 6H12a6 6 0 1 0 6 6v-.3"/><path d="M15 2.5A9.93 9.93 0 1 0 21.5 9M5.3 19.4L4 22m14.7-2.6L20 22"/></g></svg>';
+        } else if (marker.icon === 'football') {
+            iconSpan.innerHTML =
+                '<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M11.9 6.7s-3 1.3-5 3.6c0 0 0 3.6 1.9 5.9c0 0 3.1.7 6.2 0c0 0 1.9-2.3 1.9-5.9c0 .1-2-2.3-5-3.6m0 0V2m5 8.4s3-1.4 4.5-1.6M15 16.3s1.9 2.7 2.9 3.7m-9.1-3.7S6.9 19 6 20"/><path d="M2.6 8.7C4 9 7 10.4 7 10.4"/></g></svg>';
         }
         iconSpan.style.display = 'flex';
         iconSpan.style.marginRight = '3px'; // Reduced margin
@@ -368,51 +380,51 @@ const MapboxExample = () => {
                 mapRef.current?.on('resize', updateSvgOverlay);
 
                 // Add click event to show coordinates
-                // mapRef.current?.on('click', (e) => {
-                //     // Remove existing popup if it exists
-                //     if (clickPopupRef.current) {
-                //         clickPopupRef.current.remove();
-                //     }
+                mapRef.current?.on('click', (e) => {
+                    // Remove existing popup if it exists
+                    if (clickPopupRef.current) {
+                        clickPopupRef.current.remove();
+                    }
 
-                //     // Store clicked coordinates
-                //     const coords: [number, number] = [
-                //         e.lngLat.lng,
-                //         e.lngLat.lat,
-                //     ];
-                //     setClickedCoordinates(coords);
+                    // Store clicked coordinates
+                    const coords: [number, number] = [
+                        e.lngLat.lng,
+                        e.lngLat.lat,
+                    ];
+                    setClickedCoordinates(coords);
 
-                //     // Format coordinates with 6 decimal places
-                //     const lng = coords[0].toFixed(6);
-                //     const lat = coords[1].toFixed(6);
+                    // Format coordinates with 6 decimal places
+                    const lng = coords[0].toFixed(6);
+                    const lat = coords[1].toFixed(6);
 
-                //     // Create popup with coordinates in the requested format
-                //     if (mapRef.current) {
-                //         clickPopupRef.current = new mapboxgl.Popup({
-                //             closeButton: true,
-                //             closeOnClick: false,
-                //         })
-                //             .setLngLat(coords)
-                //             .setHTML(
-                //                 `
-                //                 <div style="font-family: sans-serif; text-align: center;">
-                //                     <h3 style="margin: 0 0 5px 0; font-weight: bold; font-size: 14px;">Coordinates</h3>
-                //                     <h3 style="margin: 0 0 5px 0; font-size: 12px;">This is for testing purposes only</h3>
-                //                     <p style="margin: 0 0 5px 0; font-size: 13px; font-family: monospace;">[${lng}, ${lat}]</p>
-                //                     <button
-                //                         id="copy-coords-btn"
-                //                         style="background-color: #8A1438; color: white; border: none; border-radius: 4px; padding: 4px 8px; font-size: 12px; cursor: pointer; margin-top: 2px;"
-                //                         onclick="navigator.clipboard.writeText('[${lng}, ${lat}]').then(() => {
-                //                             const btn = document.getElementById('copy-coords-btn');
-                //                             btn.textContent = 'Copied!';
-                //                             setTimeout(() => { btn.textContent = 'Copy' }, 2000);
-                //                         })"
-                //                     >Copy</button>
-                //                 </div>
-                //             `,
-                //             )
-                //             .addTo(mapRef.current);
-                //     }
-                // });
+                    // Create popup with coordinates in the requested format
+                    if (mapRef.current) {
+                        clickPopupRef.current = new mapboxgl.Popup({
+                            closeButton: true,
+                            closeOnClick: false,
+                        })
+                            .setLngLat(coords)
+                            .setHTML(
+                                `
+                                <div style="font-family: sans-serif; text-align: center;">
+                                    <h3 style="margin: 0 0 5px 0; font-weight: bold; font-size: 14px;">Coordinates</h3>
+                                    <h3 style="margin: 0 0 5px 0; font-size: 12px;">This is for testing purposes only</h3>
+                                    <p style="margin: 0 0 5px 0; font-size: 13px; font-family: monospace;">[${lng}, ${lat}]</p>
+                                    <button
+                                        id="copy-coords-btn"
+                                        style="background-color: #8A1438; color: white; border: none; border-radius: 4px; padding: 4px 8px; font-size: 12px; cursor: pointer; margin-top: 2px;"
+                                        onclick="navigator.clipboard.writeText('[${lng}, ${lat}]').then(() => {
+                                            const btn = document.getElementById('copy-coords-btn');
+                                            btn.textContent = 'Copied!';
+                                            setTimeout(() => { btn.textContent = 'Copy' }, 2000);
+                                        })"
+                                    >Copy</button>
+                                </div>
+                            `,
+                            )
+                            .addTo(mapRef.current);
+                    }
+                });
 
                 // Initial update
                 updateSvgOverlay();
