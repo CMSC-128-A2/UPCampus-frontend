@@ -219,28 +219,19 @@ function AdminPage() {
                     <nav className="flex-1">
                         <ul className="space-y-1">
                             <li>
-                                <Link href="#" className="flex items-center px-4 py-3 text-gray-700 hover:bg-[#f0f0f0] transition-colors duration-200">
-                                    <Icon icon="ph:user-bold" width="24" height="24" />
-                                </Link>
-                            </li>
-                            <li>
-                                <Link href="#" className="flex items-center px-4 py-3 text-gray-700 hover:bg-[#f0f0f0] transition-colors duration-200">
-                                    <Icon icon="ph:users-bold" width="24" height="24" />
+                                <Link href="/faculty" className="flex items-center px-4 py-3 text-gray-700 hover:bg-[#f0f0f0] transition-colors duration-200">
+                                    <Icon icon="ph:graduation-cap-bold" width="24" height="24" className="mr-3" />
+                                    <span>Faculty</span>
                                 </Link>
                             </li>
                             <li className="bg-[#E9F2E1]">
-                                <Link href="#" className="flex items-center px-4 py-3 text-gray-700 hover:bg-[#dbe9ce] transition-colors duration-200">
-                                    <Icon icon="ph:book-open-bold" width="24" height="24" className="mr-3" />
-                                    <span>My Classes</span>
+                                <Link href="/admin" className="flex items-center px-4 py-3 text-gray-700 hover:bg-[#dbe9ce] transition-colors duration-200">
+                                    <Icon icon="ph:users-three-bold" width="24" height="24" className="mr-3" />
+                                    <span>Admins</span>
                                 </Link>
                             </li>
                             <li>
-                                <Link href="#" className="flex items-center px-4 py-3 text-gray-700 hover:bg-[#f0f0f0] transition-colors duration-200">
-                                    <Icon icon="ph:users-three-bold" width="24" height="24" />
-                                </Link>
-                            </li>
-                            <li>
-                                <Link href="#" className="flex items-center px-4 py-3 text-gray-700 hover:bg-[#f0f0f0] transition-colors duration-200">
+                                <Link href="/map" className="flex items-center px-4 py-3 text-gray-700 hover:bg-[#f0f0f0] transition-colors duration-200">
                                     <Icon icon="ph:map-trifold-bold" width="24" height="24" className="mr-3" />
                                     <span>Campus Map</span>
                                 </Link>
