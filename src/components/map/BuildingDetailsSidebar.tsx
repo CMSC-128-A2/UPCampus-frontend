@@ -44,10 +44,13 @@ const BuildingDetailsSidebar: React.FC<BuildingDetailsSidebarProps> = ({
     if (!building) {
         return (
             <div
-                className={`fixed top-0 right-0 w-full sm:w-[320px] md:w-[350px] h-full bg-maroon-accent-light text-white overflow-hidden shadow-lg z-60 transition-all duration-300 ease-in-out ${
+                className={`fixed sm:top-0 sm:right-0 w-full sm:w-[320px] md:w-[350px] h-full bg-maroon-accent-light text-white overflow-hidden shadow-lg z-60 
+                transition-all duration-300 ease-in-out
+                top-[50%] max-h-[50%] 
+                sm:max-h-full ${
                     isOpen
-                        ? 'translate-x-0 opacity-100'
-                        : 'translate-x-full opacity-0'
+                        ? 'translate-y-0 sm:translate-y-0 sm:translate-x-0 opacity-100'
+                        : 'translate-y-full sm:translate-y-0 sm:translate-x-full opacity-0'
                 }`}
             ></div>
         );
@@ -55,20 +58,24 @@ const BuildingDetailsSidebar: React.FC<BuildingDetailsSidebarProps> = ({
 
     return (
         <>
-            {/* Backdrop overlay - only visible when sidebar is open */}
+            {/* Backdrop overlay - only visible when sidebar is open but non-interactive */}
             <div
-                className={`fixed inset-0 z-40 transition-opacity duration-300 ${
-                    isOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'
+                className={`fixed inset-0 z-40 transition-opacity duration-300 pointer-events-none ${
+                    isOpen ? 'opacity-100' : 'opacity-0'
                 }`}
-                onClick={onClose}
             />
 
             {/* Sidebar */}
             <div
-                className={`fixed top-0 right-0 w-full sm:w-[320px] md:w-[350px] h-full bg-maroon-accent-light text-white overflow-y-auto shadow-lg z-50 transition-all duration-300 ease-in-out ${
+                className={`fixed sm:top-0 sm:right-0 w-full sm:w-[320px] md:w-[350px] bg-maroon-accent-light text-white overflow-y-auto shadow-lg z-50 
+                transition-all duration-300 ease-in-out
+                /* Mobile: Bottom half of screen */
+                top-[50%] h-[50%] rounded-t-2xl
+                /* Desktop: Full height */
+                sm:h-full sm:rounded-none ${
                     isOpen
-                        ? 'translate-x-0 opacity-100'
-                        : 'translate-x-full opacity-0'
+                        ? 'translate-y-0 sm:translate-y-0 sm:translate-x-0 opacity-100'
+                        : 'translate-y-full sm:translate-y-0 sm:translate-x-full opacity-0'
                 }`}
             >
                 {/* Header */}

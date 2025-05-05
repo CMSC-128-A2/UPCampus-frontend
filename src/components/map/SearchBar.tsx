@@ -7,7 +7,12 @@ import { useMapStore, MapDrawerType } from '@/store/mapStore';
 
 const SearchBar: React.FC = () => {
     const [showSearchInput, setShowSearchInput] = useState(false);
-    const { activeDrawer, toggleDrawer } = useMapStore();
+    const { activeDrawer, toggleDrawer, setSelectedMarkId } = useMapStore();
+
+    const handleDrawerClick = (drawer: MapDrawerType) => {
+        setSelectedMarkId(null);
+        toggleDrawer(drawer);
+    };
 
     return (
         <div className="flex items-center max-w-[calc(100vw-20px)] w-[518px] h-[69.2px] m-[10px] rounded-[10px] p-[10px] gap-[10px] bg-[#7F1532] z-10 absolute top-0 left-0">
@@ -39,7 +44,7 @@ const SearchBar: React.FC = () => {
                     </div>
 
                     <div
-                        onClick={() => toggleDrawer('buildings')}
+                        onClick={() => handleDrawerClick('buildings')}
                         className={`group w-[49px] h-[49.2px] rounded-[5px] p-[10px] gap-[10px] cursor-pointer flex items-center justify-center 
                         hover:bg-[#FFAE1D] transition-colors duration-300 ease-in-out ${
                             activeDrawer === 'buildings'
@@ -54,10 +59,12 @@ const SearchBar: React.FC = () => {
                     </div>
 
                     <div
-                        onClick={() => toggleDrawer('activity')}
-                        className={`group w-[49px] h-[49.2px] rounded-[5px] p-[10px] gap-[10px] bg-[#FFFFFF] cursor-pointer flex items-center justify-center 
+                        onClick={() => handleDrawerClick('activity')}
+                        className={`group w-[49px] h-[49.2px] rounded-[5px] p-[10px] gap-[10px] cursor-pointer flex items-center justify-center 
                         hover:bg-[#FFAE1D] transition-colors duration-300 ease-in-out ${
-                            activeDrawer === 'activity' ? 'bg-[#FFAE1D]' : ''
+                            activeDrawer === 'activity'
+                                ? 'bg-[#FFAE1D]'
+                                : 'bg-white'
                         }`}
                     >
                         <Goal
@@ -66,10 +73,12 @@ const SearchBar: React.FC = () => {
                         />
                     </div>
                     <div
-                        onClick={() => toggleDrawer('security')}
-                        className={`group w-[49px] h-[49.2px] rounded-[5px] p-[10px] gap-[10px] bg-[#FFFFFF] cursor-pointer flex items-center justify-center 
+                        onClick={() => handleDrawerClick('security')}
+                        className={`group w-[49px] h-[49.2px] rounded-[5px] p-[10px] gap-[10px] cursor-pointer flex items-center justify-center 
                         hover:bg-[#FFAE1D] transition-colors duration-300 ease-in-out ${
-                            activeDrawer === 'security' ? 'bg-[#FFAE1D]' : ''
+                            activeDrawer === 'security'
+                                ? 'bg-[#FFAE1D]'
+                                : 'bg-white'
                         }`}
                     >
                         <ShieldUser
