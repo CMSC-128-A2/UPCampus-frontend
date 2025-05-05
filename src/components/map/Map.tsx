@@ -533,8 +533,12 @@ const MapboxExample = () => {
 
             // If marker exists, zoom to its coordinates
             if (selectedMarker) {
+                const newCoordinates = [
+                    selectedMarker.coordinates[0] - 0.0002,
+                    selectedMarker.coordinates[1],
+                ];
                 mapRef.current.flyTo({
-                    center: selectedMarker.coordinates as [number, number],
+                    center: newCoordinates as [number, number],
                     zoom: 19,
                     duration: 1000, // Animation duration in milliseconds
                     essential: true, // This animation is considered essential
