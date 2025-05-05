@@ -12,12 +12,40 @@ export interface ClassSection {
     type: 'Lecture' | 'Laboratory';
     room: string;
     schedule: string;
+    faculty?: string;
+    faculty_name?: string;
 }
 
 export interface Course {
     id: string;
     course_code: string;
     sections: ClassSection[];
+}
+
+export interface Department {
+    id: string;
+    name: string;
+}
+
+export interface Faculty {
+    id: string;
+    name: string;
+    department: string;
+    department_name: string;
+}
+
+export interface FacultyDetail extends Faculty {
+    class_sections: ClassSection[];
+    created_at: string;
+    updated_at: string;
+}
+
+export interface AdminUser {
+    id: string;
+    name: string;
+    email: string;
+    user_id: string;
+    password?: string;
 }
 
 // Convert backend course format to frontend format
@@ -31,7 +59,9 @@ export const mapCourseToFrontend = (course: Course) => {
             section: section.section,
             type: section.type,
             room: section.room,
-            schedule: section.schedule
+            schedule: section.schedule,
+            faculty: section.faculty,
+            facultyName: section.faculty_name
         }))
     };
 };
@@ -120,6 +150,7 @@ export const schedulesApi = {
         room: string;
         day: string;
         time: string;
+        faculty_id?: string;
     }) => {
         try {
             console.log('Creating section with data:', sectionData);
@@ -165,6 +196,7 @@ export const schedulesApi = {
             room: string;
             day: string;
             time: string;
+            faculty_id?: string;
         }
     ) => {
         try {
@@ -218,6 +250,315 @@ export const schedulesApi = {
             return true;
         } catch (error) {
             console.error('Failed to delete section:', error);
+            throw error;
+        }
+    }
+};
+
+// Faculty API
+export const facultyApi = {
+    // Get all faculty members
+    getAllFaculty: async () => {
+        try {
+            console.log('Fetching faculty from:', `${API_BASE_URL}/api/schedules/faculty/`);
+            const response = await fetch(`${API_BASE_URL}/api/schedules/faculty/`, {
+                headers: {
+                    'Accept': 'application/json',
+                },
+            });
+            
+            if (!response.ok) {
+                throw new Error(`Error: ${response.status}`);
+            }
+            
+            const data = await response.json();
+            return data;
+        } catch (error) {
+            console.error('Failed to fetch faculty members:', error);
+            throw error;
+        }
+    },
+    
+    // Get a single faculty member by ID
+    getFaculty: async (id: string) => {
+        try {
+            console.log(`Fetching faculty with id ${id}`);
+            const response = await fetch(`${API_BASE_URL}/api/schedules/faculty/${id}/`, {
+                headers: {
+                    'Accept': 'application/json',
+                },
+            });
+            
+            if (!response.ok) {
+                throw new Error(`Error: ${response.status}`);
+            }
+            
+            return await response.json();
+        } catch (error) {
+            console.error(`Failed to fetch faculty with id ${id}:`, error);
+            throw error;
+        }
+    },
+    
+    // Get schedules for a faculty member
+    getFacultySchedules: async (id: string) => {
+        try {
+            console.log(`Fetching schedules for faculty with id ${id}`);
+            const response = await fetch(`${API_BASE_URL}/api/schedules/faculty/${id}/schedules/`, {
+                headers: {
+                    'Accept': 'application/json',
+                },
+            });
+            
+            if (!response.ok) {
+                throw new Error(`Error: ${response.status}`);
+            }
+            
+            return await response.json();
+        } catch (error) {
+            console.error(`Failed to fetch schedules for faculty with id ${id}:`, error);
+            throw error;
+        }
+    },
+    
+    // Create a new faculty member
+    createFaculty: async (facultyData: {
+        name: string;
+        department: string;
+    }) => {
+        try {
+            console.log('Creating faculty with data:', facultyData);
+            const response = await fetch(`${API_BASE_URL}/api/schedules/faculty/`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json',
+                },
+                body: JSON.stringify(facultyData),
+            });
+            
+            if (!response.ok) {
+                const errorText = await response.text();
+                console.error('Error response body:', errorText);
+                
+                let errorData;
+                try {
+                    errorData = JSON.parse(errorText);
+                } catch (e) {
+                    throw new Error(`Error: ${response.status} - ${errorText}`);
+                }
+                
+                throw new Error(errorData.detail || `Error: ${response.status}`);
+            }
+            
+            return await response.json();
+        } catch (error) {
+            console.error('Failed to create faculty:', error);
+            throw error;
+        }
+    },
+    
+    // Update a faculty member
+    updateFaculty: async (
+        id: string,
+        facultyData: {
+            name: string;
+            department: string;
+        }
+    ) => {
+        try {
+            console.log(`Updating faculty ${id} with data:`, facultyData);
+            const response = await fetch(`${API_BASE_URL}/api/schedules/faculty/${id}/`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json',
+                },
+                body: JSON.stringify(facultyData),
+            });
+            
+            if (!response.ok) {
+                const errorText = await response.text();
+                console.error('Error response body:', errorText);
+                
+                let errorData;
+                try {
+                    errorData = JSON.parse(errorText);
+                } catch (e) {
+                    throw new Error(`Error: ${response.status} - ${errorText}`);
+                }
+                
+                throw new Error(errorData.detail || `Error: ${response.status}`);
+            }
+            
+            return await response.json();
+        } catch (error) {
+            console.error(`Failed to update faculty ${id}:`, error);
+            throw error;
+        }
+    },
+    
+    // Delete a faculty member
+    deleteFaculty: async (id: string) => {
+        try {
+            console.log(`Deleting faculty with id ${id}`);
+            const response = await fetch(`${API_BASE_URL}/api/schedules/faculty/${id}/`, {
+                method: 'DELETE',
+            });
+            
+            if (!response.ok) {
+                throw new Error(`Error: ${response.status}`);
+            }
+            
+            return true;
+        } catch (error) {
+            console.error(`Failed to delete faculty with id ${id}:`, error);
+            throw error;
+        }
+    }
+};
+
+// Admin API
+export const adminApi = {
+    // Get all admin users
+    getAllAdmins: async () => {
+        try {
+            console.log('Fetching admins from:', `${API_BASE_URL}/api/schedules/admins/`);
+            const response = await fetch(`${API_BASE_URL}/api/schedules/admins/`, {
+                headers: {
+                    'Accept': 'application/json',
+                },
+            });
+            
+            if (!response.ok) {
+                throw new Error(`Error: ${response.status}`);
+            }
+            
+            const data = await response.json();
+            return data;
+        } catch (error) {
+            console.error('Failed to fetch admins:', error);
+            throw error;
+        }
+    },
+    
+    // Get a single admin by ID
+    getAdmin: async (id: string) => {
+        try {
+            console.log(`Fetching admin with id ${id}`);
+            const response = await fetch(`${API_BASE_URL}/api/schedules/admins/${id}/`, {
+                headers: {
+                    'Accept': 'application/json',
+                },
+            });
+            
+            if (!response.ok) {
+                throw new Error(`Error: ${response.status}`);
+            }
+            
+            return await response.json();
+        } catch (error) {
+            console.error(`Failed to fetch admin with id ${id}:`, error);
+            throw error;
+        }
+    },
+    
+    // Create a new admin user
+    createAdmin: async (adminData: {
+        name: string;
+        email: string;
+        user_id: string;
+        password: string;
+    }) => {
+        try {
+            console.log('Creating admin with data:', adminData);
+            const response = await fetch(`${API_BASE_URL}/api/schedules/admins/`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json',
+                },
+                body: JSON.stringify(adminData),
+            });
+            
+            if (!response.ok) {
+                const errorText = await response.text();
+                console.error('Error response body:', errorText);
+                
+                let errorData;
+                try {
+                    errorData = JSON.parse(errorText);
+                } catch (e) {
+                    throw new Error(`Error: ${response.status} - ${errorText}`);
+                }
+                
+                throw new Error(errorData.detail || `Error: ${response.status}`);
+            }
+            
+            return await response.json();
+        } catch (error) {
+            console.error('Failed to create admin:', error);
+            throw error;
+        }
+    },
+    
+    // Update an admin user
+    updateAdmin: async (
+        id: string,
+        adminData: {
+            name: string;
+            email: string;
+            user_id: string;
+            password?: string;
+        }
+    ) => {
+        try {
+            console.log(`Updating admin ${id} with data:`, adminData);
+            const response = await fetch(`${API_BASE_URL}/api/schedules/admins/${id}/`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json',
+                },
+                body: JSON.stringify(adminData),
+            });
+            
+            if (!response.ok) {
+                const errorText = await response.text();
+                console.error('Error response body:', errorText);
+                
+                let errorData;
+                try {
+                    errorData = JSON.parse(errorText);
+                } catch (e) {
+                    throw new Error(`Error: ${response.status} - ${errorText}`);
+                }
+                
+                throw new Error(errorData.detail || `Error: ${response.status}`);
+            }
+            
+            return await response.json();
+        } catch (error) {
+            console.error(`Failed to update admin ${id}:`, error);
+            throw error;
+        }
+    },
+    
+    // Delete an admin user
+    deleteAdmin: async (id: string) => {
+        try {
+            console.log(`Deleting admin with id ${id}`);
+            const response = await fetch(`${API_BASE_URL}/api/schedules/admins/${id}/`, {
+                method: 'DELETE',
+            });
+            
+            if (!response.ok) {
+                throw new Error(`Error: ${response.status}`);
+            }
+            
+            return true;
+        } catch (error) {
+            console.error(`Failed to delete admin with id ${id}:`, error);
             throw error;
         }
     }

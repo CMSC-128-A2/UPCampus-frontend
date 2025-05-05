@@ -9,7 +9,7 @@ import ViewScheduleModal from '@/components/schedule/ViewScheduleModal';
 import EditScheduleModal from '@/components/schedule/EditScheduleModal';
 import Layout from '@/components/ui/Layout';
 import RootExtensionWrapper from '@/app/admin/RootExtensionWrapper';
-import { schedulesApi, parseSchedule, Course, ClassSection as ApiClassSection } from '@/lib/api';
+import { schedulesApi, facultyApi, parseSchedule, Course, ClassSection as ApiClassSection, Faculty } from '@/lib/api';
 
 // Define TypeScript types for the data structure
 type ScheduleType = 'Lecture' | 'Laboratory';
@@ -29,73 +29,13 @@ interface CourseSchedule {
     sections: ClassSection[];
 }
 
-interface Professor {
-    id: string;
-    name: string;
-    department: string;
-}
-
-// Mock professors data
-const mockProfessors: Record<string, Professor> = {
-    '1': {
-        id: '1',
-        name: 'Prof Name',
-        department: 'Biology',
-    },
-    '2': {
-        id: '2',
-        name: 'Alicaya, Erik',
-        department: 'Computer Science',
-    },
-    '4': {
-        id: '4',
-        name: 'Dulaca, Ryan',
-        department: 'Computer Science',
-    },
-    '6': {
-        id: '6',
-        name: 'Noel, Kyle',
-        department: 'Computer Science',
-    },
-    '9': {
-        id: '9',
-        name: 'Roldan, Jace',
-        department: 'Computer Science',
-    },
-    '12': {
-        id: '12',
-        name: 'Tan, Darmae',
-        department: 'Computer Science',
-    },
-};
-
-// Mock course data for the new UI
-const mockCourses = [
-    {
-        courseCode: 'CMSC 126',
-        sections: [
-            { id: '1', section: 'A', type: 'Lecture', room: 'SCI 405', schedule: 'M TH | 11:00 AM - 12:00 PM' },
-            { id: '2', section: 'A1', type: 'Laboratory', room: 'SCI 402', schedule: 'TH | 3:00 PM - 6:00 PM' },
-            { id: '3', section: 'A2', type: 'Laboratory', room: 'SCI 402', schedule: 'M | 3:00 PM - 6:00 PM' },
-        ]
-    },
-    {
-        courseCode: 'CMSC 129',
-        sections: [
-            { id: '4', section: 'A', type: 'Lecture', room: 'SCI 405', schedule: 'M TH | 9:00 AM - 10:00 AM' },
-            { id: '5', section: 'A1', type: 'Laboratory', room: 'SCI 404', schedule: 'T | 9:00 AM - 12:00 PM' },
-            { id: '6', section: 'A2', type: 'Laboratory', room: 'SCI 404', schedule: 'F | 9:00 AM - 12:00 PM' },
-        ]
-    }
-];
-
 export default function SchedulePage() {
     const params = useParams();
     const router = useRouter();
     const professorId = params.id as string;
-    const [professor, setProfessor] = useState<Professor | null>(null);
+    const [professor, setProfessor] = useState<Faculty | null>(null);
     
-    const [classSchedules, setClassSchedules] = useState<CourseSchedule[]>(mockCourses);
+    const [classSchedules, setClassSchedules] = useState<CourseSchedule[]>([]);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isViewModalOpen, setIsViewModalOpen] = useState(false);
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
@@ -105,18 +45,35 @@ export default function SchedulePage() {
     const [error, setError] = useState<string | null>(null);
     const [selectedFloor, setSelectedFloor] = useState<Floor>('4th Floor');
 
-    // Fetch professor data
+    // Fetch professor data and schedules
     useEffect(() => {
-        if (professorId && mockProfessors[professorId]) {
-            setProfessor(mockProfessors[professorId]);
-        }
-        
-        // Simulate API loading completion
-        const timer = setTimeout(() => {
-            setIsLoading(false);
-        }, 500);
-        
-        return () => clearTimeout(timer);
+        const fetchData = async () => {
+            try {
+                setIsLoading(true);
+                
+                // Fetch professor details
+                const professorData = await facultyApi.getFaculty(professorId);
+                setProfessor(professorData);
+                
+                // Fetch courses with schedules that are assigned to this professor
+                const courses = await schedulesApi.getCourses();
+                
+                // Filter and map to frontend format
+                const professorCourses = courses.filter(course => 
+                    course.sections.some(section => section.faculty === professorId)
+                );
+                
+                setClassSchedules(professorCourses);
+                setError(null);
+            } catch (err) {
+                console.error('Failed to fetch data:', err);
+                setError('Failed to load schedule data. Please try again later.');
+            } finally {
+                setIsLoading(false);
+            }
+        };
+
+        fetchData();
     }, [professorId]);
 
     // Filter schedules based on search query
@@ -167,7 +124,9 @@ export default function SchedulePage() {
     // Handle delete schedule
     const handleDeleteSchedule = async (courseId: string, sectionId: string) => {
         try {
-            // Mock deleting the schedule
+            await schedulesApi.deleteSection(courseId, sectionId);
+            
+            // Update state after successful delete
             setClassSchedules(prevSchedules => 
                 prevSchedules.map(course => ({
                     ...course,
@@ -199,7 +158,21 @@ export default function SchedulePage() {
         }
 
         try {
-            // Format schedule
+            // Create API request data
+            const apiData = {
+                course_code: scheduleData.courseCode,
+                section: scheduleData.section,
+                type: scheduleData.type,
+                room: scheduleData.room,
+                day: scheduleData.day,
+                time: scheduleData.time,
+                faculty_id: professorId,
+            };
+
+            // Save section via API
+            const newSection = await schedulesApi.createSection(apiData);
+            
+            // Convert to frontend format
             const schedule = `${scheduleData.day} | ${scheduleData.time}`;
             const type = scheduleData.type as ScheduleType;
             
@@ -218,7 +191,7 @@ export default function SchedulePage() {
                     sections: [
                         ...updatedSchedules[courseIndex].sections,
                         {
-                            id: Math.random().toString(36).substring(2, 9),
+                            id: newSection.id,
                             section: scheduleData.section,
                             type,
                             room: scheduleData.room,
@@ -229,11 +202,11 @@ export default function SchedulePage() {
             } else {
                 // Create new course
                 updatedSchedules.push({
-                    id: Math.random().toString(36).substring(2, 9),
+                    id: newSection.course, // API returns course ID
                     courseCode: scheduleData.courseCode,
                     sections: [
                         {
-                            id: Math.random().toString(36).substring(2, 9),
+                            id: newSection.id,
                             section: scheduleData.section,
                             type,
                             room: scheduleData.room,
@@ -261,11 +234,19 @@ export default function SchedulePage() {
         time: string;
     }) => {
         try {
-            // Format schedule
+            // Update via API
+            const apiData = {
+                ...scheduleData,
+                faculty_id: professorId,
+            };
+            
+            await schedulesApi.updateSection(sectionId, apiData);
+            
+            // Format schedule for frontend
             const schedule = `${scheduleData.day} | ${scheduleData.time}`;
             const type = scheduleData.type as ScheduleType;
             
-            // Update the schedule
+            // Update the schedule in state
             setClassSchedules(prevSchedules => 
                 prevSchedules.map(course => ({
                     ...course,
