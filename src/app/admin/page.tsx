@@ -7,6 +7,7 @@ import ScheduleModal from '@/components/schedule/ScheduleModal';
 import ViewScheduleModal from '@/components/schedule/ViewScheduleModal';
 import EditScheduleModal from '@/components/schedule/EditScheduleModal';
 import { schedulesApi, parseSchedule, Course, ClassSection as ApiClassSection } from '@/lib/api';
+import RootExtensionWrapper from './RootExtensionWrapper';
 
 // Define TypeScript types for the data structure
 type ScheduleType = 'Lecture' | 'Laboratory';
@@ -193,8 +194,8 @@ function AdminPage() {
         }
     };
 
-    return (
-        <div className="flex flex-col h-screen">
+    const renderContent = () => (
+        <>
             {/* Header with logo and faculty button */}
             <div className="flex justify-between items-center px-6 bg-white border-b w-full">
                 <div className="flex items-center gap-2">
@@ -409,7 +410,13 @@ function AdminPage() {
                     onSave={handleEditSchedule}
                 />
             )}
-        </div>
+        </>
+    );
+
+    return (
+        <RootExtensionWrapper>
+            {renderContent()}
+        </RootExtensionWrapper>
     );
 }
 
