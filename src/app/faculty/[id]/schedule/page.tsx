@@ -7,6 +7,7 @@ import { useParams, useRouter } from 'next/navigation';
 import ScheduleModal from '@/components/schedule/ScheduleModal';
 import ViewScheduleModal from '@/components/schedule/ViewScheduleModal';
 import EditScheduleModal from '@/components/schedule/EditScheduleModal';
+import ErrorModal from '@/components/ui/ErrorModal';
 import Layout from '@/components/ui/Layout';
 import RootExtensionWrapper from '@/app/admin/RootExtensionWrapper';
 import { schedulesApi, facultyApi, parseSchedule, Course, ClassSection as ApiClassSection, Faculty } from '@/lib/api';
@@ -44,6 +45,9 @@ export default function SchedulePage() {
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
     const [selectedFloor, setSelectedFloor] = useState<Floor>('4th Floor');
+    const [errorModalOpen, setErrorModalOpen] = useState(false);
+    const [errorTitle, setErrorTitle] = useState('');
+    const [errorMessage, setErrorMessage] = useState('');
 
     // Fetch professor data and schedules
     useEffect(() => {
@@ -153,6 +157,18 @@ export default function SchedulePage() {
         setIsEditModalOpen(false);
     };
 
+    // Close error modal
+    const closeErrorModal = () => {
+        setErrorModalOpen(false);
+    };
+
+    // Show error in modal
+    const showError = (title: string, message: string) => {
+        setErrorTitle(title);
+        setErrorMessage(message);
+        setErrorModalOpen(true);
+    };
+
     // Handle delete schedule
     const handleDeleteSchedule = async (courseId: string, sectionId: string) => {
         try {
@@ -185,11 +201,75 @@ export default function SchedulePage() {
         // Check if all required fields are filled
         if (!scheduleData.courseCode || !scheduleData.section || !scheduleData.type ||
             !scheduleData.room || !scheduleData.day || !scheduleData.time) {
-            alert('Please fill in all fields');
+            showError('Incomplete Data', 'Please fill in all fields');
             return;
         }
 
         try {
+            // First check for schedule conflicts
+            const conflictCheckData = {
+                day: scheduleData.day,
+                time: scheduleData.time,
+                room: scheduleData.room,
+                faculty_id: professorId,
+            };
+            
+            try {
+                // Check for conflicts before saving
+                const conflictCheck = await schedulesApi.checkScheduleConflicts(conflictCheckData);
+                
+                if (conflictCheck.hasConflict) {
+                    showError('Schedule Conflict', conflictCheck.details);
+                    return;
+                }
+            } catch (conflictError: any) {
+                if (conflictError.message && conflictError.message.includes('409')) {
+                    // Extract conflict details if available
+                    let conflictMessage = 'There is a schedule conflict.';
+                    
+                    try {
+                        // Try to parse the response for more details
+                        const errorDetail = JSON.parse(
+                            conflictError.message.substring(conflictError.message.indexOf('{'))
+                        );
+                        
+                        if (errorDetail.conflicts) {
+                            const roomConflicts = errorDetail.conflicts.filter((c: any) => c.type === 'room');
+                            const facultyConflicts = errorDetail.conflicts.filter((c: any) => c.type === 'faculty');
+                            
+                            let message = 'The following conflicts were detected:\n\n';
+                            
+                            if (roomConflicts.length > 0) {
+                                message += 'Room Conflicts:\n';
+                                roomConflicts.forEach((conflict: any, index: number) => {
+                                    message += `${index + 1}. ${conflict.course} ${conflict.section} in room ${conflict.room}\n`;
+                                });
+                                message += '\n';
+                            }
+                            
+                            if (facultyConflicts.length > 0) {
+                                message += 'Faculty Conflicts:\n';
+                                facultyConflicts.forEach((conflict: any, index: number) => {
+                                    message += `${index + 1}. ${conflict.course} ${conflict.section} (${conflict.schedule})\n`;
+                                });
+                            }
+                            
+                            conflictMessage = message;
+                        }
+                    } catch (parseError) {
+                        console.error('Failed to parse conflict details:', parseError);
+                    }
+                    
+                    showError('Schedule Conflict', conflictMessage);
+                    return;
+                }
+                
+                // For other errors, just show the generic error
+                console.error('Error checking schedule conflicts:', conflictError);
+                showError('Error', 'Failed to check for schedule conflicts. Please try again.');
+                return;
+            }
+            
             // Create API request data
             const apiData = {
                 course_code: scheduleData.courseCode,
@@ -252,7 +332,19 @@ export default function SchedulePage() {
             closeModal();
         } catch (error: any) {
             console.error('Error saving schedule:', error);
-            alert(error.message || 'Failed to save schedule. Please try again.');
+            
+            // Show error in modal
+            let errorMsg = 'Failed to save schedule. Please try again.';
+            
+            if (error.message) {
+                if (error.message.includes('already exists')) {
+                    errorMsg = 'A section with this name already exists for this course.';
+                } else {
+                    errorMsg = `Error: ${error.message}`;
+                }
+            }
+            
+            showError('Error Saving Schedule', errorMsg);
         }
     };
 
@@ -266,6 +358,71 @@ export default function SchedulePage() {
         time: string;
     }) => {
         try {
+            // Check for schedule conflicts first (excluding the current section being edited)
+            const conflictCheckData = {
+                day: scheduleData.day,
+                time: scheduleData.time,
+                room: scheduleData.room,
+                faculty_id: professorId,
+                exclude_section_id: sectionId
+            };
+            
+            try {
+                // Check for conflicts before saving
+                const conflictCheck = await schedulesApi.checkScheduleConflicts(conflictCheckData);
+                
+                if (conflictCheck.hasConflict) {
+                    showError('Schedule Conflict', conflictCheck.details);
+                    return;
+                }
+            } catch (conflictError: any) {
+                if (conflictError.message && conflictError.message.includes('409')) {
+                    // Extract conflict details if available
+                    let conflictMessage = 'There is a schedule conflict.';
+                    
+                    try {
+                        // Try to parse the response for more details
+                        const errorDetail = JSON.parse(
+                            conflictError.message.substring(conflictError.message.indexOf('{'))
+                        );
+                        
+                        if (errorDetail.conflicts) {
+                            const roomConflicts = errorDetail.conflicts.filter((c: any) => c.type === 'room');
+                            const facultyConflicts = errorDetail.conflicts.filter((c: any) => c.type === 'faculty');
+                            
+                            let message = 'The following conflicts were detected:\n\n';
+                            
+                            if (roomConflicts.length > 0) {
+                                message += 'Room Conflicts:\n';
+                                roomConflicts.forEach((conflict: any, index: number) => {
+                                    message += `${index + 1}. ${conflict.course} ${conflict.section} in room ${conflict.room}\n`;
+                                });
+                                message += '\n';
+                            }
+                            
+                            if (facultyConflicts.length > 0) {
+                                message += 'Faculty Conflicts:\n';
+                                facultyConflicts.forEach((conflict: any, index: number) => {
+                                    message += `${index + 1}. ${conflict.course} ${conflict.section} (${conflict.schedule})\n`;
+                                });
+                            }
+                            
+                            conflictMessage = message;
+                        }
+                    } catch (parseError) {
+                        console.error('Failed to parse conflict details:', parseError);
+                    }
+                    
+                    showError('Schedule Conflict', conflictMessage);
+                    return;
+                }
+                
+                // For other errors, just show the generic error
+                console.error('Error checking schedule conflicts:', conflictError);
+                showError('Error', 'Failed to check for schedule conflicts. Please try again.');
+                return;
+            }
+            
             // Update via API
             const apiData = {
                 ...scheduleData,
@@ -297,7 +454,19 @@ export default function SchedulePage() {
             closeEditModal();
         } catch (error: any) {
             console.error('Error updating schedule:', error);
-            alert(error.message || 'Failed to update schedule. Please try again.');
+            
+            // Show error in modal
+            let errorMsg = 'Failed to update schedule. Please try again.';
+            
+            if (error.message) {
+                if (error.message.includes('already exists')) {
+                    errorMsg = 'A section with this name already exists for this course.';
+                } else {
+                    errorMsg = `Error: ${error.message}`;
+                }
+            }
+            
+            showError('Error Updating Schedule', errorMsg);
         }
     };
 
@@ -486,6 +655,14 @@ export default function SchedulePage() {
                         onSave={handleEditSchedule}
                     />
                 )}
+                
+                {/* Error Modal */}
+                <ErrorModal
+                    isOpen={errorModalOpen}
+                    onClose={closeErrorModal}
+                    title={errorTitle}
+                    message={errorMessage}
+                />
             </Layout>
         </RootExtensionWrapper>
     );

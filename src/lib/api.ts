@@ -252,6 +252,45 @@ export const schedulesApi = {
             console.error('Failed to delete section:', error);
             throw error;
         }
+    },
+
+    // Check for schedule conflicts
+    checkScheduleConflicts: async (scheduleData: {
+        day: string;
+        time: string;
+        room: string;
+        faculty_id: string;
+        exclude_section_id?: string;
+    }) => {
+        try {
+            console.log('Checking schedule conflicts with data:', scheduleData);
+            const response = await fetch(`${API_BASE_URL}/api/schedules/conflicts/check/`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json',
+                },
+                body: JSON.stringify(scheduleData),
+            });
+            
+            const data = await response.json();
+            
+            // If response is not ok, it means there's a conflict
+            if (!response.ok) {
+                return {
+                    hasConflict: true,
+                    details: data.detail || 'Schedule conflict detected.',
+                    conflicts: data.conflicts || []
+                };
+            }
+            
+            return {
+                hasConflict: false
+            };
+        } catch (error) {
+            console.error('Failed to check schedule conflicts:', error);
+            throw error;
+        }
     }
 };
 
