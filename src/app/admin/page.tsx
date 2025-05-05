@@ -1,428 +1,175 @@
 'use client';
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Icon } from '@iconify/react';
-import ScheduleModal from '@/components/schedule/ScheduleModal';
-import ViewScheduleModal from '@/components/schedule/ViewScheduleModal';
-import EditScheduleModal from '@/components/schedule/EditScheduleModal';
-import { schedulesApi, parseSchedule, Course, ClassSection as ApiClassSection } from '@/lib/api';
 import RootExtensionWrapper from './RootExtensionWrapper';
 
-// Define TypeScript types for the data structure
-type ScheduleType = 'Lecture' | 'Laboratory';
-
-interface ClassSection {
-    id: string; // Remove the optional marker (?) to make id required
-    section: string;
-    type: ScheduleType;
-    room: string;
-    schedule: string;
+// Define admin user type
+interface AdminUser {
+  name: string;
+  email: string;
+  userId: string;
+  password: string;
 }
 
-interface CourseSchedule {
-    id: string;
-    courseCode: string;
-    sections: ClassSection[];
-}
+// Mock admin data based exactly on the image
+const mockAdmins: AdminUser[] = [
+  {
+    name: 'Jennie Kim',
+    email: 'jennierubyjanet@gmail.com',
+    userId: 'jen123',
+    password: 'rubyjane1@'
+  },
+  {
+    name: 'Lalisa Manoban',
+    email: 'lalalisa@gmail.com',
+    userId: 'lalisa0327',
+    password: 'lalaLisa2703'
+  },
+  {
+    name: 'Rose Park',
+    email: 'rosie@gmail.com',
+    userId: 'aptrose1@',
+    password: 'apateupateuRSP'
+  },
+  {
+    name: 'Jisoo Kim',
+    email: 'sooya@gmail.com',
+    userId: 'sooya143',
+    password: 'hellojisoopp4'
+  }
+];
 
 function AdminPage() {
-    const [classSchedules, setClassSchedules] = useState<CourseSchedule[]>([]);
-    const [isModalOpen, setIsModalOpen] = useState(false);
-    const [isViewModalOpen, setIsViewModalOpen] = useState(false);
-    const [isEditModalOpen, setIsEditModalOpen] = useState(false);
-    const [selectedSchedule, setSelectedSchedule] = useState<{ course: CourseSchedule, section: ClassSection } | null>(null);
-    const [searchQuery, setSearchQuery] = useState('');
-    const [isLoading, setIsLoading] = useState(true);
-    const [error, setError] = useState<string | null>(null);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [adminUsers, setAdminUsers] = useState<AdminUser[]>(mockAdmins);
 
-    // Fetch data from API
-    useEffect(() => {
-        const fetchCourses = async () => {
-            try {
-                setIsLoading(true);
-                const courses = await schedulesApi.getCourses();
-                setClassSchedules(courses);
-                setError(null);
-            } catch (err) {
-                console.error('Error fetching courses:', err);
-                setError('Failed to load schedules. Please try again later.');
-            } finally {
-                setIsLoading(false);
-            }
-        };
+  // Filter admin users based on search query
+  const filteredAdmins = searchQuery.trim() === ''
+    ? adminUsers
+    : adminUsers.filter(admin => {
+        const query = searchQuery.toLowerCase();
+        return (
+          admin.name.toLowerCase().includes(query) ||
+          admin.email.toLowerCase().includes(query) ||
+          admin.userId.toLowerCase().includes(query)
+        );
+      });
 
-        fetchCourses();
-    }, []);
+  const addAdmin = () => {
+    // This would open a modal or form to add a new admin in a real implementation
+    alert('Add admin functionality would be implemented here');
+  };
 
-    // Filter class schedules based on search query
-    const filteredSchedules = searchQuery.trim() === ''
-        ? classSchedules
-        : classSchedules.filter(course => {
-            // Search in course code
-            if (course.courseCode.toLowerCase().includes(searchQuery.toLowerCase())) {
-                return true;
-            }
-
-            // Search in sections
-            return course.sections.some(section =>
-                section.section.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                section.type.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                section.room.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                section.schedule.toLowerCase().includes(searchQuery.toLowerCase())
-            );
-        });
-
-    const openModal = () => {
-        setIsModalOpen(true);
-    };
-
-    const closeModal = () => {
-        setIsModalOpen(false);
-    };
-
-    const openViewModal = (course: CourseSchedule, section: ClassSection) => {
-        setSelectedSchedule({ course, section });
-        setIsViewModalOpen(true);
-    };
-
-    const closeViewModal = () => {
-        setIsViewModalOpen(false);
-        setSelectedSchedule(null);
-    };
-
-    const openEditModal = () => {
-        setIsViewModalOpen(false);
-        setIsEditModalOpen(true);
-    };
-
-    const closeEditModal = () => {
-        setIsEditModalOpen(false);
-    };
-
-    // Handle delete schedule
-    const handleDeleteSchedule = async (courseId: string, sectionName: string) => {
-        try {
-            await schedulesApi.deleteSection(courseId, sectionName);
-            
-            // Update local state after successful API call
-            const updatedSchedules = classSchedules.map(course => {
-                if (course.id === courseId) {
-                    return {
-                        ...course,
-                        sections: course.sections.filter(section => section.section !== sectionName)
-                    };
-                }
-                return course;
-            });
-
-            // Check if the course has any sections left
-            const course = updatedSchedules.find(c => c.id === courseId);
-            if (course && course.sections.length === 0) {
-                // If no sections left, delete the course
-                await schedulesApi.deleteCourse(courseId);
-                // Remove the course from the list
-                const filteredSchedules = updatedSchedules.filter(c => c.id !== courseId);
-                setClassSchedules(filteredSchedules);
-            } else {
-                // Otherwise just update the schedules
-                setClassSchedules(updatedSchedules);
-            }
-        } catch (error) {
-            console.error('Error deleting section:', error);
-            alert('Failed to delete section. Please try again.');
-        }
-    };
-
-    // Handle save new schedule
-    const handleSaveSchedule = async (scheduleData: {
-        courseCode: string;
-        section: string;
-        type: string;
-        room: string;
-        day: string;
-        time: string;
-    }) => {
-        // Check if all required fields are filled
-        if (!scheduleData.courseCode || !scheduleData.section || !scheduleData.type ||
-            !scheduleData.room || !scheduleData.day || !scheduleData.time) {
-            alert('Please fill in all fields');
-            return;
-        }
-
-        try {
-            // Format data for API
-            const apiData = {
-                course_code: scheduleData.courseCode,
-                                section: scheduleData.section,
-                type: scheduleData.type,
-                                room: scheduleData.room,
-                day: scheduleData.day,
-                time: scheduleData.time
-            };
-
-            // Call API to create section
-            await schedulesApi.createSection(apiData);
-            
-            // Refresh the course list to get updated data
-            const courses = await schedulesApi.getCourses();
-            setClassSchedules(courses);
-        } catch (error: any) {
-            console.error('Error saving schedule:', error);
-            alert(error.message || 'Failed to save schedule. Please try again.');
-        }
-    };
-
-    // Handle edit schedule
-    const handleEditSchedule = async (sectionId: string, scheduleData: {
-        course_code?: string;
-        section: string;
-        type: string;
-        room: string;
-        day: string;
-        time: string;
-    }) => {
-        try {
-            await schedulesApi.updateSection(sectionId, scheduleData);
-            
-            // Refresh the course list to get updated data
-            const courses = await schedulesApi.getCourses();
-            setClassSchedules(courses);
-        } catch (error: any) {
-            console.error('Error updating schedule:', error);
-            alert(error.message || 'Failed to update schedule. Please try again.');
-        }
-    };
-
-    const renderContent = () => (
-        <>
-            {/* Header with logo and faculty button */}
-            <div className="flex justify-between items-center px-6 bg-white border-b w-full">
-                <div className="flex items-center gap-2">
-                    <Image
-                        src="/assets/images/manager-page-logo.svg"
-                        alt="UP Logo"
-                        width={210}
-                        height={70}
-                        style={{ objectFit: 'contain' }}
-                    />
+  return (
+    <RootExtensionWrapper>
+      <div className="flex flex-col h-screen">
+        {/* Main Content Area - Sidebar + Content */}
+        <div className="flex flex-1 overflow-hidden">
+          {/* Sidebar */}
+          <div className="w-60 bg-white border-r overflow-y-auto flex flex-col">
+            <div className="p-6">
+              <Link href="/" className="flex items-center">
+                <div className="text-[#8BC34A] text-2xl font-semibold">
+                  <span className="text-[#8BC34A]">UP</span>
+                  <span className="text-[#8BC34A] ml-1">Manager</span>
                 </div>
-                <Link href="/faculty" className="text-[#008CFF] border border-[#008CFF] px-5 py-2 mr-3 text-xl rounded-lg flex items-center justify-center hover:bg-[#E6F4FF] hover:border-[#0070cc] transition-colors duration-200">
-                    <Icon icon="ph:graduation-cap-bold" width="20" height="20" className="mr-2" />
-                    Faculty
-                </Link>
+              </Link>
             </div>
+            
+            <nav className="flex-1">
+              <ul className="space-y-1">
+                <li>
+                  <Link href="/faculty" className="flex items-center px-6 py-3 text-gray-700">
+                    <Icon icon="ph:graduation-cap-bold" width="24" height="24" className="mr-3" />
+                    <span>Faculty</span>
+                  </Link>
+                </li>
+                <li className="bg-[#f2f9ec]">
+                  <Link href="/admin" className="flex items-center px-6 py-3 text-gray-700">
+                    <Icon icon="ph:users-three-bold" width="24" height="24" className="mr-3" />
+                    <span>Admins</span>
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/map" className="flex items-center px-6 py-3 text-gray-700">
+                    <Icon icon="ph:map-trifold-bold" width="24" height="24" className="mr-3" />
+                    <span>Campus Map</span>
+                  </Link>
+                </li>
+              </ul>
+            </nav>
 
-            <div className="flex flex-1 overflow-hidden">
-                {/* Sidebar - now starts below header */}
-                <div className="w-60 bg-white border-r overflow-y-auto flex flex-col">
-                    <nav className="flex-1">
-                        <ul className="space-y-1">
-                            <li>
-                                <Link href="/faculty" className="flex items-center px-4 py-3 text-gray-700 hover:bg-[#f0f0f0] transition-colors duration-200">
-                                    <Icon icon="ph:graduation-cap-bold" width="24" height="24" className="mr-3" />
-                                    <span>Faculty</span>
-                                </Link>
-                            </li>
-                            <li className="bg-[#E9F2E1]">
-                                <Link href="/admin" className="flex items-center px-4 py-3 text-gray-700 hover:bg-[#dbe9ce] transition-colors duration-200">
-                                    <Icon icon="ph:users-three-bold" width="24" height="24" className="mr-3" />
-                                    <span>Admins</span>
-                                </Link>
-                            </li>
-                            <li>
-                                <Link href="/map" className="flex items-center px-4 py-3 text-gray-700 hover:bg-[#f0f0f0] transition-colors duration-200">
-                                    <Icon icon="ph:map-trifold-bold" width="24" height="24" className="mr-3" />
-                                    <span>Campus Map</span>
-                                </Link>
-                            </li>
-                        </ul>
-                    </nav>
-
-                    <div className="mt-auto border-t border-gray-200">
-                        <Link href="#" className="flex items-center px-4 py-3 text-gray-700 hover:bg-[#f0f0f0] hover:text-red-600 transition-colors duration-200">
-                            <Icon icon="ph:sign-out-bold" width="24" height="24" className="mr-3" />
-                            <span>Sign Out</span>
-                        </Link>
-                    </div>
-                </div>
-
-                {/* Main Content */}
-                <div className="flex-1 bg-[#F3F3F3] overflow-y-auto">
-                    <div className="m-8 bg-white border border-gray200 rounded-lg">
-                        <div className="p-6">
-                            <h1 className="text-3xl font-semibold mb-6">Science Building</h1>
-
-                            {/* Search and Floor Selection */}
-                            <div className="mb-6">
-                                <div className="mb-4">
-                                    <div className="relative">
-                                        <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                                            <Icon icon="ph:magnifying-glass" width="20" height="20" className="text-gray-400" />
-                                        </div>
-                                        <input
-                                            type="text"
-                                            className="w-full pl-10 pr-4 py-3 text-lg border border-gray-300 rounded-lg focus:outline-none"
-                                            placeholder="Search"
-                                            value={searchQuery}
-                                            onChange={(e) => setSearchQuery(e.target.value)}
-                                        />
-                                    </div>
-                                </div>
-
-                                <div className="flex justify-between items-center">
-                                    <button className="flex items-center px-4 py-2 bg-[#E9F2E1] text-[#93BF6A] font-medium rounded-lg border-[1.5px] text-xl border-[#93BF6A] hover:bg-[#dbe9ce] hover:border-[#7da054] transition-colors duration-200">
-                                        <Icon icon="ph:caret-down-bold" width="20" height="20" className="mr-2" />
-                                        4th Floor
-                                    </button>
-
-                                    <button
-                                        onClick={openModal}
-                                        className="flex items-center px-4 py-2 bg-[#CCE8FF] text-[#4392F1] font-medium rounded-lg border-[1.5px] text-xl border-[#4392F1] hover:bg-[#b3dbff] hover:border-[#2b7ad9] transition-colors duration-200"
-                                    >
-                                        <Icon icon="ph:plus-bold" width="20" height="20" className="mr-2" />
-                                        Schedule
-                                    </button>
-                                </div>
-                            </div>
-
-                            {/* Loading State */}
-                            {isLoading && (
-                                <div className="bg-white p-8 rounded-lg text-center">
-                                    <div className="flex flex-col items-center">
-                                        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#4392F1] mb-4"></div>
-                                        <h3 className="text-xl font-medium text-gray-700">Loading schedules...</h3>
-                                    </div>
-                                </div>
-                            )}
-
-                            {/* Error State */}
-                            {error && !isLoading && (
-                                <div className="bg-white p-8 rounded-lg text-center">
-                                    <div className="flex flex-col items-center">
-                                        <Icon icon="ph:warning-circle" width="48" height="48" className="text-red-500 mb-4" />
-                                        <h3 className="text-xl font-medium text-gray-700 mb-2">{error}</h3>
-                                        <button 
-                                            className="mt-4 px-4 py-2 bg-[#4392F1] text-white rounded-lg"
-                                            onClick={() => window.location.reload()}
-                                        >
-                                            Retry
-                                        </button>
-                                    </div>
-                                </div>
-                            )}
-
-                            {/* Class Schedules */}
-                            {!isLoading && !error && filteredSchedules.length > 0 ? (
-                                filteredSchedules.map((course) => (
-                                    <div key={course.id} className="bg-white overflow-hidden mb-6 last:mb-0">
-                                        <div className="bg-[#CCE8FF] py-3 px-4 text-3xl">
-                                            {course.courseCode}
-                                        </div>
-
-                                        <div className="overflow-x-auto">
-                                            <table className="min-w-full">
-                                                <thead>
-                                                    <tr className="bg-[#F3F3F3]">
-                                                        <th className="py-3 px-4 text-left font-medium text-gray-600">Section</th>
-                                                        <th className="py-3 px-4 text-left font-medium text-gray-600">Type</th>
-                                                        <th className="py-3 px-4 text-left font-medium text-gray-600">Room Assigned</th>
-                                                        <th className="py-3 px-4 text-left font-medium text-gray-600">Schedule</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    {course.sections.map((section, index) => (
-                                                        <tr
-                                                            key={`${course.id}-${section.section}`}
-                                                            className="border-t border-gray-300 hover:bg-[#f9f9f9] transition-colors duration-200 cursor-pointer"
-                                                            onClick={() => openViewModal(course, section)}
-                                                        >
-                                                            <td className="py-3 px-4">{section.section}</td>
-                                                            <td className="py-3 px-4">{section.type}</td>
-                                                            <td className="py-3 px-4">{section.room}</td>
-                                                            <td className="py-3 px-4">{section.schedule}</td>
-                                                        </tr>
-                                                    ))}
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                    </div>
-                                ))
-                            ) : !isLoading && !error && (
-                                <div className="bg-white p-8 rounded-lg text-center">
-                                    <div className="flex flex-col items-center">
-                                        <Icon icon="ph:magnifying-glass" width="48" height="48" className="text-gray-400 mb-4" />
-                                        <h3 className="text-xl font-medium text-gray-700 mb-2">No matching schedules found</h3>
-                                        <p className="text-gray-500">Try adjusting your search criteria or add a new schedule.</p>
-                                    </div>
-                                </div>
-                            )}
-                        </div>
-                    </div>
-                </div>
+            <div className="mt-auto p-6">
+              <Link href="/signin" className="flex items-center text-gray-700">
+                <Icon icon="ph:sign-out-bold" width="24" height="24" className="mr-3" />
+                <span>Sign Out</span>
+              </Link>
             </div>
+          </div>
 
-            {/* Add Schedule Modal */}
-            {isModalOpen && (
-                <ScheduleModal
-                    isOpen={isModalOpen}
-                    onClose={closeModal}
-                    onSave={handleSaveSchedule}
-                />
-            )}
-
-            {/* View Schedule Modal */}
-            {isViewModalOpen && selectedSchedule && (
-                <ViewScheduleModal
-                    isOpen={isViewModalOpen}
-                    onClose={closeViewModal}
-                    courseCode={selectedSchedule.course.courseCode}
-                    section={selectedSchedule.section.section}
-                    type={selectedSchedule.section.type}
-                    room={selectedSchedule.section.room}
-                    schedule={selectedSchedule.section.schedule}
-                    onEdit={openEditModal}
-                    onDelete={() => {
-                        handleDeleteSchedule(selectedSchedule.course.id, selectedSchedule.section.section);
-                        closeViewModal();
-                    }}
-                />
-            )}
-
-            {/* Edit Schedule Modal */}
-            {isEditModalOpen && selectedSchedule && (
-                <EditScheduleModal
-                    isOpen={isEditModalOpen}
-                    onClose={closeEditModal}
-                    sectionId={selectedSchedule.section.id}
-                    initialData={{
-                        courseCode: selectedSchedule.course.courseCode,
-                        section: selectedSchedule.section.section,
-                        type: selectedSchedule.section.type,
-                        room: selectedSchedule.section.room,
-                        schedule: selectedSchedule.section.schedule
-                    }}
-                    onSave={(sectionId, data) => {
-                        handleEditSchedule(sectionId, {
-                            course_code: selectedSchedule.course.courseCode,
-                            section: data.section,
-                            type: data.type,
-                            room: data.room,
-                            day: data.day,
-                            time: data.time
-                        });
-                        closeEditModal();
-                    }}
-                />
-            )}
-        </>
-    );
-
-    return (
-        <RootExtensionWrapper>
-            {renderContent()}
-        </RootExtensionWrapper>
-    );
+          {/* Main Content */}
+          <div className="flex-1 overflow-y-auto p-6 bg-gray-100">
+            <div className="bg-white rounded-lg shadow-sm p-6">
+              {/* Admin Title */}
+              <h1 className="text-3xl font-semibold text-gray-800 mb-6">Admins</h1>
+              
+              {/* Search and Add Admin */}
+              <div className="mb-6">
+                <div className="relative w-full mb-4">
+                  <div className="absolute inset-y-0 left-3 flex items-center pointer-events-none">
+                    <Icon icon="ph:magnifying-glass" className="text-gray-400" width="20" height="20" />
+                  </div>
+                  <input
+                    type="text"
+                    placeholder="Search"
+                    className="pl-10 pr-4 py-3 w-full border rounded-lg focus:outline-none focus:ring-1 focus:ring-[#8BC34A]"
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                  />
+                </div>
+                
+                <div className="flex justify-end">
+                  <button
+                    onClick={addAdmin}
+                    className="bg-[#E6F4FF] text-[#1E88E5] border border-[#1E88E5] px-4 py-2 rounded-lg flex items-center"
+                  >
+                    <Icon icon="ph:plus" width="20" height="20" className="mr-2" />
+                    <span>Admin</span>
+                  </button>
+                </div>
+              </div>
+              
+              {/* Admin Users Table */}
+              <div className="overflow-x-auto">
+                <table className="min-w-full divide-y divide-gray-200">
+                  <thead className="bg-gray-50">
+                    <tr>
+                      <th className="px-4 py-3 text-left text-sm font-medium text-gray-600">Name</th>
+                      <th className="px-4 py-3 text-left text-sm font-medium text-gray-600">Email</th>
+                      <th className="px-4 py-3 text-left text-sm font-medium text-gray-600">User ID</th>
+                      <th className="px-4 py-3 text-left text-sm font-medium text-gray-600">Password</th>
+                    </tr>
+                  </thead>
+                  <tbody className="bg-white divide-y divide-gray-200">
+                    {filteredAdmins.map((admin, index) => (
+                      <tr key={index} className="hover:bg-gray-50">
+                        <td className="px-4 py-3 text-sm text-gray-700">{admin.name}</td>
+                        <td className="px-4 py-3 text-sm text-gray-700">{admin.email}</td>
+                        <td className="px-4 py-3 text-sm text-gray-700">{admin.userId}</td>
+                        <td className="px-4 py-3 text-sm text-gray-700">{admin.password}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </RootExtensionWrapper>
+  );
 }
 
 export default AdminPage;
