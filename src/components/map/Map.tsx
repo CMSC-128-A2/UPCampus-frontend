@@ -29,7 +29,7 @@ const MapboxExample = () => {
     const initialBearing = 80;
 
     // Use the global store for selected mark
-    const { selectedMarkId, setSelectedMarkId } = useMapStore();
+    const { selectedMarkId, setSelectedMarkId, activeDrawer } = useMapStore();
 
     // Track if sidebar is open (no longer needs to be local state)
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -80,7 +80,7 @@ const MapboxExample = () => {
         markerContent.style.alignItems = 'center';
 
         // Same styling for all markers
-        markerContent.style.backgroundColor = '#8A1438'; // Maroon color for all markers
+        markerContent.style.backgroundColor = '#FFFFFF'; // White background instead of maroon
         markerContent.style.color = 'maroon';
         markerContent.style.border = '2px solid maroon';
         markerContent.style.borderRadius = '9999px';
@@ -159,8 +159,14 @@ const MapboxExample = () => {
         Object.values(markersRef.current).forEach((marker) => marker.remove());
         markersRef.current = {};
 
-        // Add all markers (buildings and featured)
-        mapMarkers.forEach((mapMarker) => {
+        // Filter markers based on activeDrawer
+        const filteredMarkers =
+            activeDrawer === null
+                ? mapMarkers
+                : mapMarkers.filter((marker) => marker.type === activeDrawer);
+
+        // Add filtered markers to the map
+        filteredMarkers.forEach((mapMarker) => {
             const markerEl = createCustomMarkerElement(mapMarker);
             const mapboxMarker = new mapboxgl.Marker({
                 element: markerEl,
@@ -471,6 +477,48 @@ const MapboxExample = () => {
             });
         }
     }, [selectedMarkId, mapLoaded]);
+
+    // Effect to reload markers when activeDrawer changes
+    useEffect(() => {
+        if (mapLoaded) {
+            // If we have a selected marker, check if it should still be visible
+            if (selectedMarkId !== null) {
+                const selectedMarker = mapMarkers.find(
+                    (marker) => marker.id === selectedMarkId,
+                );
+                // If selected marker exists but doesn't match active drawer type, deselect it
+                if (
+                    selectedMarker &&
+                    activeDrawer !== null &&
+                    selectedMarker.type !== activeDrawer
+                ) {
+                    setSelectedMarkId(null);
+                }
+            }
+
+            addMarkersToMap();
+
+            // Re-apply selection styling after markers are reloaded
+            if (selectedMarkId !== null) {
+                // Short delay to ensure markers are rendered
+                setTimeout(() => {
+                    const selectedMarker = markersRef.current[selectedMarkId];
+                    if (selectedMarker) {
+                        const element = selectedMarker.getElement();
+                        const markerContent = element.querySelector('div');
+
+                        element.style.zIndex = '2';
+                        if (markerContent) {
+                            markerContent.style.backgroundColor = '#8A1438'; // maroon-accent
+                            markerContent.style.transform = 'scale(1.1)';
+                            markerContent.style.color = 'white';
+                            markerContent.style.border = '2px solid white';
+                        }
+                    }
+                }, 10);
+            }
+        }
+    }, [activeDrawer, mapLoaded, selectedMarkId, setSelectedMarkId]);
 
     // Effect to zoom to selected marker when selectedMarkId changes
     useEffect(() => {
