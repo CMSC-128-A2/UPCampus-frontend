@@ -2,56 +2,56 @@ export const mapMarkers = [
     {
         id: '9',
         type: 'buildings',
-        name: 'College of Science Building',
+        name: 'Arts and Design Workshop Bldg. 2',
         icon: 'building',
         coordinates: [123.898096, 10.323937],
     },
     {
         id: '10',
         type: 'buildings',
-        name: 'College of Engineering Building',
+        name: 'Arts and Science Extension Bldg. (ASX)',
         icon: 'building',
         coordinates: [123.897949, 10.323871],
     },
     {
         id: '8',
         type: 'buildings',
-        name: 'University Library',
+        name: 'Arts and Design Workshop Bldg.',
         icon: 'building',
         coordinates: [123.898273, 10.323521],
     },
     {
         id: '7',
         type: 'buildings',
-        name: 'College of Social Sciences Building',
+        name: 'Undergraduate Building',
         icon: 'building',
         coordinates: [123.897928, 10.323404],
     },
     {
         id: '6b',
         type: 'buildings',
-        name: 'College of Arts and Sciences Building B',
+        name: 'Management Bldg. 1',
         icon: 'building',
         coordinates: [123.897771, 10.32311],
     },
     {
         id: '6a',
         type: 'buildings',
-        name: 'College of Arts and Sciences Building A',
+        name: 'Management Administration',
         icon: 'building',
         coordinates: [123.897737, 10.32278],
     },
     {
         id: '6c',
         type: 'buildings',
-        name: 'College of Arts and Sciences Building C',
+        name: 'Management Bldg. 2',
         icon: 'building',
         coordinates: [123.897714, 10.322545],
     },
     {
         id: '6',
         type: 'buildings',
-        name: 'College of Arts and Sciences Main Building',
+        name: 'School of Management',
         icon: 'building',
         coordinates: [123.8978, 10.322611],
     },
@@ -66,230 +66,230 @@ export const mapMarkers = [
         id: '2',
         type: 'buildings',
         icon: 'building',
-        name: 'College of Business Administration',
+        name: 'Science Building',
         coordinates: [123.897939, 10.322249],
     },
     {
         id: '5d',
         type: 'buildings',
-        name: 'College of Education Building D',
+        name: 'Lihangin Hall',
         icon: 'building',
         coordinates: [123.897523, 10.322135],
     },
     {
         id: '5a',
         type: 'buildings',
-        name: 'College of Education Building A',
+        name: 'Balay Varangao',
         icon: 'building',
         coordinates: [123.897562, 10.321921],
     },
     {
         id: '5',
         type: 'buildings',
-        name: 'College of Education Main Building',
+        name: 'Residence Halls',
         icon: 'building',
         coordinates: [123.89759, 10.321825],
     },
     {
         id: '5b',
         type: 'buildings',
-        name: 'College of Education Building B',
+        name: 'Lalahon Hall',
         icon: 'building',
         coordinates: [123.897685, 10.321631],
     },
     {
         id: '5c',
         type: 'buildings',
-        name: 'College of Education Building C',
+        name: 'Liadlaw Hall',
         icon: 'building',
         coordinates: [123.897555, 10.321638],
     },
     {
         id: 'A9',
         type: 'activity',
-        name: 'University Amphitheater',
+        name: 'Amphitheater/Sunset Garden',
         icon: 'star',
         coordinates: [123.897727, 10.323369],
     },
     {
         id: 'A8',
         type: 'activity',
-        name: 'University Sports Complex',
+        name: 'Volleyball Court',
         icon: 'volleyball',
         coordinates: [123.898368, 10.323105],
     },
     {
         id: 'A6',
         type: 'activity',
-        name: 'Student Camping Grounds',
+        name: 'Undergraduate Cottages',
         icon: 'tent',
         coordinates: [123.898161, 10.322744],
     },
     {
         id: 'A4',
         type: 'activity',
-        name: 'Archery Range',
+        name: 'Admin Field',
         icon: 'target',
         coordinates: [123.898449, 10.321591],
     },
     {
         id: 'G1',
         type: 'security',
-        name: 'Main Gate Security Post',
+        name: 'Entrance Gate Guard House',
         icon: 'shield',
         coordinates: [123.898713, 10.321827],
     },
     {
         id: 'G3',
         type: 'security',
-        name: 'East Campus Security Station',
+        name: 'High School Guard House',
         icon: 'shield',
         coordinates: [123.898842, 10.322043],
     },
     {
         id: 'G4',
         type: 'security',
-        name: 'North Gate Security Post',
+        name: 'AS Guard House',
         icon: 'shield',
         coordinates: [123.898689, 10.322791],
     },
     {
         id: 'G2',
         type: 'security',
-        name: 'West Campus Security Station',
+        name: 'Exit Gate Guard House',
         icon: 'shield',
         coordinates: [123.898521, 10.322888],
     },
     {
         id: 'A2',
         type: 'activity',
-        name: 'Botanical Garden Picnic Area',
+        name: 'Admin Cottages',
         icon: 'tent',
         coordinates: [123.89824, 10.321963],
     },
     {
         id: 'A3',
         type: 'activity',
-        name: 'Student Camping Zone',
+        name: 'Malacañang Cottage',
         icon: 'tent',
         coordinates: [123.898494, 10.321822],
     },
     {
         id: 'A1',
         type: 'activity',
-        name: 'University Plaza',
+        name: 'Oblation Square',
         icon: 'star',
         coordinates: [123.898569, 10.322395],
     },
     {
         id: 'A5',
         type: 'activity',
-        name: 'Art Installation Area',
+        name: 'College Mini Stage',
         icon: 'star',
         coordinates: [123.898634, 10.321482],
     },
     {
         id: 'A10',
         type: 'activity',
-        name: 'Alumni Park',
+        name: 'High School Open Field',
         icon: 'star',
         coordinates: [123.899085, 10.32205],
     },
     {
         id: 'A11',
         type: 'activity',
-        name: 'University Lagoon',
+        name: 'High School Open Court',
         icon: 'star',
         coordinates: [123.899468, 10.321972],
     },
     {
         id: 'A12',
         type: 'activity',
-        name: 'Meditation Garden',
+        name: 'High School Covered Court',
         icon: 'star',
         coordinates: [123.899965, 10.321848],
     },
     {
         id: 'A13',
         type: 'activity',
-        name: 'University Football Field',
+        name: 'Soccer Field',
         icon: 'football',
         coordinates: [123.89982, 10.322717],
     },
     {
         id: '4',
         type: 'buildings',
-        name: 'University Library and Research Center',
+        name: 'Library Building',
         icon: 'book',
         coordinates: [123.897985, 10.321434],
     },
     {
         id: '3',
         type: 'buildings',
-        name: 'College of Health Sciences Building',
+        name: 'Technology Innovation Center Bldg.',
         icon: 'building',
         coordinates: [123.897882, 10.321726],
     },
     {
         id: '3b',
         type: 'buildings',
-        name: 'University Health Services',
+        name: 'Clinic',
         icon: 'clinic',
         coordinates: [123.897962, 10.321684],
     },
     {
         id: '3a',
         type: 'buildings',
-        name: 'University Food Court',
+        name: 'Cafeteria',
         icon: 'food',
         coordinates: [123.897946, 10.321814],
     },
     {
         id: '13',
         type: 'buildings',
-        name: 'College of Law',
+        name: 'Cebu Cultural Center',
         icon: 'building',
         coordinates: [123.899158, 10.322484],
     },
     {
         id: '11',
         type: 'buildings',
-        name: 'College of Agriculture Building',
+        name: 'Arts and Sciences (AS) Bldg.',
         icon: 'building',
         coordinates: [123.899292, 10.323221],
     },
     {
         id: '11a',
         type: 'buildings',
-        name: 'Agricultural Research Center',
+        name: 'AS Conference Hall',
         icon: 'building',
         coordinates: [123.899462, 10.323281],
     },
     {
         id: '11b',
         type: 'buildings',
-        name: 'Animal Science Building',
+        name: 'AS East Wing',
         icon: 'building',
         coordinates: [123.89943, 10.323088],
     },
     {
         id: '11c',
         type: 'buildings',
-        name: 'Agricultural Engineering Building',
+        name: 'AS West Wing',
         icon: 'building',
         coordinates: [123.899506, 10.323501],
     },
     {
         id: '14',
         type: 'buildings',
-        name: 'College of Communication',
+        name: 'High School Area',
         icon: 'building',
         coordinates: [123.899711, 10.321967],
     },
     {
         id: '12',
         type: 'buildings',
-        name: 'College of Engineering Building',
+        name: 'Union Building',
         icon: 'building',
         coordinates: [123.899779, 10.323402],
     },
@@ -298,7 +298,7 @@ export const mapMarkers = [
 export const mockBuildingsData = {
     '12': {
         id: '12',
-        name: 'College of Engineering Building',
+        name: 'Union Building',
         image: '/assets/images/random-building.jpg',
         floors: [
             {
@@ -354,7 +354,7 @@ export const mockBuildingsData = {
     },
     '9': {
         id: '9',
-        name: 'College of Science Building',
+        name: 'Arts and Design Workshop Bldg. 2',
         image: '/assets/images/random-building.jpg',
         floors: [
             {
@@ -425,7 +425,7 @@ export const mockBuildingsData = {
     },
     '10': {
         id: '10',
-        name: 'College of Engineering Building',
+        name: 'Arts and Science Extension Bldg. (ASX)',
         image: '/assets/images/random-building.jpg',
         floors: [
             {
@@ -469,7 +469,7 @@ export const mockBuildingsData = {
     },
     '8': {
         id: '8',
-        name: 'University Library',
+        name: 'Arts and Design Workshop Bldg.',
         image: '/assets/images/random-building.jpg',
         floors: [
             {
@@ -505,7 +505,7 @@ export const mockBuildingsData = {
     },
     '7': {
         id: '7',
-        name: 'College of Social Sciences Building',
+        name: 'Undergraduate Building',
         image: '/assets/images/random-building.jpg',
         floors: [
             {
@@ -539,7 +539,7 @@ export const mockBuildingsData = {
     },
     '6b': {
         id: '6b',
-        name: 'College of Arts and Sciences Building B',
+        name: 'Management Bldg. 1',
         image: '/assets/images/random-building.jpg',
         floors: [
             {
@@ -558,7 +558,7 @@ export const mockBuildingsData = {
     },
     '6a': {
         id: '6a',
-        name: 'College of Arts and Sciences Building A',
+        name: 'Management Administration',
         image: '/assets/images/random-building.jpg',
         floors: [
             {
@@ -581,7 +581,7 @@ export const mockBuildingsData = {
     },
     '6c': {
         id: '6c',
-        name: 'College of Arts and Sciences Building C',
+        name: 'Management Bldg. 2',
         image: '/assets/images/random-building.jpg',
         floors: [
             {
@@ -604,7 +604,7 @@ export const mockBuildingsData = {
     },
     '6': {
         id: '6',
-        name: 'College of Arts and Sciences Main Building',
+        name: 'School of Management',
         image: '/assets/images/random-building.jpg',
         floors: [
             {
@@ -656,7 +656,7 @@ export const mockBuildingsData = {
     },
     '2': {
         id: '2',
-        name: 'College of Business Administration',
+        name: 'Science Building',
         image: '/assets/images/random-building.jpg',
         floors: [
             {
@@ -689,7 +689,7 @@ export const mockBuildingsData = {
     },
     '5d': {
         id: '5d',
-        name: 'College of Education Building D',
+        name: 'Lihangin Hall',
         image: '/assets/images/random-building.jpg',
         floors: [
             {
@@ -712,7 +712,7 @@ export const mockBuildingsData = {
     },
     '5a': {
         id: '5a',
-        name: 'College of Education Building A',
+        name: 'Balay Varangao',
         image: '/assets/images/random-building.jpg',
         floors: [
             {
@@ -735,7 +735,7 @@ export const mockBuildingsData = {
     },
     '5': {
         id: '5',
-        name: 'College of Education Main Building',
+        name: 'Residence Halls',
         image: '/assets/images/random-building.jpg',
         floors: [
             {
@@ -758,7 +758,7 @@ export const mockBuildingsData = {
     },
     '5b': {
         id: '5b',
-        name: 'College of Education Building B',
+        name: 'Lalahon Hall',
         image: '/assets/images/random-building.jpg',
         floors: [
             {
@@ -781,7 +781,7 @@ export const mockBuildingsData = {
     },
     '5c': {
         id: '5c',
-        name: 'College of Education Building C',
+        name: 'Liadlaw Hall',
         image: '/assets/images/random-building.jpg',
         floors: [
             {
@@ -804,7 +804,7 @@ export const mockBuildingsData = {
     },
     '4': {
         id: '4',
-        name: 'University Library and Research Center',
+        name: 'Library Building',
         image: '/assets/images/random-building.jpg',
         floors: [
             {
@@ -839,7 +839,7 @@ export const mockBuildingsData = {
     },
     '3': {
         id: '3',
-        name: 'College of Health Sciences Building',
+        name: 'Technology Innovation Center Bldg.',
         image: '/assets/images/random-building.jpg',
         floors: [
             {
@@ -862,7 +862,7 @@ export const mockBuildingsData = {
     },
     '3b': {
         id: '3b',
-        name: 'University Health Services',
+        name: 'Clinic',
         image: '/assets/images/random-building.jpg',
         floors: [
             {
@@ -887,7 +887,7 @@ export const mockBuildingsData = {
     },
     '3a': {
         id: '3a',
-        name: 'University Food Court',
+        name: 'Cafeteria',
         image: '/assets/images/random-building.jpg',
         floors: [
             {
@@ -903,7 +903,7 @@ export const mockBuildingsData = {
     },
     '13': {
         id: '13',
-        name: 'College of Law',
+        name: 'Cebu Cultural Center',
         image: '/assets/images/random-building.jpg',
         floors: [
             {
@@ -922,7 +922,7 @@ export const mockBuildingsData = {
     },
     '11': {
         id: '11',
-        name: 'College of Agriculture Building',
+        name: 'Arts and Sciences (AS) Bldg.',
         image: '/assets/images/random-building.jpg',
         floors: [
             {
@@ -945,7 +945,7 @@ export const mockBuildingsData = {
     },
     '11a': {
         id: '11a',
-        name: 'Agricultural Research Center',
+        name: 'AS Conference Hall',
         image: '/assets/images/random-building.jpg',
         floors: [
             {
@@ -968,7 +968,7 @@ export const mockBuildingsData = {
     },
     '11b': {
         id: '11b',
-        name: 'Animal Science Building',
+        name: 'AS East Wing',
         image: '/assets/images/random-building.jpg',
         floors: [
             {
@@ -991,7 +991,7 @@ export const mockBuildingsData = {
     },
     '11c': {
         id: '11c',
-        name: 'Agricultural Engineering Building',
+        name: 'AS West Wing',
         image: '/assets/images/random-building.jpg',
         floors: [
             {
@@ -1014,7 +1014,7 @@ export const mockBuildingsData = {
     },
     '14': {
         id: '14',
-        name: 'College of Communication',
+        name: 'High School Area',
         image: '/assets/images/random-building.jpg',
         floors: [
             {
@@ -1046,7 +1046,7 @@ export const mockBuildingsData = {
     // Activity locations
     A9: {
         id: 'A9',
-        name: 'University Amphitheater',
+        name: 'Amphitheater/Sunset Garden',
         image: '/assets/images/random-building.jpg',
         type: 'activity',
         description:
@@ -1058,7 +1058,7 @@ export const mockBuildingsData = {
     },
     A8: {
         id: 'A8',
-        name: 'University Sports Complex',
+        name: 'Volleyball Court',
         image: '/assets/images/random-building.jpg',
         type: 'activity',
         description:
@@ -1070,7 +1070,7 @@ export const mockBuildingsData = {
     },
     A6: {
         id: 'A6',
-        name: 'Student Camping Grounds',
+        name: 'Undergraduate Cottages',
         image: '/assets/images/random-building.jpg',
         type: 'activity',
         description:
@@ -1082,7 +1082,7 @@ export const mockBuildingsData = {
     },
     A4: {
         id: 'A4',
-        name: 'Archery Range',
+        name: 'Admin Field',
         image: '/assets/images/random-building.jpg',
         type: 'activity',
         description:
@@ -1094,7 +1094,7 @@ export const mockBuildingsData = {
     },
     A2: {
         id: 'A2',
-        name: 'Botanical Garden Picnic Area',
+        name: 'Admin Cottages',
         image: '/assets/images/random-building.jpg',
         type: 'activity',
         description:
@@ -1106,7 +1106,7 @@ export const mockBuildingsData = {
     },
     A3: {
         id: 'A3',
-        name: 'Student Camping Zone',
+        name: 'Malacañang Cottage',
         image: '/assets/images/random-building.jpg',
         type: 'activity',
         description:
@@ -1118,7 +1118,7 @@ export const mockBuildingsData = {
     },
     A1: {
         id: 'A1',
-        name: 'University Plaza',
+        name: 'Oblation Square',
         image: '/assets/images/random-building.jpg',
         type: 'activity',
         description:
@@ -1130,7 +1130,7 @@ export const mockBuildingsData = {
     },
     A5: {
         id: 'A5',
-        name: 'Art Installation Area',
+        name: 'College Mini Stage',
         image: '/assets/images/random-building.jpg',
         type: 'activity',
         description: 'Open space for art installations and exhibitions.',
@@ -1141,7 +1141,7 @@ export const mockBuildingsData = {
     },
     A10: {
         id: 'A10',
-        name: 'Alumni Park',
+        name: 'High School Open Field',
         image: '/assets/images/random-building.jpg',
         type: 'activity',
         description:
@@ -1153,7 +1153,7 @@ export const mockBuildingsData = {
     },
     A11: {
         id: 'A11',
-        name: 'University Lagoon',
+        name: 'High School Open Court',
         image: '/assets/images/random-building.jpg',
         type: 'activity',
         description:
@@ -1165,7 +1165,7 @@ export const mockBuildingsData = {
     },
     A12: {
         id: 'A12',
-        name: 'Meditation Garden',
+        name: 'High School Covered Court',
         image: '/assets/images/random-building.jpg',
         type: 'activity',
         description: 'Quiet space for meditation and mindfulness activities.',
@@ -1176,7 +1176,7 @@ export const mockBuildingsData = {
     },
     A13: {
         id: 'A13',
-        name: 'University Football Field',
+        name: 'Soccer Field',
         image: '/assets/images/random-building.jpg',
         type: 'activity',
         description:
@@ -1189,7 +1189,7 @@ export const mockBuildingsData = {
     // Security locations
     G1: {
         id: 'G1',
-        name: 'Main Gate Security Post',
+        name: 'Entrance Gate Guard House',
         image: '/assets/images/random-building.jpg',
         type: 'security',
         personnel: '5 security officers',
@@ -1204,7 +1204,7 @@ export const mockBuildingsData = {
     },
     G3: {
         id: 'G3',
-        name: 'East Campus Security Station',
+        name: 'High School Guard House',
         image: '/assets/images/random-building.jpg',
         type: 'security',
         personnel: '3 security officers',
@@ -1219,7 +1219,7 @@ export const mockBuildingsData = {
     },
     G4: {
         id: 'G4',
-        name: 'North Gate Security Post',
+        name: 'AS Guard House',
         image: '/assets/images/random-building.jpg',
         type: 'security',
         personnel: '4 security officers',
@@ -1234,7 +1234,7 @@ export const mockBuildingsData = {
     },
     G2: {
         id: 'G2',
-        name: 'West Campus Security Station',
+        name: 'Exit Gate Guard House',
         image: '/assets/images/random-building.jpg',
         type: 'security',
         personnel: '3 security officers',
