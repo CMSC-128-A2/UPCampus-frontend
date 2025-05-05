@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { Icon } from '@iconify/react';
 import RootExtensionWrapper from './RootExtensionWrapper';
 import AdminModal from '@/components/ui/AdminModal';
+import EditAdminModal from '@/components/ui/EditAdminModal';
 import Layout from '@/components/ui/Layout';
 
 // Define admin user type
@@ -47,6 +48,8 @@ function AdminPage() {
   const [searchQuery, setSearchQuery] = useState('');
   const [adminUsers, setAdminUsers] = useState<AdminUser[]>(mockAdmins);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [selectedAdmin, setSelectedAdmin] = useState<AdminUser | null>(null);
 
   // Filter admin users based on search query
   const filteredAdmins = searchQuery.trim() === ''
@@ -68,9 +71,28 @@ function AdminPage() {
     setIsModalOpen(false);
   };
 
+  const openEditModal = (admin: AdminUser) => {
+    setSelectedAdmin(admin);
+    setIsEditModalOpen(true);
+  };
+
+  const closeEditModal = () => {
+    setIsEditModalOpen(false);
+    setSelectedAdmin(null);
+  };
+
   const handleSaveAdmin = (admin: AdminUser) => {
     setAdminUsers([...adminUsers, admin]);
     closeModal();
+  };
+
+  const handleUpdateAdmin = (updatedAdmin: AdminUser) => {
+    setAdminUsers(prevAdmins => 
+      prevAdmins.map(admin => 
+        admin.userId === updatedAdmin.userId ? updatedAdmin : admin
+      )
+    );
+    closeEditModal();
   };
 
   return (
@@ -119,7 +141,11 @@ function AdminPage() {
               </thead>
               <tbody className="bg-white divide-y divide-gray-200">
                 {filteredAdmins.map((admin, index) => (
-                  <tr key={index} className="hover:bg-gray-50">
+                  <tr 
+                    key={index} 
+                    className="hover:bg-gray-50 cursor-pointer"
+                    onClick={() => openEditModal(admin)}
+                  >
                     <td className="px-4 py-3 text-sm text-gray-700">{admin.name}</td>
                     <td className="px-4 py-3 text-sm text-gray-700">{admin.email}</td>
                     <td className="px-4 py-3 text-sm text-gray-700">{admin.userId}</td>
@@ -137,6 +163,16 @@ function AdminPage() {
           onClose={closeModal}
           onSave={handleSaveAdmin}
         />
+
+        {/* Edit Admin Modal */}
+        {selectedAdmin && (
+          <EditAdminModal
+            isOpen={isEditModalOpen}
+            onClose={closeEditModal}
+            onSave={handleUpdateAdmin}
+            initialData={selectedAdmin}
+          />
+        )}
       </Layout>
     </RootExtensionWrapper>
   );
