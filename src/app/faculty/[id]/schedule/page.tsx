@@ -151,10 +151,15 @@ export default function SchedulePage() {
     const openEditModal = () => {
         setIsViewModalOpen(false);
         setIsEditModalOpen(true);
+        // Keep the selectedSchedule set so it's available for the edit modal
     };
 
     const closeEditModal = () => {
         setIsEditModalOpen(false);
+        // If coming from view modal, re-open it
+        if (selectedSchedule) {
+            setIsViewModalOpen(true);
+        }
     };
 
     // Close toast
@@ -172,7 +177,12 @@ export default function SchedulePage() {
     // Handle delete schedule
     const handleDeleteSchedule = async (courseId: string, sectionId: string) => {
         try {
-            await schedulesApi.deleteSection(courseId, sectionId);
+            const response = await schedulesApi.deleteSection(courseId, sectionId);
+            
+            if (response.error) {
+                showToast(response.detail || 'Failed to delete section. Please try again.', 'error');
+                return;
+            }
             
             // Update state after successful delete
             setClassSchedules(prevSchedules => 

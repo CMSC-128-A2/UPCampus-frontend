@@ -266,24 +266,28 @@ function EditScheduleModal({ isOpen, onClose, sectionId, initialData, onSave }: 
                         </div>
 
                         {/* Footer */}
-                        <div className="mt-8 flex justify-end space-x-3">
+                        <div className="flex justify-end space-x-3 mt-6">
                             <button
                                 onClick={handleClose}
-                                className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-100 transition-colors duration-200"
+                                className="px-5 py-2 border border-gray-300 rounded-lg hover:bg-gray-100 transition-colors duration-200"
+                                disabled={isSaving}
                             >
                                 Cancel
                             </button>
                             <button
                                 onClick={handleSave}
                                 disabled={isSaving}
-                                className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors duration-200 flex items-center justify-center min-w-[80px]"
+                                className="flex items-center px-5 py-2 bg-[#93C5FD] text-white font-medium rounded-lg hover:bg-[#60A5FA] transition-colors duration-200 disabled:opacity-50"
                             >
                                 {isSaving ? (
-                                    <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
+                                    <>
+                                        <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-2"></div>
+                                        Saving...
+                                    </>
                                 ) : (
                                     <>
-                                        <Edit className="mr-2 h-5 w-5" />
-                                        Save
+                                        <Icon icon="ph:floppy-disk" width="20" height="20" className="mr-2" />
+                                        Save Changes
                                     </>
                                 )}
                             </button>

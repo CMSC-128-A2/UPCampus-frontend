@@ -208,7 +208,18 @@ export const schedulesApi = {
         }
     },
 
-    // Update an existing section
+    /**
+     * Update an existing class section 
+     * 
+     * Returns either:
+     * - On success: The updated section data from the server
+     * - On error: { error: true, status, detail, conflicts? } with structured error information
+     * 
+     * Conflicts will be present in the response when there's a schedule conflict (HTTP 409)
+     * 
+     * @param sectionId ID of the section to update
+     * @param sectionData Section data to update
+     */
     updateSection: async (
         sectionId: string,
         sectionData: {
@@ -278,23 +289,48 @@ export const schedulesApi = {
     },
 
     // Delete a section
-    deleteSection: async (courseId: string, sectionName: string) => {
+    deleteSection: async (courseId: string, sectionId: string) => {
         try {
-            console.log(`Deleting section: courseId=${courseId}, sectionName=${sectionName}`);
-            const response = await fetch(`${API_BASE_URL}/api/schedules/courses/${courseId}/sections/${sectionName}/`, {
+            console.log(`Deleting section: courseId=${courseId}, sectionId=${sectionId}`);
+            const response = await fetch(`${API_BASE_URL}/api/schedules/sections/${sectionId}/`, {
                 method: 'DELETE',
             });
 
             console.log('Delete section response status:', response.status);
 
+            // Try to parse error response if present
             if (!response.ok) {
-                throw new Error(`Error: ${response.status}`);
+                let errorDetail = '';
+                try {
+                    const errorText = await response.text();
+                    try {
+                        const errorJson = JSON.parse(errorText);
+                        errorDetail = errorJson.detail || errorText;
+                    } catch (e) {
+                        errorDetail = errorText;
+                    }
+                } catch (e) {
+                    errorDetail = `Error: ${response.status}`;
+                }
+
+                return {
+                    error: true,
+                    status: response.status,
+                    detail: errorDetail
+                };
             }
 
-            return true;
+            return {
+                error: false,
+                status: response.status
+            };
         } catch (error) {
             console.error('Failed to delete section:', error);
-            throw error;
+            return {
+                error: true,
+                status: 500,
+                detail: error instanceof Error ? error.message : 'An unexpected error occurred'
+            };
         }
     },
 
