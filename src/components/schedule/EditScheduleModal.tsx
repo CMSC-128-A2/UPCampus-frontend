@@ -2,6 +2,12 @@ import React, { useState, useEffect } from 'react';
 import { Icon } from '@iconify/react';
 import { Edit } from 'lucide-react';
 import { parseSchedule } from '@/lib/api';
+import TimePicker from 'react-time-picker';
+import 'react-time-picker/dist/TimePicker.css';
+import 'react-clock/dist/Clock.css';
+import './timepicker.css'; // Import custom TimePicker styling
+
+type TimeValue = string | null;
 
 interface EditScheduleModalProps {
     isOpen: boolean;
@@ -30,8 +36,59 @@ function EditScheduleModal({ isOpen, onClose, sectionId, initialData, onSave }: 
     const [type, setType] = useState<'Lecture' | 'Laboratory'>('Lecture');
     const [room, setRoom] = useState('');
     const [day, setDay] = useState<string[]>([]);
-    const [time, setTime] = useState('');
+    
+    // Time state using separate start and end times
+    const [startTime, setStartTime] = useState<TimeValue>(null);
+    const [endTime, setEndTime] = useState<TimeValue>(null);
+    
     const [isSaving, setIsSaving] = useState(false);
+    
+    // Format time to 12-hour format
+    const formatTime = (time: TimeValue): string => {
+        if (!time) return '';
+        
+        const [hours, minutes] = time.split(':');
+        const hour = parseInt(hours, 10);
+        const minute = parseInt(minutes, 10);
+        
+        const period = hour >= 12 ? 'PM' : 'AM';
+        const formattedHour = hour % 12 || 12; // Convert 0 to 12 for 12 AM
+        
+        return `${formattedHour}:${minute.toString().padStart(2, '0')} ${period}`;
+    };
+    
+    // Get the combined time string in the format "11:00 AM - 12:00 PM"
+    const getTimeString = (): string => {
+        const formattedStartTime = formatTime(startTime);
+        const formattedEndTime = formatTime(endTime);
+        
+        if (!formattedStartTime || !formattedEndTime) {
+            return '';
+        }
+        
+        return `${formattedStartTime} - ${formattedEndTime}`;
+    };
+    
+    // Parse 12-hour format time string (e.g., "11:00 AM") to 24-hour format for TimePicker
+    const parseTimeString = (timeStr: string): string | null => {
+        if (!timeStr) return null;
+        
+        // Match pattern like "11:00 AM" or "1:30 PM"
+        const match = timeStr.match(/(\d+):(\d+)\s*[AP]M/i);
+        if (!match) return null;
+        
+        let [, hours, minutes, period] = match;
+        let hour = parseInt(hours, 10);
+        
+        // Convert to 24-hour format
+        if (period.toUpperCase() === 'PM' && hour < 12) {
+            hour += 12;
+        } else if (period.toUpperCase() === 'AM' && hour === 12) {
+            hour = 0;
+        }
+        
+        return `${hour.toString().padStart(2, '0')}:${minutes}`;
+    };
 
     // Initialize form data when modal is opened or initial data changes
     useEffect(() => {
@@ -45,7 +102,16 @@ function EditScheduleModal({ isOpen, onClose, sectionId, initialData, onSave }: 
             const { day: scheduleDay, time: scheduleTime } = parseSchedule(initialData.schedule);
             // Split the day string into an array of days and filter out empty strings
             setDay(scheduleDay.split(' ').filter(Boolean));
-            setTime(scheduleTime);
+            
+            // Parse the time string to extract start and end times
+            const timePattern = /(\d+:\d+\s*[AP]M)\s*-\s*(\d+:\d+\s*[AP]M)/i;
+            const timeMatch = scheduleTime.match(timePattern);
+            
+            if (timeMatch) {
+                const [, startTimeStr, endTimeStr] = timeMatch;
+                setStartTime(parseTimeString(startTimeStr.trim()));
+                setEndTime(parseTimeString(endTimeStr.trim()));
+            }
         }
     }, [isOpen, initialData]);
 
@@ -56,8 +122,11 @@ function EditScheduleModal({ isOpen, onClose, sectionId, initialData, onSave }: 
     const handleSave = async () => {
         if (!onSave) return;
         
+        const timeString = getTimeString();
+        const dayString = day.join(' ');
+        
         // Validate form
-        if (!section || !type || !room || !day || !time) {
+        if (!section || !type || !room || !dayString || !timeString) {
             alert('Please fill in all required fields');
             return;
         }
@@ -69,8 +138,8 @@ function EditScheduleModal({ isOpen, onClose, sectionId, initialData, onSave }: 
                 section,
                 type,
                 room,
-                day: day.join(' '), // Join the array back into a space-separated string
-                time
+                day: dayString,
+                time: timeString
             });
             handleClose();
         } catch (error) {
@@ -167,14 +236,43 @@ function EditScheduleModal({ isOpen, onClose, sectionId, initialData, onSave }: 
                         </div>
 
                         <div className="space-y-2">
-                            <label className="block text-gray-700">Time</label>
-                            <input
-                                type="text"
-                                value={time}
-                                onChange={(e) => setTime(e.target.value)}
-                                className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                placeholder="e.g., 11:00 AM - 12:00 PM"
-                            />
+                            <label className="block text-gray-700 font-medium">Time</label>
+                            <div className="grid grid-cols-2 gap-4">
+                                <div className="space-y-1">
+                                    <span className="text-sm text-gray-500 font-medium">Start Time</span>
+                                    <TimePicker 
+                                        onChange={setStartTime} 
+                                        value={startTime} 
+                                        disableClock={true}
+                                        clearIcon={null}
+                                        format="h:mm a"
+                                        locale="en-US"
+                                        className={`w-full time-picker-custom ${!startTime ? 'empty' : ''}`}
+                                        required
+                                    />
+                                </div>
+                                <div className="space-y-1">
+                                    <span className="text-sm text-gray-500 font-medium">End Time</span>
+                                    <TimePicker 
+                                        onChange={setEndTime} 
+                                        value={endTime} 
+                                        disableClock={true}
+                                        clearIcon={null}
+                                        format="h:mm a"
+                                        locale="en-US"
+                                        className={`w-full time-picker-custom ${!endTime ? 'empty' : ''}`}
+                                        required
+                                    />
+                                </div>
+                            </div>
+                            <div className="mt-2 rounded-md bg-gray-50 p-2 text-sm text-gray-600 border border-gray-100">
+                                <div className="flex items-center">
+                                    <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1 text-blue-500" viewBox="0 0 20 20" fill="currentColor">
+                                        <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clipRule="evenodd" />
+                                    </svg>
+                                    {getTimeString() ? `Schedule: ${getTimeString()}` : 'Please select start and end times'}
+                                </div>
+                            </div>
                         </div>
                     </div>
 

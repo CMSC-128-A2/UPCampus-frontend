@@ -1,0 +1,195 @@
+/* Custom styling for TimePicker to match modal design */
+
+/* Main container */
+.react-time-picker {
+  width: 100%;
+  font-family: inherit;
+}
+
+/* Empty TimePicker styling */
+.react-time-picker.empty .react-time-picker__wrapper,
+.react-time-picker:has(input:placeholder-shown) .react-time-picker__wrapper {
+  color: #9ca3af; /* Gray-400 */
+  justify-content: flex-start;
+  padding-left: 1rem;
+}
+
+/* Add a placeholder-like text via pseudo-element */
+.react-time-picker.empty .react-time-picker__inputGroup:empty::before {
+  content: "Select time...";
+  color: #9ca3af; /* Gray-400 */
+  font-size: 1rem;
+}
+
+/* Custom styling */
+.time-picker-custom .react-time-picker__wrapper,
+.react-time-picker.time-picker-custom .react-time-picker__wrapper {
+  padding: 0.75rem 1rem;
+  border: 1px solid #e5e7eb; /* Gray-300 */
+  border-radius: 0.5rem; /* rounded-lg */
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+  background-color: white;
+  min-height: 48px; /* Ensure consistent height even when empty */
+}
+
+/* Empty state styling */
+.react-time-picker__wrapper--empty {
+  color: #9ca3af; /* Gray-400 */
+  display: flex;
+  align-items: center;
+}
+
+.react-time-picker__wrapper--empty::before {
+  content: "Select time";
+  color: #9ca3af; /* Gray-400 */
+  padding-left: 0.5rem;
+}
+
+/* Placeholder styling for empty time pickers */
+.react-time-picker__inputGroup__leadingZero,
+.react-time-picker__inputGroup__input {
+  font-size: 1rem;
+  color: #9ca3af; /* Gray-400 for placeholder-like appearance */
+}
+
+.react-time-picker__inputGroup__input:focus {
+  color: #1f2937; /* Gray-800 for active input */
+}
+
+/* Empty placeholder */
+.react-time-picker__inputGroup__placeholder {
+  color: #9ca3af; /* Gray-400 */
+}
+
+/* Input wrapper */
+.react-time-picker__wrapper {
+  border: 1px solid #e5e7eb; /* Gray-300 */
+  border-radius: 0.5rem; /* rounded-lg */
+  padding: 0.75rem; /* p-3 */
+  display: flex;
+  align-items: center;
+  background-color: white;
+  transition: all 0.2s;
+  height: 3rem; /* Consistent height with other inputs */
+}
+
+.react-time-picker__wrapper:focus-within {
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.5); /* focus:ring-2 focus:ring-blue-500 */
+  border-color: rgba(59, 130, 246, 0.5); /* focus:ring-blue-500 */
+}
+
+/* Inputs */
+.react-time-picker__inputGroup {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  min-width: 0;
+}
+
+.react-time-picker__inputGroup__input {
+  font-size: 1rem;
+  line-height: 1.5;
+  color: #1f2937; /* Gray-800 */
+  -moz-appearance: textfield;
+  padding: 0;
+  border: none;
+  background: none;
+  min-width: 0.75em; /* To keep hour/minute correct size */
+  height: auto;
+}
+
+.react-time-picker__inputGroup__input:focus {
+  outline: none;
+}
+
+.react-time-picker__inputGroup__input::-webkit-outer-spin-button,
+.react-time-picker__inputGroup__input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Divider between hours and minutes */
+.react-time-picker__inputGroup__divider {
+  padding: 0 2px;
+  color: #6b7280; /* Gray-500 */
+}
+
+/* AM/PM selector */
+.react-time-picker__inputGroup__amPm {
+  font-size: 0.875rem;
+  color: #4b5563; /* Gray-600 */
+  margin-left: 4px;
+  background-color: transparent;
+  border: none;
+  appearance: none;
+  cursor: pointer;
+  padding: 2px 4px;
+  border-radius: 4px;
+}
+
+.react-time-picker__inputGroup__amPm:focus {
+  outline: none;
+  background-color: #f3f4f6;
+}
+
+.react-time-picker__inputGroup__amPm:hover {
+  background-color: #f3f4f6;
+}
+
+/* Button styling */
+.react-time-picker__button {
+  padding: 4px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #6b7280; /* Gray-500 */
+  border-radius: 4px;
+  margin-left: 2px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.react-time-picker__button:hover {
+  color: #4b5563; /* Gray-600 */
+  background-color: #f3f4f6;
+}
+
+.react-time-picker__button:focus {
+  outline: none;
+}
+
+.react-time-picker__button svg {
+  width: 16px;
+  height: 16px;
+}
+
+/* Clear button */
+.react-time-picker__clear-button {
+  display: none; /* Hide the clear button */
+}
+
+/* Clock dropdown */
+.react-time-picker__clock {
+  display: none; /* Hide the clock dropdown since we're using disableClock=true */
+}
+
+/* Error state */
+.react-time-picker.invalid .react-time-picker__wrapper {
+  border-color: #ef4444; /* Red-500 */
+}
+
+/* Disabled state */
+.react-time-picker.disabled .react-time-picker__wrapper {
+  background-color: #f3f4f6; /* Gray-100 */
+  color: #9ca3af; /* Gray-400 */
+  cursor: not-allowed;
+}
+
+.react-time-picker.disabled .react-time-picker__button,
+.react-time-picker.disabled .react-time-picker__inputGroup__input,
+.react-time-picker.disabled .react-time-picker__inputGroup__amPm {
+  color: #9ca3af; /* Gray-400 */
+  cursor: not-allowed;
+} 
