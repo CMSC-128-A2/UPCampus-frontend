@@ -4,6 +4,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { Icon } from '@iconify/react';
 import RootExtensionWrapper from './RootExtensionWrapper';
+import AdminModal from '@/components/ui/AdminModal';
 
 // Define admin user type
 interface AdminUser {
@@ -44,6 +45,7 @@ const mockAdmins: AdminUser[] = [
 function AdminPage() {
   const [searchQuery, setSearchQuery] = useState('');
   const [adminUsers, setAdminUsers] = useState<AdminUser[]>(mockAdmins);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   // Filter admin users based on search query
   const filteredAdmins = searchQuery.trim() === ''
@@ -57,9 +59,17 @@ function AdminPage() {
         );
       });
 
-  const addAdmin = () => {
-    // This would open a modal or form to add a new admin in a real implementation
-    alert('Add admin functionality would be implemented here');
+  const openModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
+
+  const handleSaveAdmin = (admin: AdminUser) => {
+    setAdminUsers([...adminUsers, admin]);
+    closeModal();
   };
 
   return (
@@ -132,7 +142,7 @@ function AdminPage() {
                 
                 <div className="flex justify-end">
                   <button
-                    onClick={addAdmin}
+                    onClick={openModal}
                     className="bg-[#E6F4FF] text-[#1E88E5] border border-[#1E88E5] px-4 py-2 rounded-lg flex items-center"
                   >
                     <Icon icon="ph:plus" width="20" height="20" className="mr-2" />
@@ -168,6 +178,13 @@ function AdminPage() {
           </div>
         </div>
       </div>
+
+      {/* Add Admin Modal */}
+      <AdminModal
+        isOpen={isModalOpen}
+        onClose={closeModal}
+        onSave={handleSaveAdmin}
+      />
     </RootExtensionWrapper>
   );
 }
