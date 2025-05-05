@@ -7,6 +7,8 @@ import { useParams, useRouter } from 'next/navigation';
 import ScheduleModal from '@/components/schedule/ScheduleModal';
 import ViewScheduleModal from '@/components/schedule/ViewScheduleModal';
 import EditScheduleModal from '@/components/schedule/EditScheduleModal';
+import Layout from '@/components/ui/Layout';
+import RootExtensionWrapper from '@/app/admin/RootExtensionWrapper';
 import { schedulesApi, parseSchedule, Course, ClassSection as ApiClassSection } from '@/lib/api';
 
 // Define TypeScript types for the data structure
@@ -288,217 +290,190 @@ export default function SchedulePage() {
 
     if (isLoading) {
         return (
-            <div className="flex items-center justify-center h-screen">
-                <div className="text-center">
-                    <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-[#8BC34A] mx-auto"></div>
-                    <p className="mt-4">Loading...</p>
-                </div>
-            </div>
+            <RootExtensionWrapper>
+                <Layout>
+                    <div className="p-6 flex justify-center items-center h-full">
+                        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#8BC34A]"></div>
+                    </div>
+                </Layout>
+            </RootExtensionWrapper>
+        );
+    }
+
+    if (error) {
+        return (
+            <RootExtensionWrapper>
+                <Layout>
+                    <div className="p-6 text-center">
+                        <div className="bg-red-50 text-red-600 p-4 rounded-lg mb-4">
+                            <p>{error}</p>
+                        </div>
+                        <Link href="/faculty" className="text-[#8BC34A] hover:underline mt-2 inline-block">
+                            Return to Faculty List
+                        </Link>
+                    </div>
+                </Layout>
+            </RootExtensionWrapper>
         );
     }
 
     if (!professor) {
         return (
-            <div className="flex items-center justify-center h-screen">
-                <div className="text-center">
-                    <Icon icon="ph:warning-circle" className="text-yellow-500 mx-auto" width="48" height="48" />
-                    <p className="mt-4">Professor not found</p>
-                    <Link href="/faculty" className="text-[#8BC34A] hover:underline mt-2 inline-block">
-                        Return to Faculty List
-                    </Link>
-                </div>
-            </div>
+            <RootExtensionWrapper>
+                <Layout>
+                    <div className="p-6 text-center">
+                        <p className="mt-4">Professor not found</p>
+                        <Link href="/faculty" className="text-[#8BC34A] hover:underline mt-2 inline-block">
+                            Return to Faculty List
+                        </Link>
+                    </div>
+                </Layout>
+            </RootExtensionWrapper>
         );
     }
 
     return (
-        <div className="flex flex-col h-screen">
-            {/* Main Content Area - Sidebar + Content */}
-            <div className="flex flex-1 overflow-hidden">
-                {/* Sidebar */}
-                <div className="w-60 bg-white border-r overflow-y-auto flex flex-col">
-                    <div className="p-6">
-                        <Link href="/" className="flex items-center">
-                            <div className="text-[#8BC34A] text-2xl font-semibold">
-                                <span className="text-[#8BC34A]">UP</span>
-                                <span className="text-[#8BC34A] ml-1">Campus</span>
-                            </div>
-                        </Link>
-                    </div>
+        <RootExtensionWrapper>
+            <Layout>
+                <div className="bg-white rounded-lg shadow-sm p-6">
+                    {/* Professor's Schedule Title */}
+                    <h1 className="text-3xl font-semibold text-gray-800 mb-6">{professor.name}'s Schedule</h1>
                     
-                    <nav className="flex-1">
-                        <ul className="space-y-1">
-                            <li>
-                                <Link href="/faculty" className="flex items-center px-6 py-3 text-gray-700">
-                                    <Icon icon="ph:graduation-cap-bold" width="24" height="24" className="mr-3" />
-                                    <span>Faculty</span>
-                                </Link>
-                            </li>
-                            <li>
-                                <Link href="/admin" className="flex items-center px-6 py-3 text-gray-700">
-                                    <Icon icon="ph:users-three-bold" width="24" height="24" className="mr-3" />
-                                    <span>Admins</span>
-                                </Link>
-                            </li>
-                            <li>
-                                <Link href="/map" className="flex items-center px-6 py-3 text-gray-700">
-                                    <Icon icon="ph:map-trifold-bold" width="24" height="24" className="mr-3" />
-                                    <span>Campus Map</span>
-                                </Link>
-                            </li>
-                        </ul>
-                    </nav>
-
-                    <div className="mt-auto p-6">
-                        <Link href="/signin" className="flex items-center text-gray-700">
-                            <Icon icon="ph:sign-out-bold" width="24" height="24" className="mr-3" />
-                            <span>Sign Out</span>
-                        </Link>
-                    </div>
-                </div>
-
-                {/* Main Content */}
-                <div className="flex-1 overflow-y-auto p-6 bg-gray-100">
-                    <div className="bg-white rounded-lg shadow-sm p-6">
-                        {/* Professor's Schedule Title */}
-                        <h1 className="text-3xl font-semibold text-gray-800 mb-6">{professor.name}'s Schedule</h1>
-                        
-                        {/* Search and Filters */}
-                        <div className="mb-6">
-                            <div className="relative w-full mb-4">
-                                <div className="absolute inset-y-0 left-3 flex items-center pointer-events-none">
-                                    <Icon icon="ph:magnifying-glass" className="text-gray-400" width="20" height="20" />
-                                </div>
-                                <input
-                                    type="text"
-                                    placeholder="Search"
-                                    className="pl-10 pr-4 py-3 w-full border rounded-lg focus:outline-none focus:ring-1 focus:ring-[#8BC34A]"
-                                    value={searchQuery}
-                                    onChange={(e) => setSearchQuery(e.target.value)}
-                                />
+                    {/* Search and Filters */}
+                    <div className="mb-6">
+                        <div className="relative w-full mb-4">
+                            <div className="absolute inset-y-0 left-3 flex items-center pointer-events-none">
+                                <Icon icon="ph:magnifying-glass" className="text-gray-400" width="20" height="20" />
                             </div>
-                            
-                            <div className="flex justify-between items-center">
-                                <div className="relative">
-                                    <select
-                                        className="appearance-none bg-[#F2F9EC] border border-[#8BC34A] text-[#8BC34A] rounded-lg pl-4 pr-10 py-2 focus:outline-none"
-                                        value={selectedFloor}
-                                        onChange={(e) => setSelectedFloor(e.target.value as Floor)}
-                                    >
-                                        <option value="1st Floor">1st Floor</option>
-                                        <option value="2nd Floor">2nd Floor</option>
-                                        <option value="3rd Floor">3rd Floor</option>
-                                        <option value="4th Floor">4th Floor</option>
-                                        <option value="5th Floor">5th Floor</option>
-                                        <option value="All Floors">All Floors</option>
-                                    </select>
-                                    <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
-                                        <Icon icon="ph:caret-down" className="text-[#8BC34A]" width="16" height="16" />
-                                    </div>
-                                </div>
-                                
-                                <button
-                                    onClick={openModal}
-                                    className="bg-[#E6F4FF] hover:bg-[#d1ebff] text-[#1E88E5] border border-[#1E88E5] px-4 py-2 rounded-lg flex items-center"
-                                >
-                                    <Icon icon="ph:plus" width="20" height="20" className="mr-2" />
-                                    <span>Schedule</span>
-                                </button>
-                            </div>
+                            <input
+                                type="text"
+                                placeholder="Search"
+                                className="pl-10 pr-4 py-3 w-full border rounded-lg focus:outline-none focus:ring-1 focus:ring-[#8BC34A]"
+                                value={searchQuery}
+                                onChange={(e) => setSearchQuery(e.target.value)}
+                            />
                         </div>
                         
-                        {/* Course Schedules */}
-                        {filteredSchedules.length === 0 ? (
-                            <div className="p-6 text-center text-gray-500">
-                                <Icon icon="ph:calendar-blank" className="mx-auto mb-2" width="48" height="48" />
-                                <p>No schedules found. {searchQuery ? 'Try a different search.' : 'Add a new schedule to get started.'}</p>
+                        <div className="flex justify-between items-center">
+                            <div className="relative">
+                                <select
+                                    className="appearance-none bg-[#F2F9EC] border border-[#8BC34A] text-[#8BC34A] rounded-lg pl-4 pr-10 py-2 focus:outline-none"
+                                    value={selectedFloor}
+                                    onChange={(e) => setSelectedFloor(e.target.value as Floor)}
+                                >
+                                    <option value="1st Floor">1st Floor</option>
+                                    <option value="2nd Floor">2nd Floor</option>
+                                    <option value="3rd Floor">3rd Floor</option>
+                                    <option value="4th Floor">4th Floor</option>
+                                    <option value="5th Floor">5th Floor</option>
+                                    <option value="All Floors">All Floors</option>
+                                </select>
+                                <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+                                    <Icon icon="ph:caret-down" className="text-[#8BC34A]" width="16" height="16" />
+                                </div>
                             </div>
-                        ) : (
-                            <div className="space-y-6">
-                                {filteredSchedules.map(course => (
-                                    <div key={course.courseCode} className="mb-8">
-                                        {/* Course Header */}
-                                        <div className="bg-[#E6F4FF] px-4 py-3 rounded-lg mb-2">
-                                            <h2 className="text-xl font-semibold text-gray-800">{course.courseCode}</h2>
-                                        </div>
-                                        
-                                        {/* Course Sections */}
-                                        <div className="overflow-x-auto">
-                                            <table className="min-w-full divide-y divide-gray-200">
-                                                <thead className="bg-gray-50">
-                                                    <tr>
-                                                        <th className="px-4 py-3 text-left text-sm font-medium text-gray-600">Section</th>
-                                                        <th className="px-4 py-3 text-left text-sm font-medium text-gray-600">Type</th>
-                                                        <th className="px-4 py-3 text-left text-sm font-medium text-gray-600">Room Assigned</th>
-                                                        <th className="px-4 py-3 text-left text-sm font-medium text-gray-600">Schedule</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody className="bg-white divide-y divide-gray-200">
-                                                    {course.sections.map(section => (
-                                                        <tr 
-                                                            key={section.id} 
-                                                            className="hover:bg-gray-50 cursor-pointer"
-                                                            onClick={() => openViewModal(course, section)}
-                                                        >
-                                                            <td className="px-4 py-3 text-sm text-gray-700">{section.section}</td>
-                                                            <td className="px-4 py-3 text-sm text-gray-700">{section.type}</td>
-                                                            <td className="px-4 py-3 text-sm text-gray-700">{section.room}</td>
-                                                            <td className="px-4 py-3 text-sm text-gray-700">{section.schedule}</td>
-                                                        </tr>
-                                                    ))}
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                    </div>
-                                ))}
-                            </div>
-                        )}
+                            
+                            <button
+                                onClick={openModal}
+                                className="bg-[#E6F4FF] hover:bg-[#d1ebff] text-[#1E88E5] border border-[#1E88E5] px-4 py-2 rounded-lg flex items-center"
+                            >
+                                <Icon icon="ph:plus" width="20" height="20" className="mr-2" />
+                                <span>Schedule</span>
+                            </button>
+                        </div>
                     </div>
+                    
+                    {/* Course Schedules */}
+                    {filteredSchedules.length === 0 ? (
+                        <div className="p-6 text-center text-gray-500">
+                            <Icon icon="ph:calendar-blank" className="mx-auto mb-2" width="48" height="48" />
+                            <p>No schedules found. {searchQuery ? 'Try a different search.' : 'Add a new schedule to get started.'}</p>
+                        </div>
+                    ) : (
+                        <div className="space-y-6">
+                            {filteredSchedules.map(course => (
+                                <div key={course.courseCode} className="mb-8">
+                                    {/* Course Header */}
+                                    <div className="bg-[#E6F4FF] px-4 py-3 rounded-lg mb-2">
+                                        <h2 className="text-xl font-semibold text-gray-800">{course.courseCode}</h2>
+                                    </div>
+                                    
+                                    {/* Course Sections */}
+                                    <div className="overflow-x-auto">
+                                        <table className="min-w-full divide-y divide-gray-200">
+                                            <thead className="bg-gray-50">
+                                                <tr>
+                                                    <th className="px-4 py-3 text-left text-sm font-medium text-gray-600">Section</th>
+                                                    <th className="px-4 py-3 text-left text-sm font-medium text-gray-600">Type</th>
+                                                    <th className="px-4 py-3 text-left text-sm font-medium text-gray-600">Room Assigned</th>
+                                                    <th className="px-4 py-3 text-left text-sm font-medium text-gray-600">Schedule</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody className="bg-white divide-y divide-gray-200">
+                                                {course.sections.map(section => (
+                                                    <tr 
+                                                        key={section.id} 
+                                                        className="hover:bg-gray-50 cursor-pointer"
+                                                        onClick={() => openViewModal(course, section)}
+                                                    >
+                                                        <td className="px-4 py-3 text-sm text-gray-700">{section.section}</td>
+                                                        <td className="px-4 py-3 text-sm text-gray-700">{section.type}</td>
+                                                        <td className="px-4 py-3 text-sm text-gray-700">{section.room}</td>
+                                                        <td className="px-4 py-3 text-sm text-gray-700">{section.schedule}</td>
+                                                    </tr>
+                                                ))}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    )}
                 </div>
-            </div>
 
-            {/* Add Schedule Modal */}
-            <ScheduleModal
-                isOpen={isModalOpen}
-                onClose={closeModal}
-                onSave={handleSaveSchedule}
-            />
-
-            {/* View Schedule Modal */}
-            {selectedSchedule && (
-                <ViewScheduleModal
-                    isOpen={isViewModalOpen}
-                    onClose={closeViewModal}
-                    courseCode={selectedSchedule.course.courseCode}
-                    section={selectedSchedule.section.section}
-                    type={selectedSchedule.section.type}
-                    room={selectedSchedule.section.room}
-                    schedule={selectedSchedule.section.schedule}
-                    onDelete={() => {
-                        if (selectedSchedule) {
-                            handleDeleteSchedule(selectedSchedule.course.id, selectedSchedule.section.id);
-                        }
-                    }}
-                    onEdit={openEditModal}
+                {/* Add Schedule Modal */}
+                <ScheduleModal
+                    isOpen={isModalOpen}
+                    onClose={closeModal}
+                    onSave={handleSaveSchedule}
                 />
-            )}
 
-            {/* Edit Schedule Modal */}
-            {selectedSchedule && (
-                <EditScheduleModal
-                    isOpen={isEditModalOpen}
-                    onClose={closeEditModal}
-                    sectionId={selectedSchedule.section.id}
-                    initialData={{
-                        courseCode: selectedSchedule.course.courseCode,
-                        section: selectedSchedule.section.section,
-                        type: selectedSchedule.section.type,
-                        room: selectedSchedule.section.room,
-                        schedule: selectedSchedule.section.schedule,
-                    }}
-                    onSave={handleEditSchedule}
-                />
-            )}
-        </div>
+                {/* View Schedule Modal */}
+                {selectedSchedule && (
+                    <ViewScheduleModal
+                        isOpen={isViewModalOpen}
+                        onClose={closeViewModal}
+                        courseCode={selectedSchedule.course.courseCode}
+                        section={selectedSchedule.section.section}
+                        type={selectedSchedule.section.type}
+                        room={selectedSchedule.section.room}
+                        schedule={selectedSchedule.section.schedule}
+                        onDelete={() => {
+                            if (selectedSchedule) {
+                                handleDeleteSchedule(selectedSchedule.course.id, selectedSchedule.section.id);
+                            }
+                        }}
+                        onEdit={openEditModal}
+                    />
+                )}
+
+                {/* Edit Schedule Modal */}
+                {selectedSchedule && (
+                    <EditScheduleModal
+                        isOpen={isEditModalOpen}
+                        onClose={closeEditModal}
+                        sectionId={selectedSchedule.section.id}
+                        initialData={{
+                            courseCode: selectedSchedule.course.courseCode,
+                            section: selectedSchedule.section.section,
+                            type: selectedSchedule.section.type,
+                            room: selectedSchedule.section.room,
+                            schedule: selectedSchedule.section.schedule,
+                        }}
+                        onSave={handleEditSchedule}
+                    />
+                )}
+            </Layout>
+        </RootExtensionWrapper>
     );
 } 
