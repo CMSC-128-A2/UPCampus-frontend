@@ -371,13 +371,17 @@ function AdminPage() {
                 </div>
             </div>
 
-            {/* Schedule Modals */}
-            <ScheduleModal
-                isOpen={isModalOpen}
-                onClose={closeModal}
-                onSave={handleSaveSchedule}
-            />
-            {selectedSchedule && (
+            {/* Add Schedule Modal */}
+            {isModalOpen && (
+                <ScheduleModal
+                    isOpen={isModalOpen}
+                    onClose={closeModal}
+                    onSave={handleSaveSchedule}
+                />
+            )}
+
+            {/* View Schedule Modal */}
+            {isViewModalOpen && selectedSchedule && (
                 <ViewScheduleModal
                     isOpen={isViewModalOpen}
                     onClose={closeViewModal}
@@ -386,16 +390,16 @@ function AdminPage() {
                     type={selectedSchedule.section.type}
                     room={selectedSchedule.section.room}
                     schedule={selectedSchedule.section.schedule}
-                    onDelete={() => {
-                        if (selectedSchedule) {
-                            handleDeleteSchedule(selectedSchedule.course.id, selectedSchedule.section.section);
-                            closeViewModal();
-                        }
-                    }}
                     onEdit={openEditModal}
+                    onDelete={() => {
+                        handleDeleteSchedule(selectedSchedule.course.id, selectedSchedule.section.section);
+                        closeViewModal();
+                    }}
                 />
             )}
-            {selectedSchedule && selectedSchedule.section.id && (
+
+            {/* Edit Schedule Modal */}
+            {isEditModalOpen && selectedSchedule && (
                 <EditScheduleModal
                     isOpen={isEditModalOpen}
                     onClose={closeEditModal}
@@ -407,7 +411,17 @@ function AdminPage() {
                         room: selectedSchedule.section.room,
                         schedule: selectedSchedule.section.schedule
                     }}
-                    onSave={handleEditSchedule}
+                    onSave={(sectionId, data) => {
+                        handleEditSchedule(sectionId, {
+                            course_code: selectedSchedule.course.courseCode,
+                            section: data.section,
+                            type: data.type,
+                            room: data.room,
+                            day: data.day,
+                            time: data.time
+                        });
+                        closeEditModal();
+                    }}
                 />
             )}
         </>

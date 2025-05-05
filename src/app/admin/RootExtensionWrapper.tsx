@@ -13,7 +13,23 @@ export default function RootExtensionWrapper({ children }: RootExtensionWrapperP
   const [isMounted, setIsMounted] = useState(false);
 
   useEffect(() => {
+    // Set mounted state to true when component mounts on client
     setIsMounted(true);
+    
+    // Remove any browser extension attributes from the document that might cause hydration errors
+    const removeExtensionAttributes = () => {
+      // Try to remove Grammarly attributes specifically
+      if (document && document.body) {
+        document.body.removeAttribute('data-new-gr-c-s-check-loaded');
+        document.body.removeAttribute('data-gr-ext-installed');
+      }
+    };
+    
+    // Run cleanup immediately and set a periodic check
+    removeExtensionAttributes();
+    const interval = setInterval(removeExtensionAttributes, 1000);
+    
+    return () => clearInterval(interval);
   }, []);
 
   // During server-side rendering and initial client-side rendering, return a placeholder
