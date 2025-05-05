@@ -97,7 +97,7 @@ function ScheduleModal({ isOpen, onClose, onSave }: ScheduleModalProps) {
                 day,
                 time: timeString
             });
-            handleClose();
+            // Don't close modal here, let the parent component decide based on success/failure
         } catch (error) {
             console.error('Error saving schedule:', error);
             // Error is handled in parent component

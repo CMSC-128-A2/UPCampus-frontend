@@ -141,7 +141,7 @@ function EditScheduleModal({ isOpen, onClose, sectionId, initialData, onSave }: 
                 day: dayString,
                 time: timeString
             });
-            handleClose();
+            // Don't close modal here, let the parent component decide based on success/failure
         } catch (error) {
             console.error('Error saving schedule:', error);
             // Error is handled in parent component

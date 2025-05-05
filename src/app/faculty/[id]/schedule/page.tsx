@@ -215,15 +215,18 @@ export default function SchedulePage() {
                 faculty_id: professorId,
             };
             
+            let hasConflict = false;
+            
             try {
                 // Check for conflicts before saving
                 const conflictCheck = await schedulesApi.checkScheduleConflicts(conflictCheckData);
                 
                 if (conflictCheck.hasConflict) {
                     showToast(conflictCheck.details, 'error');
-                    return;
+                    return; // Exit without closing modal
                 }
             } catch (conflictError: any) {
+                hasConflict = true;
                 if (conflictError.message && conflictError.message.includes('409')) {
                     // Extract conflict details if available
                     let conflictMessage = 'There is a schedule conflict.';
@@ -262,14 +265,16 @@ export default function SchedulePage() {
                     }
                     
                     showToast(conflictMessage, 'error');
-                    return;
+                    return; // Exit without closing modal
                 }
                 
                 // For other errors, just show the generic error
                 console.error('Error checking schedule conflicts:', conflictError);
                 showToast('Failed to check for schedule conflicts. Please try again.', 'error');
-                return;
+                return; // Exit without closing modal
             }
+            
+            // If we've reached here, there are no conflicts, proceed with saving
             
             // Create API request data
             const apiData = {
@@ -330,12 +335,12 @@ export default function SchedulePage() {
             }
             
             setClassSchedules(updatedSchedules);
-            closeModal();
+            closeModal(); // Only close modal on success
             showToast(`Successfully added ${scheduleData.courseCode} ${scheduleData.section} schedule`, 'success');
         } catch (error: any) {
             console.error('Error saving schedule:', error);
             
-            // Show error in toast
+            // Show error in toast without closing the modal
             let errorMsg = 'Failed to save schedule. Please try again.';
             
             if (error.message) {
@@ -347,6 +352,7 @@ export default function SchedulePage() {
             }
             
             showToast(errorMsg, 'error');
+            // Don't close modal here, let user fix their input
         }
     };
 
@@ -375,7 +381,7 @@ export default function SchedulePage() {
                 
                 if (conflictCheck.hasConflict) {
                     showToast(conflictCheck.details, 'error');
-                    return;
+                    return; // Exit without closing modal
                 }
             } catch (conflictError: any) {
                 if (conflictError.message && conflictError.message.includes('409')) {
@@ -416,14 +422,16 @@ export default function SchedulePage() {
                     }
                     
                     showToast(conflictMessage, 'error');
-                    return;
+                    return; // Exit without closing modal
                 }
                 
                 // For other errors, just show the generic error
                 console.error('Error checking schedule conflicts:', conflictError);
                 showToast('Failed to check for schedule conflicts. Please try again.', 'error');
-                return;
+                return; // Exit without closing modal
             }
+            
+            // If we've reached here, there are no conflicts, proceed with updating
             
             // Update via API
             const apiData = {
@@ -453,12 +461,12 @@ export default function SchedulePage() {
                 }))
             );
             
-            closeEditModal();
+            closeEditModal(); // Only close modal on success
             showToast('Schedule updated successfully', 'success');
         } catch (error: any) {
             console.error('Error updating schedule:', error);
             
-            // Show error in toast
+            // Show error in toast without closing the modal
             let errorMsg = 'Failed to update schedule. Please try again.';
             
             if (error.message) {
@@ -470,6 +478,7 @@ export default function SchedulePage() {
             }
             
             showToast(errorMsg, 'error');
+            // Don't close modal here, let user fix their input
         }
     };
 
