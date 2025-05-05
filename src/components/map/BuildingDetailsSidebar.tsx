@@ -3,14 +3,27 @@ import Image from 'next/image';
 import { ArrowLeftToLine } from 'lucide-react';
 import { useMapStore } from '@/store/mapStore';
 
+// Updated interface to accommodate all building types
 interface BuildingDetail {
     id: string;
     name: string;
     image: string;
-    floors: {
+    type?: string;
+    // Building-specific properties
+    floors?: {
         name: string;
         facilities: string[];
     }[];
+    // Activity-specific properties
+    description?: string;
+    schedule?: string;
+    capacity?: string;
+    contactPerson?: string;
+    contactNumber?: string;
+    // Security-specific properties
+    personnel?: string;
+    services?: string[];
+    operatingHours?: string;
 }
 
 interface BuildingDetailsSidebarProps {
@@ -55,6 +68,141 @@ const BuildingDetailsSidebar: React.FC<BuildingDetailsSidebarProps> = ({
             ></div>
         );
     }
+
+    // Determine the type of content to display
+    const renderContent = () => {
+        // Handle activity type
+        if (building.type === 'activity') {
+            return (
+                <div className="pt-2 px-4">
+                    <h3 className="text-xl mb-3">Activity Information</h3>
+
+                    <div className="space-y-4">
+                        {building.description && (
+                            <div>
+                                <h4 className="font-semibold">Description</h4>
+                                <p className="mt-1">{building.description}</p>
+                            </div>
+                        )}
+
+                        {building.schedule && (
+                            <div>
+                                <h4 className="font-semibold">Schedule</h4>
+                                <p className="mt-1">{building.schedule}</p>
+                            </div>
+                        )}
+
+                        {building.capacity && (
+                            <div>
+                                <h4 className="font-semibold">Capacity</h4>
+                                <p className="mt-1">{building.capacity}</p>
+                            </div>
+                        )}
+
+                        {building.contactPerson && (
+                            <div>
+                                <h4 className="font-semibold">
+                                    Contact Person
+                                </h4>
+                                <p className="mt-1">{building.contactPerson}</p>
+                            </div>
+                        )}
+
+                        {building.contactNumber && (
+                            <div>
+                                <h4 className="font-semibold">
+                                    Contact Number
+                                </h4>
+                                <p className="mt-1">{building.contactNumber}</p>
+                            </div>
+                        )}
+                    </div>
+                </div>
+            );
+        }
+
+        // Handle security type
+        if (building.type === 'security') {
+            return (
+                <div className="pt-2 px-4">
+                    <h3 className="text-xl mb-3">Security Information</h3>
+
+                    <div className="space-y-4">
+                        {building.personnel && (
+                            <div>
+                                <h4 className="font-semibold">Personnel</h4>
+                                <p className="mt-1">{building.personnel}</p>
+                            </div>
+                        )}
+
+                        {building.services && building.services.length > 0 && (
+                            <div>
+                                <h4 className="font-semibold">Services</h4>
+                                <ul className="mt-1 space-y-1 pl-4">
+                                    {building.services.map((service, index) => (
+                                        <li
+                                            key={index}
+                                            className="list-disc pl-1"
+                                        >
+                                            {service}
+                                        </li>
+                                    ))}
+                                </ul>
+                            </div>
+                        )}
+
+                        {building.operatingHours && (
+                            <div>
+                                <h4 className="font-semibold">
+                                    Operating Hours
+                                </h4>
+                                <p className="mt-1">
+                                    {building.operatingHours}
+                                </p>
+                            </div>
+                        )}
+
+                        {building.contactNumber && (
+                            <div>
+                                <h4 className="font-semibold">
+                                    Contact Number
+                                </h4>
+                                <p className="mt-1">{building.contactNumber}</p>
+                            </div>
+                        )}
+                    </div>
+                </div>
+            );
+        }
+
+        // Handle building type (default)
+        return (
+            <div className="pt-2">
+                <h3 className="text-xl mb-1 px-2">Facilities</h3>
+
+                {building.floors &&
+                    building.floors.map((floor, index) => (
+                        <div key={index} className="mb-4">
+                            <h4 className="font-semibold bg-white/20 px-2 my-2 py-2">
+                                {floor.name}
+                            </h4>
+                            <ul className="space-y-1 text-sm px-4">
+                                {floor.facilities.map(
+                                    (facility, facilityIndex) => (
+                                        <li
+                                            key={facilityIndex}
+                                            className="pl-2"
+                                        >
+                                            {facility}
+                                        </li>
+                                    ),
+                                )}
+                            </ul>
+                        </div>
+                    ))}
+            </div>
+        );
+    };
 
     return (
         <>
@@ -105,30 +253,8 @@ const BuildingDetailsSidebar: React.FC<BuildingDetailsSidebarProps> = ({
                     </div>
                 </div>
 
-                {/* Facilities Section */}
-                <div className="pt-2">
-                    <h3 className="text-xl mb-1 px-2">Facilities</h3>
-
-                    {building.floors.map((floor, index) => (
-                        <div key={index} className="mb-4">
-                            <h4 className="font-semibold bg-white/20 px-2 my-2 py-2">
-                                {floor.name}
-                            </h4>
-                            <ul className="space-y-1 text-sm px-4">
-                                {floor.facilities.map(
-                                    (facility, facilityIndex) => (
-                                        <li
-                                            key={facilityIndex}
-                                            className="pl-2"
-                                        >
-                                            {facility}
-                                        </li>
-                                    ),
-                                )}
-                            </ul>
-                        </div>
-                    ))}
-                </div>
+                {/* Content based on building type */}
+                {renderContent()}
             </div>
         </>
     );
