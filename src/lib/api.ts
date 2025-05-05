@@ -60,7 +60,7 @@ export const mapCourseToFrontend = (course: Course) => {
             type: section.type,
             room: section.room,
             schedule: section.schedule,
-            faculty: section.faculty,
+            faculty: section.faculty ? section.faculty.toString() : null,
             facultyName: section.faculty_name
         }))
     };

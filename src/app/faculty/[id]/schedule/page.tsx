@@ -54,16 +54,48 @@ export default function SchedulePage() {
                 // Fetch professor details
                 const professorData = await facultyApi.getFaculty(professorId);
                 setProfessor(professorData);
+                console.log('Fetched professor data:', professorData);
+                
+                // Try to fetch schedules directly from facultySchedules endpoint for comparison
+                try {
+                    const facultySchedules = await facultyApi.getFacultySchedules(professorId);
+                    console.log('Faculty schedules from direct API call:', facultySchedules);
+                } catch (scheduleErr) {
+                    console.error('Error fetching faculty schedules directly:', scheduleErr);
+                }
                 
                 // Fetch courses with schedules that are assigned to this professor
                 const courses = await schedulesApi.getCourses();
+                console.log('Fetched all courses:', courses);
                 
                 // Filter and map to frontend format
-                const professorCourses = courses.filter(course => 
-                    course.sections.some(section => section.faculty === professorId)
-                );
+                const professorCourses = courses.filter(course => {
+                    const hasFacultySection = course.sections.some(section => {
+                        // Compare strings, ensuring consistent types
+                        const sectionFacultyId = section.faculty?.toString();
+                        const currentProfessorId = professorId?.toString();
+                        
+                        const matches = sectionFacultyId === currentProfessorId;
+                        if (matches) {
+                            console.log(`Found matching section for faculty ${professorId} in course ${course.courseCode}`);
+                        }
+                        return matches;
+                    });
+                    return hasFacultySection;
+                });
                 
-                setClassSchedules(professorCourses);
+                console.log('Filtered professor courses:', professorCourses);
+                
+                // Filter sections to only include those assigned to this professor
+                const coursesWithFilteredSections = professorCourses.map(course => ({
+                    ...course,
+                    sections: course.sections.filter(section => {
+                        return section.faculty?.toString() === professorId?.toString();
+                    })
+                }));
+                
+                console.log('Courses with filtered sections:', coursesWithFilteredSections);
+                setClassSchedules(coursesWithFilteredSections);
                 setError(null);
             } catch (err) {
                 console.error('Failed to fetch data:', err);
