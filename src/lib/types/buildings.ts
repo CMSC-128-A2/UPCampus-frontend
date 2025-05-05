@@ -286,9 +286,72 @@ export const mapMarkers = [
         icon: 'building',
         coordinates: [123.899711, 10.321967],
     },
+    {
+        id: '12',
+        type: 'buildings',
+        name: 'Building 12',
+        icon: 'building',
+        coordinates: [123.899779, 10.323402],
+    },
 ];
 
 export const mockBuildingsData = {
+    '12': {
+        id: '12',
+        name: 'College of Engineering Building',
+        image: '/assets/images/random-building.jpg',
+        floors: [
+            {
+                name: '1st Floor',
+                facilities: [
+                    "Engineering Dean's Office",
+                    'Department of Civil Engineering',
+                    'Engineering Student Council Office',
+                    'Engineering Library',
+                    'Comfort Rooms',
+                ],
+            },
+            {
+                name: '2nd Floor',
+                facilities: [
+                    'Department of Mechanical Engineering',
+                    'Mechanical Engineering Laboratories',
+                    'Faculty Lounge',
+                    'Conference Room',
+                    'Comfort Rooms',
+                ],
+            },
+            {
+                name: '3rd Floor',
+                facilities: [
+                    'Department of Electrical Engineering',
+                    'Electrical Engineering Laboratories',
+                    'Computer Laboratory',
+                    'Research Center',
+                    'Comfort Rooms',
+                ],
+            },
+            {
+                name: '4th Floor',
+                facilities: [
+                    'Department of Chemical Engineering',
+                    'Chemical Engineering Laboratories',
+                    'Innovation Center',
+                    'Student Study Area',
+                    'Comfort Rooms',
+                ],
+            },
+        ],
+        departments: [
+            'Civil Engineering',
+            'Mechanical Engineering',
+            'Electrical Engineering',
+            'Chemical Engineering',
+        ],
+        contactNumber: '123-456-7890',
+        email: 'engineering@university.edu',
+        dean: 'Dr. Robert Johnson',
+    },
     '9': {
         id: '9',
         name: 'College of Science Building',
