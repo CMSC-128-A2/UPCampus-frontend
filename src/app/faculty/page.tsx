@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { Icon } from '@iconify/react';
 import { useRouter } from 'next/navigation';
 import Layout from '@/components/ui/Layout';
+import FacultyModal from '@/components/ui/FacultyModal';
 import { facultyApi, Faculty } from '@/lib/api';
 
 function FacultyPage() {
@@ -12,25 +13,26 @@ function FacultyPage() {
   const [selectedDepartment, setSelectedDepartment] = useState<string | 'All'>('All');
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   // Fetch faculty data on component mount
   useEffect(() => {
-    const fetchFaculty = async () => {
-      try {
-        setIsLoading(true);
-        const data = await facultyApi.getAllFaculty();
-        setFacultyData(data);
-        setError(null);
-      } catch (err) {
-        console.error('Failed to fetch faculty members:', err);
-        setError('Failed to load faculty members. Please try again later.');
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
     fetchFaculty();
   }, []);
+
+  const fetchFaculty = async () => {
+    try {
+      setIsLoading(true);
+      const data = await facultyApi.getAllFaculty();
+      setFacultyData(data);
+      setError(null);
+    } catch (err) {
+      console.error('Failed to fetch faculty members:', err);
+      setError('Failed to load faculty members. Please try again later.');
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   // Get all unique departments
   const departments = ['All', ...new Set(facultyData.map(prof => prof.department_name))];
@@ -49,6 +51,28 @@ function FacultyPage() {
   const handleFacultyClick = (professorId: string) => {
     // Navigate to the classes schedule page for this faculty
     router.push(`/faculty/${professorId}/schedule`);
+  };
+
+  const openModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
+
+  const handleSaveFaculty = async (facultyData: { name: string; department: string }) => {
+    try {
+      const newFaculty = await facultyApi.createFaculty(facultyData);
+      
+      // Refresh the faculty list
+      fetchFaculty();
+      
+      closeModal();
+    } catch (err) {
+      console.error('Failed to create faculty member:', err);
+      alert('Failed to create faculty member. Please try again.');
+    }
   };
 
   // Render loading state
@@ -110,7 +134,10 @@ function FacultyPage() {
               ))}
             </select>
             
-            <button className="flex items-center space-x-2 px-4 py-2 bg-[#E6F4FF] border border-[#1E88E5] rounded-lg">
+            <button 
+              onClick={openModal}
+              className="flex items-center space-x-2 px-4 py-2 bg-[#E6F4FF] border border-[#1E88E5] rounded-lg"
+            >
               <Icon icon="ph:plus" className="text-[#1E88E5]" width="20" height="20" />
               <span className="text-[#1E88E5]">Teacher</span>
             </button>
@@ -157,6 +184,13 @@ function FacultyPage() {
           )}
         </div>
       </div>
+
+      {/* Add Faculty Modal */}
+      <FacultyModal
+        isOpen={isModalOpen}
+        onClose={closeModal}
+        onSave={handleSaveFaculty}
+      />
     </Layout>
   );
 }
