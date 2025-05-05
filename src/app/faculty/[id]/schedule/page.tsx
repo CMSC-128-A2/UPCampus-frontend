@@ -7,7 +7,7 @@ import { useParams, useRouter } from 'next/navigation';
 import ScheduleModal from '@/components/schedule/ScheduleModal';
 import ViewScheduleModal from '@/components/schedule/ViewScheduleModal';
 import EditScheduleModal from '@/components/schedule/EditScheduleModal';
-import ErrorModal from '@/components/ui/ErrorModal';
+import Toast, { ToastType } from '@/components/ui/Toast';
 import Layout from '@/components/ui/Layout';
 import RootExtensionWrapper from '@/app/admin/RootExtensionWrapper';
 import { schedulesApi, facultyApi, parseSchedule, Course, ClassSection as ApiClassSection, Faculty } from '@/lib/api';
@@ -45,9 +45,9 @@ export default function SchedulePage() {
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
     const [selectedFloor, setSelectedFloor] = useState<Floor>('4th Floor');
-    const [errorModalOpen, setErrorModalOpen] = useState(false);
-    const [errorTitle, setErrorTitle] = useState('');
-    const [errorMessage, setErrorMessage] = useState('');
+    const [toastOpen, setToastOpen] = useState(false);
+    const [toastMessage, setToastMessage] = useState('');
+    const [toastType, setToastType] = useState<ToastType>('info');
 
     // Fetch professor data and schedules
     useEffect(() => {
@@ -157,16 +157,16 @@ export default function SchedulePage() {
         setIsEditModalOpen(false);
     };
 
-    // Close error modal
-    const closeErrorModal = () => {
-        setErrorModalOpen(false);
+    // Close toast
+    const closeToast = () => {
+        setToastOpen(false);
     };
 
-    // Show error in modal
-    const showError = (title: string, message: string) => {
-        setErrorTitle(title);
-        setErrorMessage(message);
-        setErrorModalOpen(true);
+    // Show toast notification
+    const showToast = (message: string, type: ToastType = 'info') => {
+        setToastMessage(message);
+        setToastType(type);
+        setToastOpen(true);
     };
 
     // Handle delete schedule
@@ -183,9 +183,10 @@ export default function SchedulePage() {
             );
             
             closeViewModal();
+            showToast('Schedule deleted successfully', 'success');
         } catch (error) {
             console.error('Error deleting section:', error);
-            alert('Failed to delete section. Please try again.');
+            showToast('Failed to delete section. Please try again.', 'error');
         }
     };
 
@@ -201,7 +202,7 @@ export default function SchedulePage() {
         // Check if all required fields are filled
         if (!scheduleData.courseCode || !scheduleData.section || !scheduleData.type ||
             !scheduleData.room || !scheduleData.day || !scheduleData.time) {
-            showError('Incomplete Data', 'Please fill in all fields');
+            showToast('Please fill in all fields', 'error');
             return;
         }
 
@@ -219,7 +220,7 @@ export default function SchedulePage() {
                 const conflictCheck = await schedulesApi.checkScheduleConflicts(conflictCheckData);
                 
                 if (conflictCheck.hasConflict) {
-                    showError('Schedule Conflict', conflictCheck.details);
+                    showToast(conflictCheck.details, 'error');
                     return;
                 }
             } catch (conflictError: any) {
@@ -260,13 +261,13 @@ export default function SchedulePage() {
                         console.error('Failed to parse conflict details:', parseError);
                     }
                     
-                    showError('Schedule Conflict', conflictMessage);
+                    showToast(conflictMessage, 'error');
                     return;
                 }
                 
                 // For other errors, just show the generic error
                 console.error('Error checking schedule conflicts:', conflictError);
-                showError('Error', 'Failed to check for schedule conflicts. Please try again.');
+                showToast('Failed to check for schedule conflicts. Please try again.', 'error');
                 return;
             }
             
@@ -330,10 +331,11 @@ export default function SchedulePage() {
             
             setClassSchedules(updatedSchedules);
             closeModal();
+            showToast(`Successfully added ${scheduleData.courseCode} ${scheduleData.section} schedule`, 'success');
         } catch (error: any) {
             console.error('Error saving schedule:', error);
             
-            // Show error in modal
+            // Show error in toast
             let errorMsg = 'Failed to save schedule. Please try again.';
             
             if (error.message) {
@@ -344,7 +346,7 @@ export default function SchedulePage() {
                 }
             }
             
-            showError('Error Saving Schedule', errorMsg);
+            showToast(errorMsg, 'error');
         }
     };
 
@@ -372,7 +374,7 @@ export default function SchedulePage() {
                 const conflictCheck = await schedulesApi.checkScheduleConflicts(conflictCheckData);
                 
                 if (conflictCheck.hasConflict) {
-                    showError('Schedule Conflict', conflictCheck.details);
+                    showToast(conflictCheck.details, 'error');
                     return;
                 }
             } catch (conflictError: any) {
@@ -413,13 +415,13 @@ export default function SchedulePage() {
                         console.error('Failed to parse conflict details:', parseError);
                     }
                     
-                    showError('Schedule Conflict', conflictMessage);
+                    showToast(conflictMessage, 'error');
                     return;
                 }
                 
                 // For other errors, just show the generic error
                 console.error('Error checking schedule conflicts:', conflictError);
-                showError('Error', 'Failed to check for schedule conflicts. Please try again.');
+                showToast('Failed to check for schedule conflicts. Please try again.', 'error');
                 return;
             }
             
@@ -452,10 +454,11 @@ export default function SchedulePage() {
             );
             
             closeEditModal();
+            showToast('Schedule updated successfully', 'success');
         } catch (error: any) {
             console.error('Error updating schedule:', error);
             
-            // Show error in modal
+            // Show error in toast
             let errorMsg = 'Failed to update schedule. Please try again.';
             
             if (error.message) {
@@ -466,7 +469,7 @@ export default function SchedulePage() {
                 }
             }
             
-            showError('Error Updating Schedule', errorMsg);
+            showToast(errorMsg, 'error');
         }
     };
 
@@ -656,12 +659,12 @@ export default function SchedulePage() {
                     />
                 )}
                 
-                {/* Error Modal */}
-                <ErrorModal
-                    isOpen={errorModalOpen}
-                    onClose={closeErrorModal}
-                    title={errorTitle}
-                    message={errorMessage}
+                {/* Toast notifications */}
+                <Toast
+                    isOpen={toastOpen}
+                    onClose={closeToast}
+                    message={toastMessage}
+                    type={toastType}
                 />
             </Layout>
         </RootExtensionWrapper>
