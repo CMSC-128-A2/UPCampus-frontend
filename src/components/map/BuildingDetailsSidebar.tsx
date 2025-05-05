@@ -226,9 +226,9 @@ const BuildingDetailsSidebar: React.FC<BuildingDetailsSidebarProps> = ({
                         : 'translate-y-full sm:translate-y-0 sm:translate-x-full opacity-0'
                 }`}
             >
-                {/* Header */}
-                <div className="relative">
-                    <div className="px-4 py-3 bg-maroon-accent flex items-center justify-between font-medium text-xl tracking-tight font-inter sticky top-0 z-10">
+                {/* Sticky header */}
+                <div className="sticky top-0 z-10">
+                    <div className="px-4 py-3 bg-maroon-accent flex items-center justify-between font-medium text-xl tracking-tight font-inter">
                         <h2 className="text-xl font-semibold">
                             {building.name}
                         </h2>
@@ -240,17 +240,17 @@ const BuildingDetailsSidebar: React.FC<BuildingDetailsSidebarProps> = ({
                             <ArrowLeftToLine size={22} className="text-white" />
                         </button>
                     </div>
+                </div>
 
-                    {/* Building Image */}
-                    <div className="w-full h-48 relative">
-                        <Image
-                            src={building.image}
-                            alt={building.name}
-                            fill
-                            style={{ objectFit: 'cover' }}
-                            className="border-y border-white/20"
-                        />
-                    </div>
+                {/* Building Image - outside of sticky header */}
+                <div className="w-full h-48 relative">
+                    <Image
+                        src={building.image}
+                        alt={building.name}
+                        fill
+                        style={{ objectFit: 'cover' }}
+                        className="border-y border-white/20"
+                    />
                 </div>
 
                 {/* Content based on building type */}
