@@ -1,0 +1,504 @@
+'use client';
+import React, { useState, useEffect } from 'react';
+import Image from 'next/image';
+import Link from 'next/link';
+import { Icon } from '@iconify/react';
+import { useParams, useRouter } from 'next/navigation';
+import ScheduleModal from '@/components/schedule/ScheduleModal';
+import ViewScheduleModal from '@/components/schedule/ViewScheduleModal';
+import EditScheduleModal from '@/components/schedule/EditScheduleModal';
+import { schedulesApi, parseSchedule, Course, ClassSection as ApiClassSection } from '@/lib/api';
+
+// Define TypeScript types for the data structure
+type ScheduleType = 'Lecture' | 'Laboratory';
+type Floor = '1st Floor' | '2nd Floor' | '3rd Floor' | '4th Floor' | '5th Floor' | 'All Floors';
+
+interface ClassSection {
+    id: string;
+    section: string;
+    type: ScheduleType;
+    room: string;
+    schedule: string;
+}
+
+interface CourseSchedule {
+    id: string;
+    courseCode: string;
+    sections: ClassSection[];
+}
+
+interface Professor {
+    id: string;
+    name: string;
+    department: string;
+}
+
+// Mock professors data
+const mockProfessors: Record<string, Professor> = {
+    '1': {
+        id: '1',
+        name: 'Prof Name',
+        department: 'Biology',
+    },
+    '2': {
+        id: '2',
+        name: 'Alicaya, Erik',
+        department: 'Computer Science',
+    },
+    '4': {
+        id: '4',
+        name: 'Dulaca, Ryan',
+        department: 'Computer Science',
+    },
+    '6': {
+        id: '6',
+        name: 'Noel, Kyle',
+        department: 'Computer Science',
+    },
+    '9': {
+        id: '9',
+        name: 'Roldan, Jace',
+        department: 'Computer Science',
+    },
+    '12': {
+        id: '12',
+        name: 'Tan, Darmae',
+        department: 'Computer Science',
+    },
+};
+
+// Mock course data for the new UI
+const mockCourses = [
+    {
+        courseCode: 'CMSC 126',
+        sections: [
+            { id: '1', section: 'A', type: 'Lecture', room: 'SCI 405', schedule: 'M TH | 11:00 AM - 12:00 PM' },
+            { id: '2', section: 'A1', type: 'Laboratory', room: 'SCI 402', schedule: 'TH | 3:00 PM - 6:00 PM' },
+            { id: '3', section: 'A2', type: 'Laboratory', room: 'SCI 402', schedule: 'M | 3:00 PM - 6:00 PM' },
+        ]
+    },
+    {
+        courseCode: 'CMSC 129',
+        sections: [
+            { id: '4', section: 'A', type: 'Lecture', room: 'SCI 405', schedule: 'M TH | 9:00 AM - 10:00 AM' },
+            { id: '5', section: 'A1', type: 'Laboratory', room: 'SCI 404', schedule: 'T | 9:00 AM - 12:00 PM' },
+            { id: '6', section: 'A2', type: 'Laboratory', room: 'SCI 404', schedule: 'F | 9:00 AM - 12:00 PM' },
+        ]
+    }
+];
+
+export default function SchedulePage() {
+    const params = useParams();
+    const router = useRouter();
+    const professorId = params.id as string;
+    const [professor, setProfessor] = useState<Professor | null>(null);
+    
+    const [classSchedules, setClassSchedules] = useState<CourseSchedule[]>(mockCourses);
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [isViewModalOpen, setIsViewModalOpen] = useState(false);
+    const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+    const [selectedSchedule, setSelectedSchedule] = useState<{ course: CourseSchedule, section: ClassSection } | null>(null);
+    const [searchQuery, setSearchQuery] = useState('');
+    const [isLoading, setIsLoading] = useState(true);
+    const [error, setError] = useState<string | null>(null);
+    const [selectedFloor, setSelectedFloor] = useState<Floor>('4th Floor');
+
+    // Fetch professor data
+    useEffect(() => {
+        if (professorId && mockProfessors[professorId]) {
+            setProfessor(mockProfessors[professorId]);
+        }
+        
+        // Simulate API loading completion
+        const timer = setTimeout(() => {
+            setIsLoading(false);
+        }, 500);
+        
+        return () => clearTimeout(timer);
+    }, [professorId]);
+
+    // Filter schedules based on search query
+    const filteredSchedules = searchQuery.trim() === ''
+        ? classSchedules
+        : classSchedules.filter(course => {
+            // Search in course code
+            if (course.courseCode.toLowerCase().includes(searchQuery.toLowerCase())) {
+                return true;
+            }
+            
+            // Search in sections
+            return course.sections.some(section =>
+                section.section.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                section.type.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                section.room.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                section.schedule.toLowerCase().includes(searchQuery.toLowerCase())
+            );
+        });
+
+    const openModal = () => {
+        setIsModalOpen(true);
+    };
+
+    const closeModal = () => {
+        setIsModalOpen(false);
+    };
+
+    const openViewModal = (course: CourseSchedule, section: ClassSection) => {
+        setSelectedSchedule({ course, section });
+        setIsViewModalOpen(true);
+    };
+
+    const closeViewModal = () => {
+        setIsViewModalOpen(false);
+        setSelectedSchedule(null);
+    };
+
+    const openEditModal = () => {
+        setIsViewModalOpen(false);
+        setIsEditModalOpen(true);
+    };
+
+    const closeEditModal = () => {
+        setIsEditModalOpen(false);
+    };
+
+    // Handle delete schedule
+    const handleDeleteSchedule = async (courseId: string, sectionId: string) => {
+        try {
+            // Mock deleting the schedule
+            setClassSchedules(prevSchedules => 
+                prevSchedules.map(course => ({
+                    ...course,
+                    sections: course.sections.filter(section => section.id !== sectionId)
+                })).filter(course => course.sections.length > 0)
+            );
+            
+            closeViewModal();
+        } catch (error) {
+            console.error('Error deleting section:', error);
+            alert('Failed to delete section. Please try again.');
+        }
+    };
+
+    // Handle save new schedule
+    const handleSaveSchedule = async (scheduleData: {
+        courseCode: string;
+        section: string;
+        type: string;
+        room: string;
+        day: string;
+        time: string;
+    }) => {
+        // Check if all required fields are filled
+        if (!scheduleData.courseCode || !scheduleData.section || !scheduleData.type ||
+            !scheduleData.room || !scheduleData.day || !scheduleData.time) {
+            alert('Please fill in all fields');
+            return;
+        }
+
+        try {
+            // Format schedule
+            const schedule = `${scheduleData.day} | ${scheduleData.time}`;
+            const type = scheduleData.type as ScheduleType;
+            
+            // Find if the course already exists
+            const courseIndex = classSchedules.findIndex(c => 
+                c.courseCode.toLowerCase() === scheduleData.courseCode.toLowerCase()
+            );
+            
+            // Create a copy of class schedules to modify
+            const updatedSchedules = [...classSchedules];
+            
+            if (courseIndex >= 0) {
+                // Add section to existing course
+                updatedSchedules[courseIndex] = {
+                    ...updatedSchedules[courseIndex],
+                    sections: [
+                        ...updatedSchedules[courseIndex].sections,
+                        {
+                            id: Math.random().toString(36).substring(2, 9),
+                            section: scheduleData.section,
+                            type,
+                            room: scheduleData.room,
+                            schedule
+                        }
+                    ]
+                };
+            } else {
+                // Create new course
+                updatedSchedules.push({
+                    id: Math.random().toString(36).substring(2, 9),
+                    courseCode: scheduleData.courseCode,
+                    sections: [
+                        {
+                            id: Math.random().toString(36).substring(2, 9),
+                            section: scheduleData.section,
+                            type,
+                            room: scheduleData.room,
+                            schedule
+                        }
+                    ]
+                });
+            }
+            
+            setClassSchedules(updatedSchedules);
+            closeModal();
+        } catch (error: any) {
+            console.error('Error saving schedule:', error);
+            alert(error.message || 'Failed to save schedule. Please try again.');
+        }
+    };
+
+    // Handle edit schedule
+    const handleEditSchedule = async (sectionId: string, scheduleData: {
+        course_code?: string;
+        section: string;
+        type: string;
+        room: string;
+        day: string;
+        time: string;
+    }) => {
+        try {
+            // Format schedule
+            const schedule = `${scheduleData.day} | ${scheduleData.time}`;
+            const type = scheduleData.type as ScheduleType;
+            
+            // Update the schedule
+            setClassSchedules(prevSchedules => 
+                prevSchedules.map(course => ({
+                    ...course,
+                    sections: course.sections.map(section => 
+                        section.id === sectionId ? {
+                            ...section,
+                            section: scheduleData.section,
+                            type,
+                            room: scheduleData.room,
+                            schedule
+                        } : section
+                    )
+                }))
+            );
+            
+            closeEditModal();
+        } catch (error: any) {
+            console.error('Error updating schedule:', error);
+            alert(error.message || 'Failed to update schedule. Please try again.');
+        }
+    };
+
+    if (isLoading) {
+        return (
+            <div className="flex items-center justify-center h-screen">
+                <div className="text-center">
+                    <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-[#8BC34A] mx-auto"></div>
+                    <p className="mt-4">Loading...</p>
+                </div>
+            </div>
+        );
+    }
+
+    if (!professor) {
+        return (
+            <div className="flex items-center justify-center h-screen">
+                <div className="text-center">
+                    <Icon icon="ph:warning-circle" className="text-yellow-500 mx-auto" width="48" height="48" />
+                    <p className="mt-4">Professor not found</p>
+                    <Link href="/faculty" className="text-[#8BC34A] hover:underline mt-2 inline-block">
+                        Return to Faculty List
+                    </Link>
+                </div>
+            </div>
+        );
+    }
+
+    return (
+        <div className="flex flex-col h-screen">
+            {/* Main Content Area - Sidebar + Content */}
+            <div className="flex flex-1 overflow-hidden">
+                {/* Sidebar */}
+                <div className="w-60 bg-white border-r overflow-y-auto flex flex-col">
+                    <div className="p-6">
+                        <Link href="/" className="flex items-center">
+                            <div className="text-[#8BC34A] text-2xl font-semibold">
+                                <span className="text-[#8BC34A]">UP</span>
+                                <span className="text-[#8BC34A] ml-1">Campus</span>
+                            </div>
+                        </Link>
+                    </div>
+                    
+                    <nav className="flex-1">
+                        <ul className="space-y-1">
+                            <li>
+                                <Link href="/faculty" className="flex items-center px-6 py-3 text-gray-700">
+                                    <Icon icon="ph:graduation-cap-bold" width="24" height="24" className="mr-3" />
+                                    <span>Faculty</span>
+                                </Link>
+                            </li>
+                            <li>
+                                <Link href="/admin" className="flex items-center px-6 py-3 text-gray-700">
+                                    <Icon icon="ph:users-three-bold" width="24" height="24" className="mr-3" />
+                                    <span>Admins</span>
+                                </Link>
+                            </li>
+                            <li>
+                                <Link href="/map" className="flex items-center px-6 py-3 text-gray-700">
+                                    <Icon icon="ph:map-trifold-bold" width="24" height="24" className="mr-3" />
+                                    <span>Campus Map</span>
+                                </Link>
+                            </li>
+                        </ul>
+                    </nav>
+
+                    <div className="mt-auto p-6">
+                        <Link href="/signin" className="flex items-center text-gray-700">
+                            <Icon icon="ph:sign-out-bold" width="24" height="24" className="mr-3" />
+                            <span>Sign Out</span>
+                        </Link>
+                    </div>
+                </div>
+
+                {/* Main Content */}
+                <div className="flex-1 overflow-y-auto p-6 bg-gray-100">
+                    <div className="bg-white rounded-lg shadow-sm p-6">
+                        {/* Professor's Schedule Title */}
+                        <h1 className="text-3xl font-semibold text-gray-800 mb-6">{professor.name}'s Schedule</h1>
+                        
+                        {/* Search and Filters */}
+                        <div className="mb-6">
+                            <div className="relative w-full mb-4">
+                                <div className="absolute inset-y-0 left-3 flex items-center pointer-events-none">
+                                    <Icon icon="ph:magnifying-glass" className="text-gray-400" width="20" height="20" />
+                                </div>
+                                <input
+                                    type="text"
+                                    placeholder="Search"
+                                    className="pl-10 pr-4 py-3 w-full border rounded-lg focus:outline-none focus:ring-1 focus:ring-[#8BC34A]"
+                                    value={searchQuery}
+                                    onChange={(e) => setSearchQuery(e.target.value)}
+                                />
+                            </div>
+                            
+                            <div className="flex justify-between items-center">
+                                <div className="relative">
+                                    <select
+                                        className="appearance-none bg-[#F2F9EC] border border-[#8BC34A] text-[#8BC34A] rounded-lg pl-4 pr-10 py-2 focus:outline-none"
+                                        value={selectedFloor}
+                                        onChange={(e) => setSelectedFloor(e.target.value as Floor)}
+                                    >
+                                        <option value="1st Floor">1st Floor</option>
+                                        <option value="2nd Floor">2nd Floor</option>
+                                        <option value="3rd Floor">3rd Floor</option>
+                                        <option value="4th Floor">4th Floor</option>
+                                        <option value="5th Floor">5th Floor</option>
+                                        <option value="All Floors">All Floors</option>
+                                    </select>
+                                    <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+                                        <Icon icon="ph:caret-down" className="text-[#8BC34A]" width="16" height="16" />
+                                    </div>
+                                </div>
+                                
+                                <button
+                                    onClick={openModal}
+                                    className="bg-[#E6F4FF] hover:bg-[#d1ebff] text-[#1E88E5] border border-[#1E88E5] px-4 py-2 rounded-lg flex items-center"
+                                >
+                                    <Icon icon="ph:plus" width="20" height="20" className="mr-2" />
+                                    <span>Schedule</span>
+                                </button>
+                            </div>
+                        </div>
+                        
+                        {/* Course Schedules */}
+                        {filteredSchedules.length === 0 ? (
+                            <div className="p-6 text-center text-gray-500">
+                                <Icon icon="ph:calendar-blank" className="mx-auto mb-2" width="48" height="48" />
+                                <p>No schedules found. {searchQuery ? 'Try a different search.' : 'Add a new schedule to get started.'}</p>
+                            </div>
+                        ) : (
+                            <div className="space-y-6">
+                                {filteredSchedules.map(course => (
+                                    <div key={course.courseCode} className="mb-8">
+                                        {/* Course Header */}
+                                        <div className="bg-[#E6F4FF] px-4 py-3 rounded-lg mb-2">
+                                            <h2 className="text-xl font-semibold text-gray-800">{course.courseCode}</h2>
+                                        </div>
+                                        
+                                        {/* Course Sections */}
+                                        <div className="overflow-x-auto">
+                                            <table className="min-w-full divide-y divide-gray-200">
+                                                <thead className="bg-gray-50">
+                                                    <tr>
+                                                        <th className="px-4 py-3 text-left text-sm font-medium text-gray-600">Section</th>
+                                                        <th className="px-4 py-3 text-left text-sm font-medium text-gray-600">Type</th>
+                                                        <th className="px-4 py-3 text-left text-sm font-medium text-gray-600">Room Assigned</th>
+                                                        <th className="px-4 py-3 text-left text-sm font-medium text-gray-600">Schedule</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody className="bg-white divide-y divide-gray-200">
+                                                    {course.sections.map(section => (
+                                                        <tr 
+                                                            key={section.id} 
+                                                            className="hover:bg-gray-50 cursor-pointer"
+                                                            onClick={() => openViewModal(course, section)}
+                                                        >
+                                                            <td className="px-4 py-3 text-sm text-gray-700">{section.section}</td>
+                                                            <td className="px-4 py-3 text-sm text-gray-700">{section.type}</td>
+                                                            <td className="px-4 py-3 text-sm text-gray-700">{section.room}</td>
+                                                            <td className="px-4 py-3 text-sm text-gray-700">{section.schedule}</td>
+                                                        </tr>
+                                                    ))}
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        )}
+                    </div>
+                </div>
+            </div>
+
+            {/* Add Schedule Modal */}
+            <ScheduleModal
+                isOpen={isModalOpen}
+                onClose={closeModal}
+                onSave={handleSaveSchedule}
+            />
+
+            {/* View Schedule Modal */}
+            {selectedSchedule && (
+                <ViewScheduleModal
+                    isOpen={isViewModalOpen}
+                    onClose={closeViewModal}
+                    courseCode={selectedSchedule.course.courseCode}
+                    section={selectedSchedule.section.section}
+                    type={selectedSchedule.section.type}
+                    room={selectedSchedule.section.room}
+                    schedule={selectedSchedule.section.schedule}
+                    onDelete={() => {
+                        if (selectedSchedule) {
+                            handleDeleteSchedule(selectedSchedule.course.id, selectedSchedule.section.id);
+                        }
+                    }}
+                    onEdit={openEditModal}
+                />
+            )}
+
+            {/* Edit Schedule Modal */}
+            {selectedSchedule && (
+                <EditScheduleModal
+                    isOpen={isEditModalOpen}
+                    onClose={closeEditModal}
+                    sectionId={selectedSchedule.section.id}
+                    initialData={{
+                        courseCode: selectedSchedule.course.courseCode,
+                        section: selectedSchedule.section.section,
+                        type: selectedSchedule.section.type,
+                        room: selectedSchedule.section.room,
+                        schedule: selectedSchedule.section.schedule,
+                    }}
+                    onSave={handleEditSchedule}
+                />
+            )}
+        </div>
+    );
+} 
