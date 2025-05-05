@@ -207,75 +207,6 @@ export default function SchedulePage() {
         }
 
         try {
-            // First check for schedule conflicts
-            const conflictCheckData = {
-                day: scheduleData.day,
-                time: scheduleData.time,
-                room: scheduleData.room,
-                faculty_id: professorId,
-            };
-            
-            let hasConflict = false;
-            
-            try {
-                // Check for conflicts before saving
-                const conflictCheck = await schedulesApi.checkScheduleConflicts(conflictCheckData);
-                
-                if (conflictCheck.hasConflict) {
-                    showToast(conflictCheck.details, 'error');
-                    return; // Exit without closing modal
-                }
-            } catch (conflictError: any) {
-                hasConflict = true;
-                if (conflictError.message && conflictError.message.includes('409')) {
-                    // Extract conflict details if available
-                    let conflictMessage = 'There is a schedule conflict.';
-                    
-                    try {
-                        // Try to parse the response for more details
-                        const errorDetail = JSON.parse(
-                            conflictError.message.substring(conflictError.message.indexOf('{'))
-                        );
-                        
-                        if (errorDetail.conflicts) {
-                            const roomConflicts = errorDetail.conflicts.filter((c: any) => c.type === 'room');
-                            const facultyConflicts = errorDetail.conflicts.filter((c: any) => c.type === 'faculty');
-                            
-                            let message = 'The following conflicts were detected:\n\n';
-                            
-                            if (roomConflicts.length > 0) {
-                                message += 'Room Conflicts:\n';
-                                roomConflicts.forEach((conflict: any, index: number) => {
-                                    message += `${index + 1}. ${conflict.course} ${conflict.section} in room ${conflict.room}\n`;
-                                });
-                                message += '\n';
-                            }
-                            
-                            if (facultyConflicts.length > 0) {
-                                message += 'Faculty Conflicts:\n';
-                                facultyConflicts.forEach((conflict: any, index: number) => {
-                                    message += `${index + 1}. ${conflict.course} ${conflict.section} (${conflict.schedule})\n`;
-                                });
-                            }
-                            
-                            conflictMessage = message;
-                        }
-                    } catch (parseError) {
-                        console.error('Failed to parse conflict details:', parseError);
-                    }
-                    
-                    showToast(conflictMessage, 'error');
-                    return; // Exit without closing modal
-                }
-                
-                // For other errors, just show the generic error
-                console.error('Error checking schedule conflicts:', conflictError);
-                showToast('Failed to check for schedule conflicts. Please try again.', 'error');
-                return; // Exit without closing modal
-            }
-            
-            // If we've reached here, there are no conflicts, proceed with saving
-            
             // Create API request data
             const apiData = {
                 course_code: scheduleData.courseCode,
@@ -288,7 +219,42 @@ export default function SchedulePage() {
             };
 
             // Save section via API
-            const newSection = await schedulesApi.createSection(apiData);
+            const response = await schedulesApi.createSection(apiData);
+            
+            // Check if there was an error
+            if (response.error) {
+                // Handle conflict errors specifically
+                if (response.status === 409 && response.conflicts) {
+                    const roomConflicts = response.conflicts.filter((c: any) => c.type === 'room');
+                    const facultyConflicts = response.conflicts.filter((c: any) => c.type === 'faculty');
+                    
+                    let message = 'The following conflicts were detected:\n\n';
+                    
+                    if (roomConflicts.length > 0) {
+                        message += 'Room Conflicts:\n';
+                        roomConflicts.forEach((conflict: any, index: number) => {
+                            message += `${index + 1}. ${conflict.course} ${conflict.section} in room ${conflict.room}\n`;
+                        });
+                        message += '\n';
+                    }
+                    
+                    if (facultyConflicts.length > 0) {
+                        message += 'Faculty Conflicts:\n';
+                        facultyConflicts.forEach((conflict: any, index: number) => {
+                            message += `${index + 1}. ${conflict.course} ${conflict.section} (${conflict.schedule})\n`;
+                        });
+                    }
+                    
+                    showToast(message, 'error');
+                } else {
+                    // Handle other errors
+                    showToast(response.detail || 'Failed to save schedule', 'error');
+                }
+                return; // Exit without closing modal
+            }
+            
+            // If we've reached here, the creation was successful
+            const newSection = response;
             
             // Convert to frontend format
             const schedule = `${scheduleData.day} | ${scheduleData.time}`;
@@ -339,20 +305,7 @@ export default function SchedulePage() {
             showToast(`Successfully added ${scheduleData.courseCode} ${scheduleData.section} schedule`, 'success');
         } catch (error: any) {
             console.error('Error saving schedule:', error);
-            
-            // Show error in toast without closing the modal
-            let errorMsg = 'Failed to save schedule. Please try again.';
-            
-            if (error.message) {
-                if (error.message.includes('already exists')) {
-                    errorMsg = 'A section with this name already exists for this course.';
-                } else {
-                    errorMsg = `Error: ${error.message}`;
-                }
-            }
-            
-            showToast(errorMsg, 'error');
-            // Don't close modal here, let user fix their input
+            showToast('An unexpected error occurred. Please try again.', 'error');
         }
     };
 
@@ -366,80 +319,45 @@ export default function SchedulePage() {
         time: string;
     }) => {
         try {
-            // Check for schedule conflicts first (excluding the current section being edited)
-            const conflictCheckData = {
-                day: scheduleData.day,
-                time: scheduleData.time,
-                room: scheduleData.room,
-                faculty_id: professorId,
-                exclude_section_id: sectionId
-            };
-            
-            try {
-                // Check for conflicts before saving
-                const conflictCheck = await schedulesApi.checkScheduleConflicts(conflictCheckData);
-                
-                if (conflictCheck.hasConflict) {
-                    showToast(conflictCheck.details, 'error');
-                    return; // Exit without closing modal
-                }
-            } catch (conflictError: any) {
-                if (conflictError.message && conflictError.message.includes('409')) {
-                    // Extract conflict details if available
-                    let conflictMessage = 'There is a schedule conflict.';
-                    
-                    try {
-                        // Try to parse the response for more details
-                        const errorDetail = JSON.parse(
-                            conflictError.message.substring(conflictError.message.indexOf('{'))
-                        );
-                        
-                        if (errorDetail.conflicts) {
-                            const roomConflicts = errorDetail.conflicts.filter((c: any) => c.type === 'room');
-                            const facultyConflicts = errorDetail.conflicts.filter((c: any) => c.type === 'faculty');
-                            
-                            let message = 'The following conflicts were detected:\n\n';
-                            
-                            if (roomConflicts.length > 0) {
-                                message += 'Room Conflicts:\n';
-                                roomConflicts.forEach((conflict: any, index: number) => {
-                                    message += `${index + 1}. ${conflict.course} ${conflict.section} in room ${conflict.room}\n`;
-                                });
-                                message += '\n';
-                            }
-                            
-                            if (facultyConflicts.length > 0) {
-                                message += 'Faculty Conflicts:\n';
-                                facultyConflicts.forEach((conflict: any, index: number) => {
-                                    message += `${index + 1}. ${conflict.course} ${conflict.section} (${conflict.schedule})\n`;
-                                });
-                            }
-                            
-                            conflictMessage = message;
-                        }
-                    } catch (parseError) {
-                        console.error('Failed to parse conflict details:', parseError);
-                    }
-                    
-                    showToast(conflictMessage, 'error');
-                    return; // Exit without closing modal
-                }
-                
-                // For other errors, just show the generic error
-                console.error('Error checking schedule conflicts:', conflictError);
-                showToast('Failed to check for schedule conflicts. Please try again.', 'error');
-                return; // Exit without closing modal
-            }
-            
-            // If we've reached here, there are no conflicts, proceed with updating
-            
             // Update via API
             const apiData = {
                 ...scheduleData,
                 faculty_id: professorId,
             };
             
-            await schedulesApi.updateSection(sectionId, apiData);
+            const response = await schedulesApi.updateSection(sectionId, apiData);
+            
+            // Check if there was an error
+            if (response.error) {
+                // Handle conflict errors specifically
+                if (response.status === 409 && response.conflicts) {
+                    const roomConflicts = response.conflicts.filter((c: any) => c.type === 'room');
+                    const facultyConflicts = response.conflicts.filter((c: any) => c.type === 'faculty');
+                    
+                    let message = 'The following conflicts were detected:\n\n';
+                    
+                    if (roomConflicts.length > 0) {
+                        message += 'Room Conflicts:\n';
+                        roomConflicts.forEach((conflict: any, index: number) => {
+                            message += `${index + 1}. ${conflict.course} ${conflict.section} in room ${conflict.room}\n`;
+                        });
+                        message += '\n';
+                    }
+                    
+                    if (facultyConflicts.length > 0) {
+                        message += 'Faculty Conflicts:\n';
+                        facultyConflicts.forEach((conflict: any, index: number) => {
+                            message += `${index + 1}. ${conflict.course} ${conflict.section} (${conflict.schedule})\n`;
+                        });
+                    }
+                    
+                    showToast(message, 'error');
+                } else {
+                    // Handle other errors
+                    showToast(response.detail || 'Failed to update schedule', 'error');
+                }
+                return; // Exit without closing modal
+            }
             
             // Format schedule for frontend
             const schedule = `${scheduleData.day} | ${scheduleData.time}`;
@@ -465,20 +383,7 @@ export default function SchedulePage() {
             showToast('Schedule updated successfully', 'success');
         } catch (error: any) {
             console.error('Error updating schedule:', error);
-            
-            // Show error in toast without closing the modal
-            let errorMsg = 'Failed to update schedule. Please try again.';
-            
-            if (error.message) {
-                if (error.message.includes('already exists')) {
-                    errorMsg = 'A section with this name already exists for this course.';
-                } else {
-                    errorMsg = `Error: ${error.message}`;
-                }
-            }
-            
-            showToast(errorMsg, 'error');
-            // Don't close modal here, let user fix their input
+            showToast('An unexpected error occurred. Please try again.', 'error');
         }
     };
 

@@ -165,24 +165,46 @@ export const schedulesApi = {
 
             console.log('Create section response status:', response.status);
 
-            if (!response.ok) {
-                const errorText = await response.text();
-                console.error('Error response body:', errorText);
-                
-                let errorData;
+            // Always try to get the response data
+            let responseData;
+            try {
+                const responseText = await response.text();
                 try {
-                    errorData = JSON.parse(errorText);
-                } catch (e) {
-                    throw new Error(`Error: ${response.status} - ${errorText}`);
+                    responseData = JSON.parse(responseText);
+                } catch (parseError) {
+                    responseData = { detail: responseText || `Error: ${response.status}` };
                 }
-                
-                throw new Error(errorData.detail || `Error: ${response.status}`);
+            } catch (readError) {
+                responseData = { detail: `Error: ${response.status}` };
             }
 
-            return await response.json();
+            if (!response.ok) {
+                // For conflict errors (HTTP 409), return a structured error that the UI can handle
+                if (response.status === 409 && responseData.conflicts) {
+                    return {
+                        error: true,
+                        status: response.status,
+                        detail: responseData.detail || 'Schedule conflict detected',
+                        conflicts: responseData.conflicts
+                    };
+                }
+                
+                // For other errors, return a structured error
+                return {
+                    error: true,
+                    status: response.status,
+                    detail: responseData.detail || `Error: ${response.status}`
+                };
+            }
+
+            return responseData;
         } catch (error) {
             console.error('Failed to create section:', error);
-            throw error;
+            return {
+                error: true,
+                status: 500,
+                detail: error instanceof Error ? error.message : 'An unexpected error occurred'
+            };
         }
     },
 
@@ -212,24 +234,46 @@ export const schedulesApi = {
 
             console.log('Update section response status:', response.status);
 
-            if (!response.ok) {
-                const errorText = await response.text();
-                console.error('Error response body:', errorText);
-                
-                let errorData;
+            // Always try to get the response data
+            let responseData;
+            try {
+                const responseText = await response.text();
                 try {
-                    errorData = JSON.parse(errorText);
-                } catch (e) {
-                    throw new Error(`Error: ${response.status} - ${errorText}`);
+                    responseData = JSON.parse(responseText);
+                } catch (parseError) {
+                    responseData = { detail: responseText || `Error: ${response.status}` };
                 }
-                
-                throw new Error(errorData.detail || `Error: ${response.status}`);
+            } catch (readError) {
+                responseData = { detail: `Error: ${response.status}` };
             }
 
-            return await response.json();
+            if (!response.ok) {
+                // For conflict errors (HTTP 409), return a structured error that the UI can handle
+                if (response.status === 409 && responseData.conflicts) {
+                    return {
+                        error: true,
+                        status: response.status,
+                        detail: responseData.detail || 'Schedule conflict detected',
+                        conflicts: responseData.conflicts
+                    };
+                }
+                
+                // For other errors, return a structured error
+                return {
+                    error: true,
+                    status: response.status,
+                    detail: responseData.detail || `Error: ${response.status}`
+                };
+            }
+
+            return responseData;
         } catch (error) {
             console.error('Failed to update section:', error);
-            throw error;
+            return {
+                error: true,
+                status: 500,
+                detail: error instanceof Error ? error.message : 'An unexpected error occurred'
+            };
         }
     },
 
@@ -273,9 +317,21 @@ export const schedulesApi = {
                 body: JSON.stringify(scheduleData),
             });
             
-            const data = await response.json();
+            // Always try to parse the JSON response, regardless of status code
+            let data;
+            try {
+                data = await response.json();
+            } catch (e) {
+                // If we can't parse JSON, use text response
+                const textData = await response.text();
+                return {
+                    hasConflict: !response.ok,
+                    details: `Error: ${response.status} - ${textData}`,
+                    conflicts: []
+                };
+            }
             
-            // If response is not ok, it means there's a conflict
+            // If response is not ok, it means there's a conflict (409) or other error
             if (!response.ok) {
                 return {
                     hasConflict: true,
@@ -289,7 +345,11 @@ export const schedulesApi = {
             };
         } catch (error) {
             console.error('Failed to check schedule conflicts:', error);
-            throw error;
+            return {
+                hasConflict: true,
+                details: error instanceof Error ? error.message : 'An unexpected error occurred',
+                conflicts: []
+            };
         }
     }
 };
