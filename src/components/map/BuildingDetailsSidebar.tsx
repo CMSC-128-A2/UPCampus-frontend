@@ -229,7 +229,7 @@ const BuildingDetailsSidebar: React.FC<BuildingDetailsSidebarProps> = ({
                 {/* Sticky header */}
                 <div className="sticky top-0 z-10">
                     <div className="px-4 py-3 bg-maroon-accent flex items-center justify-between font-medium text-xl tracking-tight font-inter rounded-t-xl">
-                        <h2 className="text-xl font-semibold">
+                        <h2 className="text-xl font-semibold truncate">
                             {building.name}
                         </h2>
                         <button
