@@ -81,18 +81,18 @@ export default function Drawer({ title, onClose, isOpen = true }: DrawerProps) {
     return (
         <>
             <div
-                className={`absolute sm:top-0 h-full w-full sm:w-[320px] md:w-[350px] text-[#FFFFFF] bg-[#D45756] shadow-lg z-10 overflow-y-auto
-                transition-all duration-300 ease-in-out
+                className={`absolute sm:top-2 h-full w-full sm:w-[320px] md:w-[350px] text-[#FFFFFF] bg-[#D45756] shadow-lg z-10 overflow-y-auto
+                transition-all duration-300 ease-in-out rounded-xl
                 /* Mobile: Bottom half of screen */
                 top-[50%] max-h-[50%] rounded-t-2xl
                 /* Desktop: Full height */
-                sm:max-h-full sm:rounded-none sm:right-0 ${
+                sm:max-h-full sm:h-[calc(100%-1rem)] sm:right-2 ${
                     drawerOpen
                         ? 'translate-y-0 sm:translate-y-0 sm:translate-x-0 opacity-100'
                         : 'translate-y-full sm:translate-y-0 sm:translate-x-full opacity-0'
                 }`}
             >
-                <div className="px-4 py-3 bg-[#7F1532] flex items-center justify-between font-medium text-xl tracking-tight font-inter sticky top-0 z-20">
+                <div className="px-4 py-3 bg-[#7F1532] flex items-center justify-between font-medium text-xl tracking-tight font-inter sticky top-0 z-20 rounded-t-xl">
                     {title}
                     <button
                         className="p-1.5 hover:bg-white/20 rounded-full transition-colors"

@@ -215,12 +215,12 @@ const BuildingDetailsSidebar: React.FC<BuildingDetailsSidebarProps> = ({
 
             {/* Sidebar */}
             <div
-                className={`fixed sm:top-0 sm:right-0 w-full sm:w-[320px] md:w-[350px] bg-maroon-accent-light text-white overflow-y-auto shadow-lg z-50 
-                transition-all duration-300 ease-in-out
+                className={`fixed sm:top-2 sm:right-2 w-full sm:w-[320px] md:w-[350px] bg-maroon-accent-light text-white overflow-y-auto shadow-lg z-50 
+                transition-all duration-300 ease-in-out rounded-xl
                 /* Mobile: Bottom half of screen */
                 top-[50%] h-[50%] rounded-t-2xl
                 /* Desktop: Full height */
-                sm:h-full sm:rounded-none ${
+                sm:h-[calc(100%-1rem)] ${
                     isOpen
                         ? 'translate-y-0 sm:translate-y-0 sm:translate-x-0 opacity-100'
                         : 'translate-y-full sm:translate-y-0 sm:translate-x-full opacity-0'
@@ -228,7 +228,7 @@ const BuildingDetailsSidebar: React.FC<BuildingDetailsSidebarProps> = ({
             >
                 {/* Sticky header */}
                 <div className="sticky top-0 z-10">
-                    <div className="px-4 py-3 bg-maroon-accent flex items-center justify-between font-medium text-xl tracking-tight font-inter">
+                    <div className="px-4 py-3 bg-maroon-accent flex items-center justify-between font-medium text-xl tracking-tight font-inter rounded-t-xl">
                         <h2 className="text-xl font-semibold">
                             {building.name}
                         </h2>

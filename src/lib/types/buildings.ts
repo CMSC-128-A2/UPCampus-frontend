@@ -984,7 +984,7 @@ export const mockBuildingsData = {
     A9: {
         id: 'A9',
         name: 'University Amphitheater',
-        image: '/assets/images/random-activity.jpg',
+        image: '/assets/images/random-building.jpg',
         type: 'activity',
         description:
             'Outdoor performance space for university events and cultural shows.',
@@ -996,7 +996,7 @@ export const mockBuildingsData = {
     A8: {
         id: 'A8',
         name: 'University Sports Complex',
-        image: '/assets/images/random-activity.jpg',
+        image: '/assets/images/random-building.jpg',
         type: 'activity',
         description:
             'Volleyball and basketball courts for recreational and varsity games.',
@@ -1008,7 +1008,7 @@ export const mockBuildingsData = {
     A6: {
         id: 'A6',
         name: 'Student Camping Grounds',
-        image: '/assets/images/random-activity.jpg',
+        image: '/assets/images/random-building.jpg',
         type: 'activity',
         description:
             'Designated area for student camping activities and outdoor events.',
@@ -1020,7 +1020,7 @@ export const mockBuildingsData = {
     A4: {
         id: 'A4',
         name: 'Archery Range',
-        image: '/assets/images/random-activity.jpg',
+        image: '/assets/images/random-building.jpg',
         type: 'activity',
         description:
             'Professional archery range for training and competitions.',
@@ -1032,7 +1032,7 @@ export const mockBuildingsData = {
     A2: {
         id: 'A2',
         name: 'Botanical Garden Picnic Area',
-        image: '/assets/images/random-activity.jpg',
+        image: '/assets/images/random-building.jpg',
         type: 'activity',
         description:
             'Picnic and relaxation area within the university botanical garden.',
@@ -1044,7 +1044,7 @@ export const mockBuildingsData = {
     A3: {
         id: 'A3',
         name: 'Student Camping Zone',
-        image: '/assets/images/random-activity.jpg',
+        image: '/assets/images/random-building.jpg',
         type: 'activity',
         description:
             'Secondary camping area for student organizational activities.',
@@ -1056,7 +1056,7 @@ export const mockBuildingsData = {
     A1: {
         id: 'A1',
         name: 'University Plaza',
-        image: '/assets/images/random-activity.jpg',
+        image: '/assets/images/random-building.jpg',
         type: 'activity',
         description:
             'Central gathering space for university events and activities.',
@@ -1068,7 +1068,7 @@ export const mockBuildingsData = {
     A5: {
         id: 'A5',
         name: 'Art Installation Area',
-        image: '/assets/images/random-activity.jpg',
+        image: '/assets/images/random-building.jpg',
         type: 'activity',
         description: 'Open space for art installations and exhibitions.',
         schedule: 'Open daily from 8:00 AM to 8:00 PM',
@@ -1079,7 +1079,7 @@ export const mockBuildingsData = {
     A10: {
         id: 'A10',
         name: 'Alumni Park',
-        image: '/assets/images/random-activity.jpg',
+        image: '/assets/images/random-building.jpg',
         type: 'activity',
         description:
             'Park dedicated to university alumni with monuments and memorials.',
@@ -1091,7 +1091,7 @@ export const mockBuildingsData = {
     A11: {
         id: 'A11',
         name: 'University Lagoon',
-        image: '/assets/images/random-activity.jpg',
+        image: '/assets/images/random-building.jpg',
         type: 'activity',
         description:
             'Artificial lagoon for recreation and environmental studies.',
@@ -1103,7 +1103,7 @@ export const mockBuildingsData = {
     A12: {
         id: 'A12',
         name: 'Meditation Garden',
-        image: '/assets/images/random-activity.jpg',
+        image: '/assets/images/random-building.jpg',
         type: 'activity',
         description: 'Quiet space for meditation and mindfulness activities.',
         schedule: 'Open daily from 6:00 AM to 6:00 PM',
@@ -1114,7 +1114,7 @@ export const mockBuildingsData = {
     A13: {
         id: 'A13',
         name: 'University Football Field',
-        image: '/assets/images/random-activity.jpg',
+        image: '/assets/images/random-building.jpg',
         type: 'activity',
         description:
             'Regulation-size football field for varsity games and practices.',
@@ -1127,7 +1127,7 @@ export const mockBuildingsData = {
     G1: {
         id: 'G1',
         name: 'Main Gate Security Post',
-        image: '/assets/images/random-security.jpg',
+        image: '/assets/images/random-building.jpg',
         type: 'security',
         personnel: '5 security officers',
         services: [
@@ -1142,7 +1142,7 @@ export const mockBuildingsData = {
     G3: {
         id: 'G3',
         name: 'East Campus Security Station',
-        image: '/assets/images/random-security.jpg',
+        image: '/assets/images/random-building.jpg',
         type: 'security',
         personnel: '3 security officers',
         services: [
@@ -1157,7 +1157,7 @@ export const mockBuildingsData = {
     G4: {
         id: 'G4',
         name: 'North Gate Security Post',
-        image: '/assets/images/random-security.jpg',
+        image: '/assets/images/random-building.jpg',
         type: 'security',
         personnel: '4 security officers',
         services: [
@@ -1172,7 +1172,7 @@ export const mockBuildingsData = {
     G2: {
         id: 'G2',
         name: 'West Campus Security Station',
-        image: '/assets/images/random-security.jpg',
+        image: '/assets/images/random-building.jpg',
         type: 'security',
         personnel: '3 security officers',
         services: [
