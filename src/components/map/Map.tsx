@@ -209,6 +209,7 @@ const MapboxExample = () => {
                         // Create popup
                         popupRef.current = new mapboxgl.Popup({
                             closeButton: false,
+                            className: 'yellow-popup',
                         })
                             .setLngLat([longitude, latitude])
                             .setHTML(
@@ -234,6 +235,7 @@ const MapboxExample = () => {
 
                             popupRef.current = new mapboxgl.Popup({
                                 closeButton: false,
+                                className: 'yellow-popup',
                             })
                                 .setLngLat([longitude, latitude])
                                 .setHTML(
@@ -329,6 +331,9 @@ const MapboxExample = () => {
                 }
                 .mapboxgl-canvas {
                     overflow: hidden !important;
+                }
+                .yellow-popup .mapboxgl-popup-content {
+                    background-color: yellow !important;
                 }
             `;
             document.head.appendChild(mapboxCanvasStyle);
