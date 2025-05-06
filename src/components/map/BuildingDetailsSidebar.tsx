@@ -1,7 +1,9 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
 import { ArrowLeftToLine } from 'lucide-react';
 import { useMapStore } from '@/store/mapStore';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { mockBuildingsData } from '@/lib/types/buildings';
 
 // Updated interface to accommodate all building types
 interface BuildingDetail {
@@ -26,20 +28,46 @@ interface BuildingDetail {
     operatingHours?: string;
 }
 
-interface BuildingDetailsSidebarProps {
-    building: BuildingDetail | null;
-    onClose: () => void;
-}
-
-const BuildingDetailsSidebar: React.FC<BuildingDetailsSidebarProps> = ({
-    building,
-    onClose,
-}) => {
+const BuildingDetailsSidebar: React.FC = () => {
     // Get the selected mark ID from the global store
-    const { selectedMarkId } = useMapStore();
+    const { selectedMarkId, setSelectedMarkId } = useMapStore();
+
+    // State to track the active tab for each building type
+    const [activeTab, setActiveTab] = useState<{
+        building: string;
+        activity: string;
+        security: string;
+    }>({
+        building: 'floors',
+        activity: 'about',
+        security: 'about',
+    });
+
+    // Get building data from mockBuildingsData using selectedMarkId
+    const building = selectedMarkId
+        ? (mockBuildingsData as Record<string, BuildingDetail>)[selectedMarkId]
+        : null;
 
     // Derive isOpen from selectedMarkId (sidebar is open when a mark is selected)
     const isOpen = selectedMarkId !== null && building !== null;
+
+    // Function to close the sidebar
+    const onClose = () => {
+        setSelectedMarkId(null);
+    };
+
+    // Reset active tab when selectedMarkId changes
+    useEffect(() => {
+        if (building) {
+            if (building.type === 'activity') {
+                setActiveTab((prev) => ({ ...prev, activity: 'about' }));
+            } else if (building.type === 'security') {
+                setActiveTab((prev) => ({ ...prev, security: 'about' }));
+            } else {
+                setActiveTab((prev) => ({ ...prev, building: 'floors' }));
+            }
+        }
+    }, [selectedMarkId, building]);
 
     // Handle body scroll lock when sidebar is open
     useEffect(() => {
@@ -69,126 +97,24 @@ const BuildingDetailsSidebar: React.FC<BuildingDetailsSidebarProps> = ({
         );
     }
 
-    // Determine the type of content to display
-    const renderContent = () => {
-        // Handle activity type
-        if (building.type === 'activity') {
-            return (
-                <div className="pt-2 px-4">
-                    <h3 className="text-xl mb-3">Activity Information</h3>
-
-                    <div className="space-y-4">
-                        {building.description && (
-                            <div>
-                                <h4 className="font-semibold">Description</h4>
-                                <p className="mt-1">{building.description}</p>
-                            </div>
-                        )}
-
-                        {building.schedule && (
-                            <div>
-                                <h4 className="font-semibold">Schedule</h4>
-                                <p className="mt-1">{building.schedule}</p>
-                            </div>
-                        )}
-
-                        {building.capacity && (
-                            <div>
-                                <h4 className="font-semibold">Capacity</h4>
-                                <p className="mt-1">{building.capacity}</p>
-                            </div>
-                        )}
-
-                        {building.contactPerson && (
-                            <div>
-                                <h4 className="font-semibold">
-                                    Contact Person
-                                </h4>
-                                <p className="mt-1">{building.contactPerson}</p>
-                            </div>
-                        )}
-
-                        {building.contactNumber && (
-                            <div>
-                                <h4 className="font-semibold">
-                                    Contact Number
-                                </h4>
-                                <p className="mt-1">{building.contactNumber}</p>
-                            </div>
-                        )}
-                    </div>
-                </div>
-            );
-        }
-
-        // Handle security type
-        if (building.type === 'security') {
-            return (
-                <div className="pt-2 px-4">
-                    <h3 className="text-xl mb-3">Security Information</h3>
-
-                    <div className="space-y-4">
-                        {building.personnel && (
-                            <div>
-                                <h4 className="font-semibold">Personnel</h4>
-                                <p className="mt-1">{building.personnel}</p>
-                            </div>
-                        )}
-
-                        {building.services && building.services.length > 0 && (
-                            <div>
-                                <h4 className="font-semibold">Services</h4>
-                                <ul className="mt-1 space-y-1 pl-4">
-                                    {building.services.map((service, index) => (
-                                        <li
-                                            key={index}
-                                            className="list-disc pl-1"
-                                        >
-                                            {service}
-                                        </li>
-                                    ))}
-                                </ul>
-                            </div>
-                        )}
-
-                        {building.operatingHours && (
-                            <div>
-                                <h4 className="font-semibold">
-                                    Operating Hours
-                                </h4>
-                                <p className="mt-1">
-                                    {building.operatingHours}
-                                </p>
-                            </div>
-                        )}
-
-                        {building.contactNumber && (
-                            <div>
-                                <h4 className="font-semibold">
-                                    Contact Number
-                                </h4>
-                                <p className="mt-1">{building.contactNumber}</p>
-                            </div>
-                        )}
-                    </div>
-                </div>
-            );
-        }
-
-        // Handle building type (default)
+    // Floors tab content for buildings
+    const renderFloorsTab = () => {
         return (
             <div className="pt-2">
                 <h3 className="text-xl mb-1 px-2">Facilities</h3>
 
                 {building.floors &&
-                    building.floors.map((floor, index) => (
+                    building.floors.map((floor, index: number) => (
                         <div key={index} className="mb-4">
                             <h4 className="font-semibold bg-white/20 px-2 my-2 py-2">
                                 {floor.name}
                             </h4>
                             <ul className="space-y-1 text-sm px-4">
                                 {floor.facilities.map(
-                                    (facility, facilityIndex) => (
+                                    (
+                                        facility: string,
+                                        facilityIndex: number,
+                                    ) => (
                                         <li
                                             key={facilityIndex}
                                             className="pl-2"
@@ -201,6 +127,264 @@ const BuildingDetailsSidebar: React.FC<BuildingDetailsSidebarProps> = ({
                         </div>
                     ))}
             </div>
+        );
+    };
+
+    // About tab content for all types
+    const renderAboutTab = () => {
+        // For activity type
+        if (building.type === 'activity') {
+            return (
+                <div className="px-4 py-3 space-y-4">
+                    {building.description && (
+                        <div>
+                            <h4 className="font-semibold">Description</h4>
+                            <p className="mt-1">{building.description}</p>
+                        </div>
+                    )}
+
+                    {building.schedule && (
+                        <div>
+                            <h4 className="font-semibold">Schedule</h4>
+                            <p className="mt-1">{building.schedule}</p>
+                        </div>
+                    )}
+
+                    {building.capacity && (
+                        <div>
+                            <h4 className="font-semibold">Capacity</h4>
+                            <p className="mt-1">{building.capacity}</p>
+                        </div>
+                    )}
+                </div>
+            );
+        }
+
+        // For security type
+        if (building.type === 'security') {
+            return (
+                <div className="px-4 py-3 space-y-4">
+                    {building.personnel && (
+                        <div>
+                            <h4 className="font-semibold">Personnel</h4>
+                            <p className="mt-1">{building.personnel}</p>
+                        </div>
+                    )}
+
+                    {building.operatingHours && (
+                        <div>
+                            <h4 className="font-semibold">Operating Hours</h4>
+                            <p className="mt-1">{building.operatingHours}</p>
+                        </div>
+                    )}
+
+                    {building.services && building.services.length > 0 && (
+                        <div>
+                            <h4 className="font-semibold">Services</h4>
+                            <ul className="mt-1 space-y-1 pl-4">
+                                {building.services.map(
+                                    (service: string, index: number) => (
+                                        <li
+                                            key={index}
+                                            className="list-disc pl-1"
+                                        >
+                                            {service}
+                                        </li>
+                                    ),
+                                )}
+                            </ul>
+                        </div>
+                    )}
+                </div>
+            );
+        }
+
+        // For building type (default)
+        return (
+            <div className="px-4 py-3 space-y-4">
+                <div>
+                    <h4 className="font-semibold">Building Type</h4>
+                    <p className="mt-1">Academic Building</p>
+                </div>
+                <div>
+                    <h4 className="font-semibold">Total Floors</h4>
+                    <p className="mt-1">{building.floors?.length || 0}</p>
+                </div>
+            </div>
+        );
+    };
+
+    // Contacts tab content
+    const renderContactsTab = () => {
+        // For security type
+        if (building.type === 'security') {
+            return (
+                <div className="px-4 py-3 space-y-4">
+                    {building.contactNumber && (
+                        <div>
+                            <h4 className="font-semibold">Contact Number</h4>
+                            <p className="mt-1">{building.contactNumber}</p>
+                        </div>
+                    )}
+                </div>
+            );
+        }
+
+        // For activity type and building type
+        return (
+            <div className="px-4 py-3 space-y-4">
+                {building.contactPerson && (
+                    <div>
+                        <h4 className="font-semibold">Contact Person</h4>
+                        <p className="mt-1">{building.contactPerson}</p>
+                    </div>
+                )}
+
+                {building.contactNumber && (
+                    <div>
+                        <h4 className="font-semibold">Contact Number</h4>
+                        <p className="mt-1">{building.contactNumber}</p>
+                    </div>
+                )}
+            </div>
+        );
+    };
+
+    // Images tab content
+    const renderImagesTab = () => {
+        // For any type (we only have one image now, but this could be expanded)
+        return (
+            <div className="px-4 py-3">
+                <div className="relative h-48 w-full rounded-md overflow-hidden">
+                    <Image
+                        src={building.image}
+                        alt={`Additional image of ${building.name}`}
+                        fill
+                        style={{ objectFit: 'cover' }}
+                        className="border border-white/20 rounded-md"
+                    />
+                </div>
+            </div>
+        );
+    };
+
+    // Render tabs based on building type
+    const renderTabs = () => {
+        // For activity type
+        if (building.type === 'activity') {
+            return (
+                <Tabs
+                    value={activeTab.activity}
+                    onValueChange={(value) =>
+                        setActiveTab((prev) => ({ ...prev, activity: value }))
+                    }
+                    className="w-full"
+                >
+                    <TabsList className="grid grid-cols-2 w-full bg-maroon-accent/60">
+                        <TabsTrigger
+                            value="about"
+                            className="text-white data-[state=active]:text-foreground"
+                        >
+                            About
+                        </TabsTrigger>
+                        <TabsTrigger
+                            value="images"
+                            className="text-white data-[state=active]:text-foreground"
+                        >
+                            Images
+                        </TabsTrigger>
+                    </TabsList>
+                    <TabsContent value="about">{renderAboutTab()}</TabsContent>
+                    <TabsContent value="images">
+                        {renderImagesTab()}
+                    </TabsContent>
+                </Tabs>
+            );
+        }
+
+        // For security type
+        if (building.type === 'security') {
+            return (
+                <Tabs
+                    value={activeTab.security}
+                    onValueChange={(value) =>
+                        setActiveTab((prev) => ({ ...prev, security: value }))
+                    }
+                    className="w-full"
+                >
+                    <TabsList className="grid grid-cols-3 w-full bg-maroon-accent/60">
+                        <TabsTrigger
+                            value="about"
+                            className="text-white data-[state=active]:text-foreground"
+                        >
+                            About
+                        </TabsTrigger>
+                        <TabsTrigger
+                            value="contacts"
+                            className="text-white data-[state=active]:text-foreground"
+                        >
+                            Contacts
+                        </TabsTrigger>
+                        <TabsTrigger
+                            value="images"
+                            className="text-white data-[state=active]:text-foreground"
+                        >
+                            Images
+                        </TabsTrigger>
+                    </TabsList>
+                    <TabsContent value="about">{renderAboutTab()}</TabsContent>
+                    <TabsContent value="contacts">
+                        {renderContactsTab()}
+                    </TabsContent>
+                    <TabsContent value="images">
+                        {renderImagesTab()}
+                    </TabsContent>
+                </Tabs>
+            );
+        }
+
+        // For building type (default)
+        return (
+            <Tabs
+                value={activeTab.building}
+                onValueChange={(value) =>
+                    setActiveTab((prev) => ({ ...prev, building: value }))
+                }
+                className="w-full"
+            >
+                <TabsList className="grid grid-cols-4 w-full bg-maroon-accent/60">
+                    <TabsTrigger
+                        value="floors"
+                        className="text-white data-[state=active]:text-foreground"
+                    >
+                        Floors
+                    </TabsTrigger>
+                    <TabsTrigger
+                        value="about"
+                        className="text-white data-[state=active]:text-foreground"
+                    >
+                        About
+                    </TabsTrigger>
+                    <TabsTrigger
+                        value="contacts"
+                        className="text-white data-[state=active]:text-foreground"
+                    >
+                        Contacts
+                    </TabsTrigger>
+                    <TabsTrigger
+                        value="images"
+                        className="text-white data-[state=active]:text-foreground"
+                    >
+                        Images
+                    </TabsTrigger>
+                </TabsList>
+                <TabsContent value="floors">{renderFloorsTab()}</TabsContent>
+                <TabsContent value="about">{renderAboutTab()}</TabsContent>
+                <TabsContent value="contacts">
+                    {renderContactsTab()}
+                </TabsContent>
+                <TabsContent value="images">{renderImagesTab()}</TabsContent>
+            </Tabs>
         );
     };
 
@@ -243,7 +427,7 @@ const BuildingDetailsSidebar: React.FC<BuildingDetailsSidebarProps> = ({
                 </div>
 
                 {/* Building Image - outside of sticky header */}
-                <div className="w-full h-48 relative">
+                <div className="w-full h-48 relative mb-2">
                     <Image
                         src={building.image}
                         alt={building.name}
@@ -253,8 +437,8 @@ const BuildingDetailsSidebar: React.FC<BuildingDetailsSidebarProps> = ({
                     />
                 </div>
 
-                {/* Content based on building type */}
-                {renderContent()}
+                {/* Tabs based on building type */}
+                <div className="w-full px-2">{renderTabs()}</div>
             </div>
         </>
     );
