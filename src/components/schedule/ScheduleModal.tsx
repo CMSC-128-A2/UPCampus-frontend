@@ -1,7 +1,10 @@
 import React, { useState } from 'react';
 import { Icon } from '@iconify/react';
-import Image from 'next/image';
 import { Save } from 'lucide-react';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { TimePicker } from '@mui/x-date-pickers/TimePicker';
+import dayjs from 'dayjs';
 
 interface ScheduleModalProps {
     isOpen: boolean;
@@ -21,8 +24,11 @@ function ScheduleModal({ isOpen, onClose, onSave }: ScheduleModalProps) {
     const [section, setSection] = useState('');
     const [type, setType] = useState('Lecture');
     const [room, setRoom] = useState('');
-    const [day, setDay] = useState('');
-    const [time, setTime] = useState('');
+    const [day, setDay] = useState<string[]>([]);
+    const [startTimeValue, setStartTimeValue] = useState<dayjs.Dayjs | null>(
+        null,
+    );
+    const [endTimeValue, setEndTimeValue] = useState<dayjs.Dayjs | null>(null);
     const [isSaving, setIsSaving] = useState(false);
 
     const resetForm = () => {
@@ -30,8 +36,9 @@ function ScheduleModal({ isOpen, onClose, onSave }: ScheduleModalProps) {
         setSection('');
         setType('Lecture');
         setRoom('');
-        setDay('');
-        setTime('');
+        setDay([]);
+        setStartTimeValue(null);
+        setEndTimeValue(null);
     };
 
     const handleClose = () => {
@@ -41,12 +48,25 @@ function ScheduleModal({ isOpen, onClose, onSave }: ScheduleModalProps) {
 
     const handleSave = async () => {
         if (!onSave) return;
-        
+
         // Validate form
-        if (!courseCode || !section || !type || !room || !day || !time) {
+        if (
+            !courseCode ||
+            !section ||
+            !type ||
+            !room ||
+            !day.length ||
+            !startTimeValue ||
+            !endTimeValue
+        ) {
             alert('Please fill in all fields');
             return;
         }
+
+        // Format times from the TimePickers
+        const formattedStartTime = startTimeValue.format('h:mm A');
+        const formattedEndTime = endTimeValue.format('h:mm A');
+        const timeString = `${formattedStartTime} - ${formattedEndTime}`;
 
         try {
             setIsSaving(true);
@@ -55,8 +75,8 @@ function ScheduleModal({ isOpen, onClose, onSave }: ScheduleModalProps) {
                 section,
                 type,
                 room,
-                day,
-                time
+                day: day.join(' '), // Join the array back into a space-separated string
+                time: timeString,
             });
             handleClose();
         } catch (error) {
@@ -76,7 +96,10 @@ function ScheduleModal({ isOpen, onClose, onSave }: ScheduleModalProps) {
                     {/* Header */}
                     <div className="flex justify-between items-center mb-6">
                         <h2 className="text-2xl font-semibold">Add Schedule</h2>
-                        <button onClick={handleClose} className="text-gray-400 hover:text-gray-600">
+                        <button
+                            onClick={handleClose}
+                            className="text-gray-400 hover:text-gray-600"
+                        >
                             <Icon icon="ph:x-bold" width="24" height="24" />
                         </button>
                     </div>
@@ -84,7 +107,9 @@ function ScheduleModal({ isOpen, onClose, onSave }: ScheduleModalProps) {
                     {/* Form */}
                     <div className="space-y-4 mb-6">
                         <div className="space-y-2">
-                            <label className="block text-gray-700">Course Code</label>
+                            <label className="block text-gray-700">
+                                Course Code
+                            </label>
                             <input
                                 type="text"
                                 value={courseCode}
@@ -96,7 +121,9 @@ function ScheduleModal({ isOpen, onClose, onSave }: ScheduleModalProps) {
 
                         <div className="grid grid-cols-2 gap-4">
                             <div className="space-y-2">
-                                <label className="block text-gray-700">Section</label>
+                                <label className="block text-gray-700">
+                                    Section
+                                </label>
                                 <input
                                     type="text"
                                     value={section}
@@ -107,14 +134,18 @@ function ScheduleModal({ isOpen, onClose, onSave }: ScheduleModalProps) {
                             </div>
 
                             <div className="space-y-2">
-                                <label className="block text-gray-700">Type</label>
+                                <label className="block text-gray-700">
+                                    Type
+                                </label>
                                 <select
                                     value={type}
                                     onChange={(e) => setType(e.target.value)}
                                     className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                                 >
                                     <option value="Lecture">Lecture</option>
-                                    <option value="Laboratory">Laboratory</option>
+                                    <option value="Laboratory">
+                                        Laboratory
+                                    </option>
                                 </select>
                             </div>
                         </div>
@@ -133,39 +164,85 @@ function ScheduleModal({ isOpen, onClose, onSave }: ScheduleModalProps) {
                         <div className="space-y-2">
                             <label className="block text-gray-700">Day</label>
                             <div className="flex flex-wrap gap-2">
-                                {['M', 'T', 'W', 'Th', 'F', 'S'].map((dayOption) => (
-                                    <button
-                                        key={dayOption}
-                                        type="button"
-                                        onClick={() => {
-                                            const currentDays = day.split(' ');
-                                            if (currentDays.includes(dayOption)) {
-                                                setDay(currentDays.filter(d => d !== dayOption).join(' '));
-                                            } else {
-                                                setDay([...currentDays, dayOption].join(' '));
-                                            }
-                                        }}
-                                        className={`px-4 py-2 rounded-lg border transition-colors duration-200 ${
-                                            day.split(' ').includes(dayOption)
-                                                ? 'bg-blue-500 text-white border-blue-500'
-                                                : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-100'
-                                        }`}
-                                    >
-                                        {dayOption}
-                                    </button>
-                                ))}
+                                {['M', 'T', 'W', 'TH', 'F', 'S'].map(
+                                    (dayOption) => (
+                                        <button
+                                            key={dayOption}
+                                            type="button"
+                                            onClick={() => {
+                                                if (day.includes(dayOption)) {
+                                                    setDay(
+                                                        day.filter(
+                                                            (d) =>
+                                                                d !== dayOption,
+                                                        ),
+                                                    );
+                                                } else {
+                                                    setDay([...day, dayOption]);
+                                                }
+                                            }}
+                                            className={`px-4 py-2 rounded-lg border transition-colors duration-200 ${
+                                                day.includes(dayOption)
+                                                    ? 'bg-blue-500 text-white border-blue-500'
+                                                    : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-100'
+                                            }`}
+                                        >
+                                            {dayOption}
+                                        </button>
+                                    ),
+                                )}
                             </div>
                         </div>
 
-                        <div className="space-y-2">
-                            <label className="block text-gray-700">Time</label>
-                            <input
-                                type="text"
-                                value={time}
-                                onChange={(e) => setTime(e.target.value)}
-                                className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                placeholder="e.g., 11:00 AM - 12:00 PM"
-                            />
+                        <div className="grid grid-cols-2 gap-4">
+                            <div className="space-y-2">
+                                <label className="block text-gray-700">
+                                    Time
+                                </label>
+                                <LocalizationProvider
+                                    dateAdapter={AdapterDayjs}
+                                >
+                                    <TimePicker
+                                        label="Start"
+                                        value={startTimeValue}
+                                        onChange={(newValue) =>
+                                            setStartTimeValue(newValue)
+                                        }
+                                        sx={{
+                                            width: '100%',
+                                            '& .MuiOutlinedInput-root': {
+                                                borderRadius: '0.5rem',
+                                                height: '3rem',
+                                                paddingLeft: '0.75rem',
+                                            },
+                                        }}
+                                    />
+                                </LocalizationProvider>
+                            </div>
+                            <div className="space-y-2">
+                                <label className="block text-gray-700">
+                                    &nbsp;
+                                </label>
+                                <LocalizationProvider
+                                    dateAdapter={AdapterDayjs}
+                                >
+                                    <TimePicker
+                                        label="End"
+                                        value={endTimeValue}
+                                        onChange={(newValue) =>
+                                            setEndTimeValue(newValue)
+                                        }
+                                        sx={{
+                                            width: '100%',
+                                            '& .MuiOutlinedInput-root': {
+                                                borderRadius: '0.5rem',
+                                                height: '3rem',
+                                                paddingLeft: '0.75rem',
+                                            },
+                                        }}
+                                    />
+                                </LocalizationProvider>
+                            </div>
                         </div>
                     </div>
 
