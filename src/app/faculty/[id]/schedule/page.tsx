@@ -446,7 +446,11 @@ export default function SchedulePage() {
             <Layout>
                 <div className="bg-white rounded-lg shadow-sm p-6">
                     {/* Professor's Schedule Title */}
-                    <h1 className="text-3xl font-semibold text-gray-800 mb-6">{professor.name}'s Schedule</h1>
+                    <div className="mb-6">
+                        <h1 className="text-3xl font-semibold text-gray-800">{professor.name}'s Schedule</h1>
+                        <p className="text-gray-600 mt-1">{professor.email}</p>
+                        <p className="text-gray-500 mt-1">Department: {professor.department_name}</p>
+                    </div>
                     
                     {/* Search and Filters */}
                     <div className="mb-6">
@@ -548,7 +552,7 @@ export default function SchedulePage() {
                 />
 
                 {/* View Schedule Modal */}
-                {selectedSchedule && (
+                {isViewModalOpen && selectedSchedule && (
                     <ViewScheduleModal
                         isOpen={isViewModalOpen}
                         onClose={closeViewModal}
@@ -557,11 +561,9 @@ export default function SchedulePage() {
                         type={selectedSchedule.section.type}
                         room={selectedSchedule.section.room}
                         schedule={selectedSchedule.section.schedule}
-                        onDelete={() => {
-                            if (selectedSchedule) {
-                                handleDeleteSchedule(selectedSchedule.course.id, selectedSchedule.section.id);
-                            }
-                        }}
+                        facultyName={professor?.name}
+                        facultyEmail={professor?.email}
+                        onDelete={() => handleDeleteSchedule(selectedSchedule.course.id, selectedSchedule.section.id)}
                         onEdit={openEditModal}
                     />
                 )}
