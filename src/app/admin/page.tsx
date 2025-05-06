@@ -6,6 +6,7 @@ import AdminModal from '@/components/ui/AdminModal';
 import EditAdminModal from '@/components/ui/EditAdminModal';
 import Layout from '@/components/ui/Layout';
 import { adminApi, AdminUser } from '@/lib/api';
+import Toast, { ToastType } from '@/components/ui/Toast';
 
 // Interface for frontend admin user format
 interface AdminUserFrontend {
@@ -14,6 +15,13 @@ interface AdminUserFrontend {
   email: string;
   userId: string;
   password: string;
+}
+
+// Toast notification state
+interface ToastState {
+  isOpen: boolean;
+  message: string;
+  type: ToastType;
 }
 
 function AdminPage() {
@@ -25,11 +33,33 @@ function AdminPage() {
   const [selectedAdmin, setSelectedAdmin] = useState<AdminUserFrontend | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [toast, setToast] = useState<ToastState>({
+    isOpen: false, 
+    message: '',
+    type: 'info'
+  });
 
   // Fetch admin users on component mount
   useEffect(() => {
     fetchAdmins();
   }, []);
+
+  // Show toast notification
+  const showToast = (message: string, type: ToastType = 'info') => {
+    setToast({
+      isOpen: true,
+      message,
+      type
+    });
+  };
+
+  // Close toast notification
+  const closeToast = () => {
+    setToast(prev => ({
+      ...prev,
+      isOpen: false
+    }));
+  };
 
   const fetchAdmins = async () => {
     try {
@@ -56,6 +86,7 @@ function AdminPage() {
     } catch (err) {
       console.error('Failed to fetch admins:', err);
       setError('Failed to load admin users. Please try again later.');
+      showToast('Failed to load admin users', 'error');
     } finally {
       setIsLoading(false);
     }
@@ -116,9 +147,12 @@ function AdminPage() {
       await adminApi.createAdmin(backendAdmin);
       fetchAdmins(); // Refresh the admin list
       closeModal();
+      
+      // Show success toast
+      showToast(`Admin ${admin.name} added successfully`, 'success');
     } catch (err) {
       console.error('Failed to create admin:', err);
-      alert('Failed to create admin. Please try again.');
+      showToast('Failed to create admin. Please try again.', 'error');
     }
   };
 
@@ -137,9 +171,12 @@ function AdminPage() {
       await adminApi.updateAdmin(selectedAdmin.id, backendAdmin);
       fetchAdmins(); // Refresh the admin list
       closeEditModal();
+      
+      // Show success toast
+      showToast(`Admin ${updatedAdmin.name} updated successfully`, 'success');
     } catch (err) {
       console.error('Failed to update admin:', err);
-      alert('Failed to update admin. Please try again.');
+      showToast('Failed to update admin. Please try again.', 'error');
     }
   };
 
@@ -148,11 +185,17 @@ function AdminPage() {
     
     try {
       await adminApi.deleteAdmin(selectedAdmin.id);
+      
+      // Show success toast - capture name before refreshing list
+      const adminName = selectedAdmin.name;
+      
       fetchAdmins(); // Refresh the admin list
       closeDeleteConfirm();
+      
+      showToast(`Admin ${adminName} deleted successfully`, 'success');
     } catch (err) {
       console.error('Failed to delete admin:', err);
-      alert('Failed to delete admin. Please try again.');
+      showToast('Failed to delete admin. Please try again.', 'error');
     }
   };
 
@@ -250,7 +293,7 @@ function AdminPage() {
                       <td className="px-4 py-3 text-sm text-gray-700">{admin.email}</td>
                       <td className="px-4 py-3 text-sm text-gray-700">{admin.userId}</td>
                       <td className="px-4 py-3 text-sm text-gray-700">
-                        {admin.password ? '••••••••' : ''}
+                        {admin.password}
                       </td>
                       <td className="px-4 py-3 text-sm text-gray-700 text-right">
                         <div className="flex justify-end space-x-2">
@@ -321,6 +364,15 @@ function AdminPage() {
             </div>
           </div>
         )}
+
+        {/* Toast Notification */}
+        <Toast
+          isOpen={toast.isOpen}
+          onClose={closeToast}
+          message={toast.message}
+          type={toast.type}
+          duration={5000}
+        />
       </Layout>
     </RootExtensionWrapper>
   );
