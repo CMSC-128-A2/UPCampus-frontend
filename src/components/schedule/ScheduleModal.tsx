@@ -211,7 +211,7 @@ function ScheduleModal({ isOpen, onClose, onSave }: ScheduleModalProps) {
                                     ) : (
                                         facultyList.map(faculty => (
                                             <option key={faculty.id} value={faculty.id}>
-                                                {faculty.name} ({faculty.email})
+                                                {faculty.name}
                                             </option>
                                         ))
                                     )}
