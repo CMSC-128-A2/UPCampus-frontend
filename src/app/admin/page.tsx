@@ -1,55 +1,65 @@
 'use client';
-import React, { useState } from 'react';
-import Image from 'next/image';
-import Link from 'next/link';
+import React, { useState, useEffect } from 'react';
 import { Icon } from '@iconify/react';
 import RootExtensionWrapper from './RootExtensionWrapper';
 import AdminModal from '@/components/ui/AdminModal';
 import EditAdminModal from '@/components/ui/EditAdminModal';
 import Layout from '@/components/ui/Layout';
+import { adminApi, AdminUser } from '@/lib/api';
 
-// Define admin user type
-interface AdminUser {
+// Interface for frontend admin user format
+interface AdminUserFrontend {
+  id?: string;
   name: string;
   email: string;
   userId: string;
   password: string;
 }
 
-// Mock admin data based exactly on the image
-const mockAdmins: AdminUser[] = [
-  {
-    name: 'Jennie Kim',
-    email: 'jennierubyjanet@gmail.com',
-    userId: 'jen123',
-    password: 'rubyjane1@'
-  },
-  {
-    name: 'Lalisa Manoban',
-    email: 'lalalisa@gmail.com',
-    userId: 'lalisa0327',
-    password: 'lalaLisa2703'
-  },
-  {
-    name: 'Rose Park',
-    email: 'rosie@gmail.com',
-    userId: 'aptrose1@',
-    password: 'apateupateuRSP'
-  },
-  {
-    name: 'Jisoo Kim',
-    email: 'sooya@gmail.com',
-    userId: 'sooya143',
-    password: 'hellojisoopp4'
-  }
-];
-
 function AdminPage() {
   const [searchQuery, setSearchQuery] = useState('');
-  const [adminUsers, setAdminUsers] = useState<AdminUser[]>(mockAdmins);
+  const [adminUsers, setAdminUsers] = useState<AdminUserFrontend[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
-  const [selectedAdmin, setSelectedAdmin] = useState<AdminUser | null>(null);
+  const [isDeleteConfirmOpen, setIsDeleteConfirmOpen] = useState(false);
+  const [selectedAdmin, setSelectedAdmin] = useState<AdminUserFrontend | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  // Fetch admin users on component mount
+  useEffect(() => {
+    fetchAdmins();
+  }, []);
+
+  const fetchAdmins = async () => {
+    try {
+      setIsLoading(true);
+      const data = await adminApi.getAllAdmins();
+      console.log('Received admin data:', data); // Log the received data structure
+      
+      // Check if data is an array or if it has a results property (pagination)
+      const adminArray = Array.isArray(data) ? data : 
+                        (data?.results && Array.isArray(data.results)) ? data.results : 
+                        [];
+      
+      // Map backend format to frontend format
+      const frontendAdmins = adminArray.map((admin: AdminUser) => ({
+        id: admin.id,
+        name: admin.name,
+        email: admin.email,
+        userId: admin.user_id,
+        password: admin.password || ''  // Handle potential undefined password
+      }));
+      
+      setAdminUsers(frontendAdmins);
+      setError(null);
+    } catch (err) {
+      console.error('Failed to fetch admins:', err);
+      setError('Failed to load admin users. Please try again later.');
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   // Filter admin users based on search query
   const filteredAdmins = searchQuery.trim() === ''
@@ -71,7 +81,8 @@ function AdminPage() {
     setIsModalOpen(false);
   };
 
-  const openEditModal = (admin: AdminUser) => {
+  const openEditModal = (admin: AdminUserFrontend, e: React.MouseEvent) => {
+    e.stopPropagation(); // Prevent row click from also triggering
     setSelectedAdmin(admin);
     setIsEditModalOpen(true);
   };
@@ -81,19 +92,103 @@ function AdminPage() {
     setSelectedAdmin(null);
   };
 
-  const handleSaveAdmin = (admin: AdminUser) => {
-    setAdminUsers([...adminUsers, admin]);
-    closeModal();
+  const openDeleteConfirm = (admin: AdminUserFrontend, e: React.MouseEvent) => {
+    e.stopPropagation(); // Prevent row click from also triggering
+    setSelectedAdmin(admin);
+    setIsDeleteConfirmOpen(true);
   };
 
-  const handleUpdateAdmin = (updatedAdmin: AdminUser) => {
-    setAdminUsers(prevAdmins => 
-      prevAdmins.map(admin => 
-        admin.userId === updatedAdmin.userId ? updatedAdmin : admin
-      )
-    );
-    closeEditModal();
+  const closeDeleteConfirm = () => {
+    setIsDeleteConfirmOpen(false);
+    setSelectedAdmin(null);
   };
+
+  const handleSaveAdmin = async (admin: AdminUserFrontend) => {
+    try {
+      // Convert to backend format
+      const backendAdmin = {
+        name: admin.name,
+        email: admin.email,
+        user_id: admin.userId,
+        password: admin.password
+      };
+      
+      await adminApi.createAdmin(backendAdmin);
+      fetchAdmins(); // Refresh the admin list
+      closeModal();
+    } catch (err) {
+      console.error('Failed to create admin:', err);
+      alert('Failed to create admin. Please try again.');
+    }
+  };
+
+  const handleUpdateAdmin = async (updatedAdmin: AdminUserFrontend) => {
+    if (!selectedAdmin?.id) return;
+    
+    try {
+      // Convert to backend format
+      const backendAdmin = {
+        name: updatedAdmin.name,
+        email: updatedAdmin.email,
+        user_id: updatedAdmin.userId,
+        password: updatedAdmin.password
+      };
+      
+      await adminApi.updateAdmin(selectedAdmin.id, backendAdmin);
+      fetchAdmins(); // Refresh the admin list
+      closeEditModal();
+    } catch (err) {
+      console.error('Failed to update admin:', err);
+      alert('Failed to update admin. Please try again.');
+    }
+  };
+
+  const handleDeleteAdmin = async () => {
+    if (!selectedAdmin?.id) return;
+    
+    try {
+      await adminApi.deleteAdmin(selectedAdmin.id);
+      fetchAdmins(); // Refresh the admin list
+      closeDeleteConfirm();
+    } catch (err) {
+      console.error('Failed to delete admin:', err);
+      alert('Failed to delete admin. Please try again.');
+    }
+  };
+
+  // Render loading state
+  if (isLoading) {
+    return (
+      <RootExtensionWrapper>
+        <Layout>
+          <div className="flex justify-center items-center h-full">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#8BC34A]"></div>
+          </div>
+        </Layout>
+      </RootExtensionWrapper>
+    );
+  }
+
+  // Render error state
+  if (error) {
+    return (
+      <RootExtensionWrapper>
+        <Layout>
+          <div className="bg-white rounded-lg shadow-sm p-6">
+            <div className="bg-red-50 text-red-600 p-4 rounded-lg mb-4">
+              <p>{error}</p>
+            </div>
+            <button 
+              onClick={() => window.location.reload()}
+              className="bg-[#8BC34A] text-white px-4 py-2 rounded-lg"
+            >
+              Try Again
+            </button>
+          </div>
+        </Layout>
+      </RootExtensionWrapper>
+    );
+  }
 
   return (
     <RootExtensionWrapper>
@@ -130,30 +225,56 @@ function AdminPage() {
           
           {/* Admin Users Table */}
           <div className="overflow-x-auto">
-            <table className="min-w-full divide-y divide-gray-200">
-              <thead className="bg-gray-50">
-                <tr>
-                  <th className="px-4 py-3 text-left text-sm font-medium text-gray-600">Name</th>
-                  <th className="px-4 py-3 text-left text-sm font-medium text-gray-600">Email</th>
-                  <th className="px-4 py-3 text-left text-sm font-medium text-gray-600">User ID</th>
-                  <th className="px-4 py-3 text-left text-sm font-medium text-gray-600">Password</th>
-                </tr>
-              </thead>
-              <tbody className="bg-white divide-y divide-gray-200">
-                {filteredAdmins.map((admin, index) => (
-                  <tr 
-                    key={index} 
-                    className="hover:bg-gray-50 cursor-pointer"
-                    onClick={() => openEditModal(admin)}
-                  >
-                    <td className="px-4 py-3 text-sm text-gray-700">{admin.name}</td>
-                    <td className="px-4 py-3 text-sm text-gray-700">{admin.email}</td>
-                    <td className="px-4 py-3 text-sm text-gray-700">{admin.userId}</td>
-                    <td className="px-4 py-3 text-sm text-gray-700">{admin.password}</td>
+            {filteredAdmins.length === 0 ? (
+              <div className="p-6 text-center text-gray-500">
+                <p>No admin users found. {searchQuery ? 'Try a different search.' : 'Add some admins to get started.'}</p>
+              </div>
+            ) : (
+              <table className="min-w-full divide-y divide-gray-200">
+                <thead className="bg-gray-50">
+                  <tr>
+                    <th className="px-4 py-3 text-left text-sm font-medium text-gray-600">Name</th>
+                    <th className="px-4 py-3 text-left text-sm font-medium text-gray-600">Email</th>
+                    <th className="px-4 py-3 text-left text-sm font-medium text-gray-600">User ID</th>
+                    <th className="px-4 py-3 text-left text-sm font-medium text-gray-600">Password</th>
+                    <th className="px-4 py-3 text-right text-sm font-medium text-gray-600">Actions</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody className="bg-white divide-y divide-gray-200">
+                  {filteredAdmins.map((admin, index) => (
+                    <tr 
+                      key={admin.id || index} 
+                      className="hover:bg-gray-50"
+                    >
+                      <td className="px-4 py-3 text-sm text-gray-700">{admin.name}</td>
+                      <td className="px-4 py-3 text-sm text-gray-700">{admin.email}</td>
+                      <td className="px-4 py-3 text-sm text-gray-700">{admin.userId}</td>
+                      <td className="px-4 py-3 text-sm text-gray-700">
+                        {admin.password ? '••••••••' : ''}
+                      </td>
+                      <td className="px-4 py-3 text-sm text-gray-700 text-right">
+                        <div className="flex justify-end space-x-2">
+                          <button
+                            onClick={(e) => openEditModal(admin, e)}
+                            className="p-1 text-blue-600 hover:text-blue-800"
+                            title="Edit"
+                          >
+                            <Icon icon="ph:pencil" width="18" height="18" />
+                          </button>
+                          <button
+                            onClick={(e) => openDeleteConfirm(admin, e)}
+                            className="p-1 text-red-600 hover:text-red-800"
+                            title="Delete"
+                          >
+                            <Icon icon="ph:trash" width="18" height="18" />
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            )}
           </div>
         </div>
 
@@ -172,6 +293,33 @@ function AdminPage() {
             onSave={handleUpdateAdmin}
             initialData={selectedAdmin}
           />
+        )}
+
+        {/* Delete Confirmation Modal */}
+        {isDeleteConfirmOpen && selectedAdmin && (
+          <div className="fixed inset-0 bg-black bg-opacity-30 flex items-center justify-center z-50">
+            <div className="bg-white rounded-lg shadow-md w-full max-w-md p-6">
+              <h2 className="text-xl font-medium text-gray-900 mb-4">Confirm Delete</h2>
+              <p className="text-gray-600 mb-6">
+                Are you sure you want to delete the admin user <span className="font-medium">{selectedAdmin.name}</span>? 
+                This action cannot be undone.
+              </p>
+              <div className="flex justify-end space-x-3">
+                <button
+                  onClick={closeDeleteConfirm}
+                  className="px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={handleDeleteAdmin}
+                  className="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700"
+                >
+                  Delete
+                </button>
+              </div>
+            </div>
+          </div>
         )}
       </Layout>
     </RootExtensionWrapper>

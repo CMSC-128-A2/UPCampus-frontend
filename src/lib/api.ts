@@ -565,12 +565,52 @@ export const adminApi = {
                 },
             });
             
+            console.log('Response status:', response.status);
+            
             if (!response.ok) {
                 throw new Error(`Error: ${response.status}`);
             }
             
-            const data = await response.json();
-            return data;
+            // Safely parse the response as JSON
+            const rawData = await response.text();
+            console.log('Raw API response:', rawData);
+            
+            let data;
+            try {
+                data = JSON.parse(rawData);
+            } catch (e) {
+                console.error('Failed to parse JSON:', e);
+                throw new Error('Invalid JSON response from server');
+            }
+            
+            console.log('Parsed data structure:', data);
+            
+            // Return the data array or results array if it's paginated
+            if (Array.isArray(data)) {
+                return data;
+            } else if (data && typeof data === 'object') {
+                if (Array.isArray(data.results)) {
+                    return data.results;
+                } else if (data.admins && Array.isArray(data.admins)) {
+                    return data.admins;
+                } else if (Object.values(data).some(val => Array.isArray(val))) {
+                    // Fallback: try to find any array property in the response
+                    const arrayProps = Object.entries(data)
+                        .filter(([_, value]) => Array.isArray(value));
+                    if (arrayProps.length > 0) {
+                        console.log('Found array property:', arrayProps[0][0]);
+                        return arrayProps[0][1];
+                    }
+                }
+                // If we still have an object but no arrays, check if it's a single admin object
+                if (data.id && data.name && data.email) {
+                    return [data]; // Return as array with single item
+                }
+            }
+            
+            // If we couldn't identify the structure, return empty array
+            console.error('Unrecognized data structure received from API:', data);
+            return [];
         } catch (error) {
             console.error('Failed to fetch admins:', error);
             throw error;

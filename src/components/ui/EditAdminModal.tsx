@@ -17,6 +17,7 @@ interface EditAdminModalProps {
 
 const EditAdminModal: React.FC<EditAdminModalProps> = ({ isOpen, onClose, onSave, initialData }) => {
   const [formData, setFormData] = useState<AdminUser>(initialData);
+  const [error, setError] = useState<string | null>(null);
   
   if (!isOpen) return null;
 
@@ -30,6 +31,21 @@ const EditAdminModal: React.FC<EditAdminModalProps> = ({ isOpen, onClose, onSave
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    setError(null);
+    
+    // Validation
+    if (!formData.name || !formData.email || !formData.userId) {
+      setError('Name, email, and user ID are required fields');
+      return;
+    }
+    
+    // Email validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(formData.email)) {
+      setError('Please enter a valid email address');
+      return;
+    }
+    
     onSave(formData);
   };
 
@@ -46,6 +62,12 @@ const EditAdminModal: React.FC<EditAdminModalProps> = ({ isOpen, onClose, onSave
             <Icon icon="ph:x" width="20" height="20" />
           </button>
         </div>
+        
+        {error && (
+          <div className="mx-6 mb-4 p-3 bg-red-50 text-red-500 rounded-md text-sm">
+            {error}
+          </div>
+        )}
         
         <form onSubmit={handleSubmit} className="px-6 pb-6">
           <div className="mb-4">
@@ -92,8 +114,9 @@ const EditAdminModal: React.FC<EditAdminModalProps> = ({ isOpen, onClose, onSave
               value={formData.password}
               onChange={handleChange}
               className="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-50 focus:outline-none focus:ring-1 focus:ring-blue-500"
-              required
+              placeholder="Leave empty to keep current password"
             />
+            <p className="mt-1 text-xs text-gray-500">Leave empty to keep current password</p>
           </div>
           
           <div className="flex justify-end">

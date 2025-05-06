@@ -12,14 +12,23 @@ const AdminModal: React.FC<AdminModalProps> = ({ isOpen, onClose, onSave }) => {
   const [email, setEmail] = useState('');
   const [userId, setUserId] = useState('');
   const [password, setPassword] = useState('');
+  const [error, setError] = useState<string | null>(null);
 
   if (!isOpen) return null;
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    setError(null);
+    
     if (!name || !email || !userId || !password) {
-      // In a real app, we'd show validation errors
-      alert('Please fill in all fields');
+      setError('Please fill in all fields');
+      return;
+    }
+
+    // Email validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      setError('Please enter a valid email address');
       return;
     }
 
@@ -46,6 +55,12 @@ const AdminModal: React.FC<AdminModalProps> = ({ isOpen, onClose, onSave }) => {
             </button>
           </div>
           
+          {error && (
+            <div className="mb-4 p-3 bg-red-50 text-red-500 rounded-md text-sm">
+              {error}
+            </div>
+          )}
+          
           <form onSubmit={handleSubmit}>
             <div className="space-y-4">
               <div>
@@ -53,7 +68,7 @@ const AdminModal: React.FC<AdminModalProps> = ({ isOpen, onClose, onSave }) => {
                 <input
                   type="text"
                   placeholder="Enter name"
-                  className="w-full p-2 bg-gray-100 border border-gray-200 rounded-md focus:outline-none"
+                  className="w-full p-2 bg-gray-100 border border-gray-200 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                 />
@@ -64,7 +79,7 @@ const AdminModal: React.FC<AdminModalProps> = ({ isOpen, onClose, onSave }) => {
                 <input
                   type="email"
                   placeholder="admin@gmail.com"
-                  className="w-full p-2 bg-gray-100 border border-gray-200 rounded-md focus:outline-none"
+                  className="w-full p-2 bg-gray-100 border border-gray-200 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                 />
@@ -75,7 +90,7 @@ const AdminModal: React.FC<AdminModalProps> = ({ isOpen, onClose, onSave }) => {
                 <input
                   type="text"
                   placeholder="Enter user ID"
-                  className="w-full p-2 bg-gray-100 border border-gray-200 rounded-md focus:outline-none"
+                  className="w-full p-2 bg-gray-100 border border-gray-200 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500"
                   value={userId}
                   onChange={(e) => setUserId(e.target.value)}
                 />
@@ -86,7 +101,7 @@ const AdminModal: React.FC<AdminModalProps> = ({ isOpen, onClose, onSave }) => {
                 <input
                   type="password"
                   placeholder="Enter password"
-                  className="w-full p-2 bg-gray-100 border border-gray-200 rounded-md focus:outline-none"
+                  className="w-full p-2 bg-gray-100 border border-gray-200 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                 />
@@ -95,7 +110,7 @@ const AdminModal: React.FC<AdminModalProps> = ({ isOpen, onClose, onSave }) => {
               <div className="flex justify-end pt-4 mt-2">
                 <button
                   type="submit"
-                  className="px-4 py-2 bg-white border border-gray-300 text-gray-500 rounded-md hover:bg-gray-50"
+                  className="px-4 py-2 bg-[#1E88E5] text-white rounded-md hover:bg-[#1976D2]"
                 >
                   Add admin
                 </button>
