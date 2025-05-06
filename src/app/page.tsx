@@ -1,24 +1,23 @@
 'use client';
 
 import { useEffect } from 'react';
-import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 
 export default function Home() {
     const router = useRouter();
+
     useEffect(() => {
-        setTimeout(() => {
-            router.push('/map');
-        }, 1000);
+        // Redirect to map page directly
+        router.push('/map');
     }, [router]);
+
+    // Return empty div while redirecting
     return (
-        <div className="flex flex-col items-center justify-center h-full gap-4">
-            <Image
-                src="/assets/images/upsee main logo.png"
-                alt="UPCampus Explorer"
-                width={300}
-                height={300}
-            />
+        <div className="flex items-center justify-center min-h-screen">
+            <div className="text-center">
+                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500 mx-auto mb-4"></div>
+                <p className="text-gray-600">Redirecting...</p>
+            </div>
         </div>
     );
 }

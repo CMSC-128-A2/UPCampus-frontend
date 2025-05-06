@@ -736,5 +736,41 @@ export const adminApi = {
             console.error(`Failed to delete admin with id ${id}:`, error);
             throw error;
         }
+    },
+    
+    authenticate: async (userId: string, password: string) => {
+        try {
+            const response = await fetch(`${API_BASE_URL}/api/schedules/admins/authenticate/`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ user_id: userId, password }),
+            });
+            
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(errorData.detail || `Authentication failed: ${response.status}`);
+            }
+            
+            const adminData = await response.json();
+            
+            // Store admin data in localStorage for persistence
+            localStorage.setItem('adminUser', JSON.stringify(adminData));
+            
+            return adminData;
+        } catch (error) {
+            console.error('Authentication failed:', error);
+            throw error;
+        }
+    },
+    
+    checkAuthenticated: () => {
+        const adminUser = localStorage.getItem('adminUser');
+        return adminUser ? JSON.parse(adminUser) : null;
+    },
+    
+    logout: () => {
+        localStorage.removeItem('adminUser');
     }
 }; 

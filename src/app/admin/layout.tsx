@@ -1,5 +1,6 @@
-import React from 'react';
+// Metadata and viewport exports (server component)
 import type { Metadata, Viewport } from 'next';
+import AdminClientLayout from './AdminClientLayout';
 
 export const metadata: Metadata = {
   title: 'Admin Dashboard - UPCampus',
@@ -17,8 +18,8 @@ export default function AdminLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className="admin-layout">
+    <AdminClientLayout>
       {children}
-    </div>
+    </AdminClientLayout>
   );
 } 

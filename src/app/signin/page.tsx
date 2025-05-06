@@ -1,18 +1,47 @@
 'use client';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
+import { adminApi } from '@/lib/api';
 
 export default function SignIn() {
     const [userId, setUserId] = useState('');
     const [password, setPassword] = useState('');
     const [showPassword, setShowPassword] = useState(false);
+    const [error, setError] = useState('');
+    const [isLoading, setIsLoading] = useState(false);
     const router = useRouter();
+    
+    // Check if user is already logged in
+    useEffect(() => {
+        const user = adminApi.checkAuthenticated();
+        if (user) {
+            router.push('/admin');
+        }
+    }, [router]);
 
-    const handleSignIn = (e: React.FormEvent) => {
+    const handleSignIn = async (e: React.FormEvent) => {
         e.preventDefault();
-        // Implement authentication logic here
-        router.push('/admin'); // Redirect to admin page after sign-in
+        setError('');
+        
+        if (!userId || !password) {
+            setError('Please enter both User ID and Password');
+            return;
+        }
+        
+        try {
+            setIsLoading(true);
+            // Authenticate with backend
+            await adminApi.authenticate(userId, password);
+            
+            // Redirect to admin dashboard after successful login
+            router.push('/admin');
+        } catch (err) {
+            console.error('Authentication error:', err);
+            setError('Invalid credentials. Please try again.');
+        } finally {
+            setIsLoading(false);
+        }
     };
 
     return (
@@ -45,6 +74,12 @@ export default function SignIn() {
                     </div>
 
                     <form onSubmit={handleSignIn} className="w-full space-y-6">
+                        {error && (
+                            <div className="p-3 bg-red-100 border border-red-400 text-red-700 rounded-lg">
+                                {error}
+                            </div>
+                        )}
+                        
                         <div className="space-y-2">
                             <label htmlFor="userId" className="block text-base font-normal text-[#008CFF]">
                                 User ID
@@ -56,6 +91,7 @@ export default function SignIn() {
                                 onChange={(e) => setUserId(e.target.value)}
                                 className="w-full p-4 border border-gray-300 rounded-lg focus:outline-none focus:border-[#008CFF] focus:ring-1 focus:ring-[#008CFF] text-lg"
                                 placeholder="Enter your user ID"
+                                disabled={isLoading}
                             />
                         </div>
 
@@ -71,11 +107,13 @@ export default function SignIn() {
                                     onChange={(e) => setPassword(e.target.value)}
                                     className="w-full p-4 border border-gray-300 rounded-lg focus:outline-none focus:border-[#008CFF] focus:ring-1 focus:ring-[#008CFF] text-lg"
                                     placeholder="Enter your password"
+                                    disabled={isLoading}
                                 />
                                 <button
                                     type="button"
                                     className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700"
                                     onClick={() => setShowPassword(!showPassword)}
+                                    disabled={isLoading}
                                 >
                                     {showPassword ? (
                                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
@@ -91,12 +129,24 @@ export default function SignIn() {
                             </div>
                         </div>
 
-                        <button
-                            type="submit"
-                            className="w-full h-14 text-xl font-medium bg-[#008CFF] hover:bg-[#0088E8] text-white rounded-lg mt-8"
-                        >
-                            Sign In
-                        </button>
+                        <div className="flex gap-4">
+                            <button
+                                type="submit"
+                                className={`flex-1 h-14 text-xl font-medium bg-[#008CFF] hover:bg-[#0088E8] text-white rounded-lg mt-8 ${isLoading ? 'opacity-70 cursor-not-allowed' : ''}`}
+                                disabled={isLoading}
+                            >
+                                {isLoading ? 'Signing In...' : 'Sign In'}
+                            </button>
+                            
+                            <button
+                                type="button"
+                                onClick={() => router.push('/map')}
+                                className="flex-1 h-14 text-xl font-medium bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg mt-8"
+                                disabled={isLoading}
+                            >
+                                Cancel
+                            </button>
+                        </div>
                     </form>
                 </div>
             </div>
