@@ -664,10 +664,7 @@ const MapboxExample = () => {
             />
 
             {/* Building Details Sidebar */}
-            <BuildingDetailsSidebar
-                building={getSelectedBuildingDetails()}
-                onClose={handleCloseSidebar}
-            />
+            <BuildingDetailsSidebar />
         </div>
     );
 };

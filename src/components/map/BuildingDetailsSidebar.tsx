@@ -32,6 +32,9 @@ const BuildingDetailsSidebar: React.FC = () => {
     // Get the selected mark ID from the global store
     const { selectedMarkId, setSelectedMarkId } = useMapStore();
 
+    // State to track sidebar open/close state for animations
+    const [sidebarOpen, setSidebarOpen] = useState(false);
+
     // State to track the active tab for each building type
     const [activeTab, setActiveTab] = useState<{
         building: string;
@@ -48,12 +51,24 @@ const BuildingDetailsSidebar: React.FC = () => {
         ? (mockBuildingsData as Record<string, BuildingDetail>)[selectedMarkId]
         : null;
 
-    // Derive isOpen from selectedMarkId (sidebar is open when a mark is selected)
-    const isOpen = selectedMarkId !== null && building !== null;
+    // Update sidebar open state when selectedMarkId changes
+    useEffect(() => {
+        if (selectedMarkId !== null && building !== null) {
+            setSidebarOpen(true);
+        } else {
+            setSidebarOpen(false);
+        }
+    }, [selectedMarkId, building]);
 
-    // Function to close the sidebar
+    // Function to close the sidebar with animation
     const onClose = () => {
-        setSelectedMarkId(null);
+        // First set the animation state
+        setSidebarOpen(false);
+
+        // Then clear the selected mark after animation completes
+        setTimeout(() => {
+            setSelectedMarkId(null);
+        }, 300); // Match duration with CSS transition
     };
 
     // Reset active tab when selectedMarkId changes
@@ -71,7 +86,7 @@ const BuildingDetailsSidebar: React.FC = () => {
 
     // Handle body scroll lock when sidebar is open
     useEffect(() => {
-        if (isOpen) {
+        if (sidebarOpen) {
             document.body.style.overflow = 'hidden';
         } else {
             document.body.style.overflow = '';
@@ -79,7 +94,7 @@ const BuildingDetailsSidebar: React.FC = () => {
         return () => {
             document.body.style.overflow = '';
         };
-    }, [isOpen]);
+    }, [sidebarOpen]);
 
     // If no building data, render a hidden div to maintain transition capabilities
     if (!building) {
@@ -89,7 +104,7 @@ const BuildingDetailsSidebar: React.FC = () => {
                 transition-all duration-300 ease-in-out
                 top-[50%] max-h-[50%] 
                 sm:max-h-full ${
-                    isOpen
+                    sidebarOpen
                         ? 'translate-y-0 sm:translate-y-0 sm:translate-x-0 opacity-100'
                         : 'translate-y-full sm:translate-y-0 sm:translate-x-full opacity-0'
                 }`}
@@ -393,52 +408,53 @@ const BuildingDetailsSidebar: React.FC = () => {
             {/* Backdrop overlay - only visible when sidebar is open but non-interactive */}
             <div
                 className={`fixed inset-0 z-40 transition-opacity duration-300 pointer-events-none ${
-                    isOpen ? 'opacity-100' : 'opacity-0'
+                    sidebarOpen ? 'opacity-100' : 'opacity-0'
                 }`}
             />
 
             {/* Sidebar */}
             <div
-                className={`fixed sm:top-2 sm:right-2 w-full sm:w-[320px] md:w-[350px] bg-maroon-accent-light text-white overflow-y-auto shadow-lg z-50 
+                className={`fixed sm:top-2 sm:right-2 w-full sm:w-[320px] md:w-[350px] bg-maroon-accent-light text-white overflow-hidden shadow-lg z-50 
                 transition-all duration-300 ease-in-out rounded-xl
                 /* Mobile: Bottom half of screen */
                 top-[50%] h-[50%] rounded-t-2xl
                 /* Desktop: Full height */
                 sm:h-[calc(100%-1rem)] ${
-                    isOpen
+                    sidebarOpen
                         ? 'translate-y-0 sm:translate-y-0 sm:translate-x-0 opacity-100'
                         : 'translate-y-full sm:translate-y-0 sm:translate-x-full opacity-0'
                 }`}
             >
-                {/* Sticky header */}
-                <div className="sticky top-0 z-10">
-                    <div className="px-4 py-3 bg-maroon-accent flex items-center justify-between font-medium text-xl tracking-tight font-inter rounded-t-xl">
-                        <h2 className="text-xl font-semibold truncate">
-                            {building.name}
-                        </h2>
-                        <button
-                            onClick={onClose}
-                            className="p-1.5 hover:bg-white/20 rounded-full transition-colors"
-                            aria-label="Close sidebar"
-                        >
-                            <ArrowLeftToLine size={22} className="text-white" />
-                        </button>
+                {/* Header - non-sticky, outside scroll area */}
+                <div className="px-4 py-3 bg-maroon-accent flex items-center justify-between font-medium text-xl tracking-tight font-inter rounded-t-xl">
+                    <h2 className="text-xl font-semibold truncate">
+                        {building.name}
+                    </h2>
+                    <button
+                        onClick={onClose}
+                        className="p-1.5 hover:bg-white/20 rounded-full transition-colors"
+                        aria-label="Close sidebar"
+                    >
+                        <ArrowLeftToLine size={22} className="text-white" />
+                    </button>
+                </div>
+
+                {/* Scrollable content area */}
+                <div className="overflow-y-auto h-[calc(100%-56px)]">
+                    {/* Building Image */}
+                    <div className="w-full h-48 relative mb-2">
+                        <Image
+                            src={building.image}
+                            alt={building.name}
+                            fill
+                            style={{ objectFit: 'cover' }}
+                            className="border-y border-white/20"
+                        />
                     </div>
-                </div>
 
-                {/* Building Image - outside of sticky header */}
-                <div className="w-full h-48 relative mb-2">
-                    <Image
-                        src={building.image}
-                        alt={building.name}
-                        fill
-                        style={{ objectFit: 'cover' }}
-                        className="border-y border-white/20"
-                    />
+                    {/* Tabs based on building type */}
+                    <div className="w-full px-2">{renderTabs()}</div>
                 </div>
-
-                {/* Tabs based on building type */}
-                <div className="w-full px-2">{renderTabs()}</div>
             </div>
         </>
     );
