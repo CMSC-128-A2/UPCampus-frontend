@@ -30,6 +30,33 @@ interface CourseSchedule {
     sections: ClassSection[];
 }
 
+// Helper function to extract floor number from room code
+const getFloorFromRoom = (room: string): number | null => {
+    // Match a digit that appears after spaces or non-digit characters
+    const match = room.match(/\s*(\d)/);
+    if (match && match[1]) {
+        return parseInt(match[1], 10);
+    }
+    return null;
+};
+
+// Helper function to check if a section belongs to a specific floor
+const isOnFloor = (room: string, floor: Floor): boolean => {
+    if (floor === 'All Floors') return true;
+    
+    const floorNumber = getFloorFromRoom(room);
+    if (floorNumber === null) return false;
+    
+    switch (floor) {
+        case '1st Floor': return floorNumber === 1;
+        case '2nd Floor': return floorNumber === 2;
+        case '3rd Floor': return floorNumber === 3;
+        case '4th Floor': return floorNumber === 4;
+        case '5th Floor': return floorNumber === 5;
+        default: return false;
+    }
+};
+
 export default function SchedulePage() {
     const params = useParams();
     const router = useRouter();
@@ -112,7 +139,7 @@ export default function SchedulePage() {
         fetchData();
     }, [professorId]);
 
-    // Filter schedules based on search query
+    // Filter schedules based on search query and floor selection
     const filteredSchedules = searchQuery.trim() === ''
         ? classSchedules
         : classSchedules.filter(course => {
@@ -129,6 +156,12 @@ export default function SchedulePage() {
                 section.schedule.toLowerCase().includes(searchQuery.toLowerCase())
             );
         });
+
+    // Apply floor filter to the filtered schedules
+    const floorFilteredSchedules = filteredSchedules.map(course => ({
+        ...course,
+        sections: course.sections.filter(section => isOnFloor(section.room, selectedFloor))
+    })).filter(course => course.sections.length > 0);
 
     const openModal = () => {
         setIsModalOpen(true);
@@ -474,12 +507,12 @@ export default function SchedulePage() {
                                     value={selectedFloor}
                                     onChange={(e) => setSelectedFloor(e.target.value as Floor)}
                                 >
+                                    <option value="All Floors">All Floors</option>
                                     <option value="1st Floor">1st Floor</option>
                                     <option value="2nd Floor">2nd Floor</option>
                                     <option value="3rd Floor">3rd Floor</option>
                                     <option value="4th Floor">4th Floor</option>
                                     <option value="5th Floor">5th Floor</option>
-                                    <option value="All Floors">All Floors</option>
                                 </select>
                                 <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
                                     <Icon icon="ph:caret-down" className="text-[#8BC34A]" width="16" height="16" />
@@ -497,14 +530,14 @@ export default function SchedulePage() {
                     </div>
                     
                     {/* Course Schedules */}
-                    {filteredSchedules.length === 0 ? (
+                    {floorFilteredSchedules.length === 0 ? (
                         <div className="p-6 text-center text-gray-500">
                             <Icon icon="ph:calendar-blank" className="mx-auto mb-2" width="48" height="48" />
-                            <p>No schedules found. {searchQuery ? 'Try a different search.' : 'Add a new schedule to get started.'}</p>
+                            <p>No schedules found. {searchQuery || selectedFloor !== 'All Floors' ? 'Try different search criteria or change the floor filter.' : 'Add a new schedule to get started.'}</p>
                         </div>
                     ) : (
                         <div className="space-y-6">
-                            {filteredSchedules.map(course => (
+                            {floorFilteredSchedules.map(course => (
                                 <div key={course.courseCode} className="mb-8">
                                     {/* Course Header */}
                                     <div className="bg-[#E6F4FF] px-4 py-3 rounded-lg mb-2">
