@@ -30,6 +30,7 @@ export interface Department {
 export interface Faculty {
     id: string;
     name: string;
+    email: string;
     department: string;
     department_name: string;
 }
@@ -459,6 +460,7 @@ export const facultyApi = {
     // Create a new faculty member
     createFaculty: async (facultyData: {
         name: string;
+        email: string;
         department: string;
     }) => {
         try {
@@ -498,6 +500,7 @@ export const facultyApi = {
         id: string,
         facultyData: {
             name: string;
+            email: string;
             department: string;
         }
     ) => {

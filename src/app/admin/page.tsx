@@ -27,12 +27,12 @@ interface ToastState {
 function AdminPage() {
   const [searchQuery, setSearchQuery] = useState('');
   const [adminUsers, setAdminUsers] = useState<AdminUserFrontend[]>([]);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isDeleteConfirmOpen, setIsDeleteConfirmOpen] = useState(false);
   const [selectedAdmin, setSelectedAdmin] = useState<AdminUserFrontend | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+    const [isLoading, setIsLoading] = useState(true);
+    const [error, setError] = useState<string | null>(null);
   const [toast, setToast] = useState<ToastState>({
     isOpen: false, 
     message: '',
@@ -40,7 +40,7 @@ function AdminPage() {
   });
 
   // Fetch admin users on component mount
-  useEffect(() => {
+    useEffect(() => {
     fetchAdmins();
   }, []);
 
@@ -62,8 +62,8 @@ function AdminPage() {
   };
 
   const fetchAdmins = async () => {
-    try {
-      setIsLoading(true);
+            try {
+                setIsLoading(true);
       const data = await adminApi.getAllAdmins();
       console.log('Received admin data:', data); // Log the received data structure
       
@@ -82,15 +82,15 @@ function AdminPage() {
       }));
       
       setAdminUsers(frontendAdmins);
-      setError(null);
-    } catch (err) {
+                setError(null);
+            } catch (err) {
       console.error('Failed to fetch admins:', err);
       setError('Failed to load admin users. Please try again later.');
       showToast('Failed to load admin users', 'error');
-    } finally {
-      setIsLoading(false);
-    }
-  };
+            } finally {
+                setIsLoading(false);
+            }
+        };
 
   // Filter admin users based on search query
   const filteredAdmins = searchQuery.trim() === ''
@@ -101,25 +101,25 @@ function AdminPage() {
           admin.name.toLowerCase().includes(query) ||
           admin.email.toLowerCase().includes(query) ||
           admin.userId.toLowerCase().includes(query)
-        );
-      });
+            );
+        });
 
-  const openModal = () => {
-    setIsModalOpen(true);
-  };
+    const openModal = () => {
+        setIsModalOpen(true);
+    };
 
-  const closeModal = () => {
-    setIsModalOpen(false);
-  };
+    const closeModal = () => {
+        setIsModalOpen(false);
+    };
 
   const openEditModal = (admin: AdminUserFrontend, e: React.MouseEvent) => {
     e.stopPropagation(); // Prevent row click from also triggering
     setSelectedAdmin(admin);
-    setIsEditModalOpen(true);
-  };
+        setIsEditModalOpen(true);
+    };
 
-  const closeEditModal = () => {
-    setIsEditModalOpen(false);
+    const closeEditModal = () => {
+        setIsEditModalOpen(false);
     setSelectedAdmin(null);
   };
 
@@ -206,7 +206,7 @@ function AdminPage() {
         <Layout>
           <div className="flex justify-center items-center h-full">
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#8BC34A]"></div>
-          </div>
+                </div>
         </Layout>
       </RootExtensionWrapper>
     );
@@ -221,13 +221,13 @@ function AdminPage() {
             <div className="bg-red-50 text-red-600 p-4 rounded-lg mb-4">
               <p>{error}</p>
             </div>
-            <button 
+                                <button 
               onClick={() => window.location.reload()}
               className="bg-[#8BC34A] text-white px-4 py-2 rounded-lg"
             >
               Try Again
-            </button>
-          </div>
+                                </button>
+                    </div>
         </Layout>
       </RootExtensionWrapper>
     );
@@ -241,37 +241,37 @@ function AdminPage() {
           <h1 className="text-3xl font-semibold text-gray-800 mb-6">Admins</h1>
           
           {/* Search and Add Admin */}
-          <div className="mb-6">
+                                <div className="mb-6">
             <div className="relative w-full mb-4">
               <div className="absolute inset-y-0 left-3 flex items-center pointer-events-none">
                 <Icon icon="ph:magnifying-glass" className="text-gray-400" width="20" height="20" />
-              </div>
-              <input
-                type="text"
-                placeholder="Search"
+                                            </div>
+                                            <input
+                                                type="text"
+                                                placeholder="Search"
                 className="pl-10 pr-4 py-3 w-full border rounded-lg focus:outline-none focus:ring-1 focus:ring-[#8BC34A]"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-              />
-            </div>
-            
+                                                value={searchQuery}
+                                                onChange={(e) => setSearchQuery(e.target.value)}
+                                            />
+                                    </div>
+
             <div className="flex justify-end">
-              <button
-                onClick={openModal}
+                                        <button
+                                            onClick={openModal}
                 className="bg-[#E6F4FF] text-[#1E88E5] border border-[#1E88E5] px-4 py-2 rounded-lg flex items-center"
-              >
+                                        >
                 <Icon icon="ph:plus" width="20" height="20" className="mr-2" />
                 <span>Admin</span>
-              </button>
-            </div>
-          </div>
-          
+                                        </button>
+                                    </div>
+                                </div>
+
           {/* Admin Users Table */}
           <div className="overflow-x-auto">
             {filteredAdmins.length === 0 ? (
               <div className="p-6 text-center text-gray-500">
                 <p>No admin users found. {searchQuery ? 'Try a different search.' : 'Add some admins to get started.'}</p>
-              </div>
+                                        </div>
             ) : (
               <table className="min-w-full divide-y divide-gray-200">
                 <thead className="bg-gray-50">
@@ -304,22 +304,22 @@ function AdminPage() {
                           >
                             <Icon icon="ph:pencil" width="18" height="18" />
                           </button>
-                          <button
+                                            <button 
                             onClick={(e) => openDeleteConfirm(admin, e)}
                             className="p-1 text-red-600 hover:text-red-800"
                             title="Delete"
-                          >
+                                            >
                             <Icon icon="ph:trash" width="18" height="18" />
-                          </button>
-                        </div>
+                                            </button>
+                                        </div>
                       </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            )}
-          </div>
-        </div>
+                                                            </tr>
+                                                        ))}
+                                                    </tbody>
+                                                </table>
+                                )}
+                            </div>
+                        </div>
 
         {/* Add Admin Modal */}
         <AdminModal
@@ -354,16 +354,16 @@ function AdminPage() {
                 >
                   Cancel
                 </button>
-                <button
+                                        <button
                   onClick={handleDeleteAdmin}
                   className="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700"
-                >
+                                        >
                   Delete
-                </button>
-              </div>
-            </div>
-          </div>
-        )}
+                                        </button>
+                                </div>
+                            </div>
+                        </div>
+                    )}
 
         {/* Toast Notification */}
         <Toast
@@ -375,7 +375,7 @@ function AdminPage() {
         />
       </Layout>
     </RootExtensionWrapper>
-  );
+    );
 }
 
 export default AdminPage;

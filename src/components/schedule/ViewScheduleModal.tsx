@@ -10,6 +10,8 @@ interface ViewScheduleModalProps {
     type: 'Lecture' | 'Laboratory';
     room: string;
     schedule: string;
+    facultyName?: string;
+    facultyEmail?: string;
     onDelete?: () => void;
     onEdit?: () => void;
 }
@@ -22,6 +24,8 @@ const ViewScheduleModal: React.FC<ViewScheduleModalProps> = ({
     type,
     room,
     schedule,
+    facultyName,
+    facultyEmail,
     onDelete,
     onEdit
 }) => {
@@ -116,10 +120,21 @@ const ViewScheduleModal: React.FC<ViewScheduleModalProps> = ({
                                     </button>
                                 </div>
                             </div>
-                            <div className="flex justify-between items-center pb-2">
+                            <div className="flex justify-between items-center border-b border-gray-200 pb-2">
                                 <span className="text-gray-600 font-medium">Schedule</span>
                                 <span className="text-gray-900">{schedule}</span>
                             </div>
+                            {facultyName && (
+                                <div className="flex justify-between items-center pb-2">
+                                    <span className="text-gray-600 font-medium">Professor</span>
+                                    <div className="text-right">
+                                        <div className="text-gray-900">{facultyName}</div>
+                                        {facultyEmail && (
+                                            <div className="text-gray-500 text-sm">{facultyEmail}</div>
+                                        )}
+                                    </div>
+                                </div>
+                            )}
                         </div>
                     </div>
 

@@ -61,7 +61,7 @@ function FacultyPage() {
     setIsModalOpen(false);
   };
 
-  const handleSaveFaculty = async (facultyData: { name: string; department: string }) => {
+  const handleSaveFaculty = async (facultyData: { name: string; email: string; department: string }) => {
     try {
       const newFaculty = await facultyApi.createFaculty(facultyData);
       
@@ -160,6 +160,7 @@ function FacultyPage() {
               <thead>
                 <tr className="bg-gray-50">
                   <th className="px-4 py-3 text-left text-sm font-medium text-gray-600">Name</th>
+                  <th className="px-4 py-3 text-left text-sm font-medium text-gray-600">Email</th>
                   <th className="px-4 py-3 text-left text-sm font-medium text-gray-600">Department</th>
                 </tr>
               </thead>
@@ -172,10 +173,10 @@ function FacultyPage() {
                   >
                     <td className="px-4 py-3 text-sm text-gray-700">
                       <div className="flex items-center">
-                        <div className="h-8 w-8 rounded-full bg-gray-200 flex-shrink-0 mr-3"></div>
                         <span>{professor.name}</span>
                       </div>
                     </td>
+                    <td className="px-4 py-3 text-sm text-gray-700">{professor.email}</td>
                     <td className="px-4 py-3 text-sm text-gray-700">{professor.department_name}</td>
                   </tr>
                 ))}
