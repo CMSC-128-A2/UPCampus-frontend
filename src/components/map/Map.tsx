@@ -403,51 +403,51 @@ const MapboxExample = () => {
                 mapRef.current?.on('resize', updateSvgOverlay);
 
                 // Add click event to show coordinates
-                mapRef.current?.on('click', (e) => {
-                    // Remove existing popup if it exists
-                    if (clickPopupRef.current) {
-                        clickPopupRef.current.remove();
-                    }
+                // mapRef.current?.on('click', (e) => {
+                //     // Remove existing popup if it exists
+                //     if (clickPopupRef.current) {
+                //         clickPopupRef.current.remove();
+                //     }
 
-                    // Store clicked coordinates
-                    const coords: [number, number] = [
-                        e.lngLat.lng,
-                        e.lngLat.lat,
-                    ];
-                    setClickedCoordinates(coords);
+                //     // Store clicked coordinates
+                //     const coords: [number, number] = [
+                //         e.lngLat.lng,
+                //         e.lngLat.lat,
+                //     ];
+                //     setClickedCoordinates(coords);
 
-                    // Format coordinates with 6 decimal places
-                    const lng = coords[0].toFixed(6);
-                    const lat = coords[1].toFixed(6);
+                //     // Format coordinates with 6 decimal places
+                //     const lng = coords[0].toFixed(6);
+                //     const lat = coords[1].toFixed(6);
 
-                    // Create popup with coordinates in the requested format
-                    if (mapRef.current) {
-                        clickPopupRef.current = new mapboxgl.Popup({
-                            closeButton: true,
-                            closeOnClick: false,
-                        })
-                            .setLngLat(coords)
-                            .setHTML(
-                                `
-                                <div style="font-family: sans-serif; text-align: center;">
-                                    <h3 style="margin: 0 0 5px 0; font-weight: bold; font-size: 14px;">Coordinates</h3>
-                                    <h3 style="margin: 0 0 5px 0; font-size: 12px;">This is for testing purposes only</h3>
-                                    <p style="margin: 0 0 5px 0; font-size: 13px; font-family: monospace;">[${lng}, ${lat}]</p>
-                                    <button
-                                        id="copy-coords-btn"
-                                        style="background-color: #8A1438; color: white; border: none; border-radius: 4px; padding: 4px 8px; font-size: 12px; cursor: pointer; margin-top: 2px;"
-                                        onclick="navigator.clipboard.writeText('[${lng}, ${lat}]').then(() => {
-                                            const btn = document.getElementById('copy-coords-btn');
-                                            btn.textContent = 'Copied!';
-                                            setTimeout(() => { btn.textContent = 'Copy' }, 2000);
-                                        })"
-                                    >Copy</button>
-                                </div>
-                            `,
-                            )
-                            .addTo(mapRef.current);
-                    }
-                });
+                //     // Create popup with coordinates in the requested format
+                //     if (mapRef.current) {
+                //         clickPopupRef.current = new mapboxgl.Popup({
+                //             closeButton: true,
+                //             closeOnClick: false,
+                //         })
+                //             .setLngLat(coords)
+                //             .setHTML(
+                //                 `
+                //                 <div style="font-family: sans-serif; text-align: center;">
+                //                     <h3 style="margin: 0 0 5px 0; font-weight: bold; font-size: 14px;">Coordinates</h3>
+                //                     <h3 style="margin: 0 0 5px 0; font-size: 12px;">This is for testing purposes only</h3>
+                //                     <p style="margin: 0 0 5px 0; font-size: 13px; font-family: monospace;">[${lng}, ${lat}]</p>
+                //                     <button
+                //                         id="copy-coords-btn"
+                //                         style="background-color: #8A1438; color: white; border: none; border-radius: 4px; padding: 4px 8px; font-size: 12px; cursor: pointer; margin-top: 2px;"
+                //                         onclick="navigator.clipboard.writeText('[${lng}, ${lat}]').then(() => {
+                //                             const btn = document.getElementById('copy-coords-btn');
+                //                             btn.textContent = 'Copied!';
+                //                             setTimeout(() => { btn.textContent = 'Copy' }, 2000);
+                //                         })"
+                //                     >Copy</button>
+                //                 </div>
+                //             `,
+                //             )
+                //             .addTo(mapRef.current);
+                //     }
+                // });
 
                 // Initial update
                 updateSvgOverlay();
