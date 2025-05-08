@@ -119,6 +119,13 @@ export const mapMarkers = [
         coordinates: [123.898368, 10.323105],
     },
     {
+        id: 'A7',
+        type: 'activity',
+        name: 'Basketball Court',
+        icon: 'basketball',
+        coordinates: [123.89792, 10.322698],
+    },
+    {
         id: 'A6',
         type: 'activity',
         name: 'Undergraduate Cottages',
@@ -1067,6 +1074,18 @@ export const mockBuildingsData = {
         capacity: '300 people',
         contactPerson: 'Coach David Rodriguez',
         contactNumber: '123-456-7891',
+    },
+    A7: {
+        id: 'A7',
+        name: 'Basketball Court',
+        image: '/assets/images/random-building.jpg',
+        type: 'activity',
+        description:
+            'Full-sized basketball court for recreational play and varsity team practices.',
+        schedule: 'Open daily from 6:00 AM to 10:00 PM',
+        capacity: '250 people',
+        contactPerson: 'Coach Michael Santos',
+        contactNumber: '123-456-7890',
     },
     A6: {
         id: 'A6',
