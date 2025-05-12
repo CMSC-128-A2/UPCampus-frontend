@@ -221,7 +221,7 @@ function ScheduleModal({ isOpen, onClose, onSave }: ScheduleModalProps) {
                             <div className="space-y-2">
                                 <label className="block text-gray-700">Day</label>
                                 <div className="flex flex-wrap gap-2">
-                                    {['M', 'T', 'W', 'Th', 'F', 'S'].map((dayOption) => (
+                                    {['M', 'T', 'W', 'TH', 'F', 'S'].map((dayOption) => (
                                         <button
                                             key={dayOption}
                                             type="button"
