@@ -613,6 +613,7 @@ export default function SchedulePage() {
                             type: selectedSchedule.section.type,
                             room: selectedSchedule.section.room,
                             schedule: selectedSchedule.section.schedule,
+                            faculty: professorId,
                         }}
                         onSave={handleEditSchedule}
                     />
