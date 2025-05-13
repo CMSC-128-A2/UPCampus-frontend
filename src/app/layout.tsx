@@ -12,6 +12,23 @@ export const metadata: Metadata = {
     description: 'UP Cebu Campus Explorer',
     keywords: [
         'UP Cebu',
+        'UP Cebu campus',
+        'UP Cebu campus map',
+        'UP Cebu campus buildings',
+        'UP Cebu campus facilities',
+        'UP Cebu campus navigation',
+        'UP Cebu campus explorer',
+        'UP Cebu campus map',
+        'UP Cebu campus tour',
+        'University of the Philippines Cebu',
+        'UP Cebu',
+        'UP Cebu campus',
+        'UP Cebu campus map',
+        'UP Cebu campus buildings',
+        'UP Cebu campus facilities',
+        'UP Cebu campus navigation',
+        'UP Cebu campus explorer',
+        'UP Cebu campus map',
         'campus map',
         'university',
         'navigation',
@@ -55,7 +72,10 @@ export default function RootLayout({
 }>) {
     return (
         <html lang="en">
-            <body className={`${inter.variable} antialiased`} suppressHydrationWarning={true}>
+            <body
+                className={`${inter.variable} antialiased`}
+                suppressHydrationWarning={true}
+            >
                 <div className="h-screen">{children}</div>
             </body>
         </html>
