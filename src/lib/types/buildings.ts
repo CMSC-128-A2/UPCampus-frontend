@@ -356,6 +356,8 @@ export const mockBuildingsData = {
         id: '12',
         name: 'Union Building',
         image: '/assets/images/random-building.jpg',
+        type: 'building',
+        slug: null,
         floors: [
             {
                 name: '1st Floor',
@@ -412,6 +414,8 @@ export const mockBuildingsData = {
         id: '9',
         name: 'Arts and Design Workshop Bldg. 2',
         image: '/assets/images/random-building.jpg',
+        type: 'building',
+        slug: null,
         floors: [
             {
                 name: '1st Floor',
@@ -483,6 +487,8 @@ export const mockBuildingsData = {
         id: '10',
         name: 'Arts and Science Extension Bldg. (ASX)',
         image: '/assets/images/random-building.jpg',
+        type: 'building',
+        slug: null,
         floors: [
             {
                 name: '1st Floor',
@@ -527,6 +533,8 @@ export const mockBuildingsData = {
         id: '8',
         name: 'Arts and Design Workshop Bldg.',
         image: '/assets/images/random-building.jpg',
+        type: 'building',
+        slug: null,
         floors: [
             {
                 name: '1st Floor',
@@ -563,6 +571,8 @@ export const mockBuildingsData = {
         id: '7',
         name: 'Undergraduate Building',
         image: '/assets/images/random-building.jpg',
+        type: 'building',
+        slug: null,
         floors: [
             {
                 name: '1st Floor',
@@ -597,6 +607,8 @@ export const mockBuildingsData = {
         id: '6b',
         name: 'Management Bldg. 1',
         image: '/assets/images/random-building.jpg',
+        type: 'building',
+        slug: null,
         floors: [
             {
                 name: '1st Floor',
@@ -616,6 +628,8 @@ export const mockBuildingsData = {
         id: '6a',
         name: 'Management Administration',
         image: '/assets/images/random-building.jpg',
+        type: 'building',
+        slug: null,
         floors: [
             {
                 name: '1st Floor',
@@ -639,6 +653,8 @@ export const mockBuildingsData = {
         id: '6c',
         name: 'Management Bldg. 2',
         image: '/assets/images/random-building.jpg',
+        type: 'building',
+        slug: null,
         floors: [
             {
                 name: '1st Floor',
@@ -662,6 +678,8 @@ export const mockBuildingsData = {
         id: '6',
         name: 'School of Management',
         image: '/assets/images/random-building.jpg',
+        type: 'building',
+        slug: null,
         floors: [
             {
                 name: '1st Floor',
@@ -687,6 +705,8 @@ export const mockBuildingsData = {
         id: '1',
         name: 'Administration Building',
         image: '/assets/images/random-building.jpg',
+        type: 'building',
+        slug: null,
         floors: [
             {
                 name: '1st Floor',
@@ -714,6 +734,8 @@ export const mockBuildingsData = {
         id: '2',
         name: 'Science Building',
         image: '/assets/images/random-building.jpg',
+        slug: 'science-building',
+        type: 'building',
         floors: [
             {
                 name: '1st Floor',
@@ -747,6 +769,8 @@ export const mockBuildingsData = {
         id: '5d',
         name: 'Lihangin Hall',
         image: '/assets/images/random-building.jpg',
+        type: 'building',
+        slug: null,
         floors: [
             {
                 name: '1st Floor',
@@ -770,6 +794,8 @@ export const mockBuildingsData = {
         id: '5a',
         name: 'Balay Varangao',
         image: '/assets/images/random-building.jpg',
+        type: 'building',
+        slug: null,
         floors: [
             {
                 name: '1st Floor',
@@ -793,6 +819,8 @@ export const mockBuildingsData = {
         id: '5',
         name: 'Residence Halls',
         image: '/assets/images/random-building.jpg',
+        type: 'building',
+        slug: null,
         floors: [
             {
                 name: '1st Floor',
@@ -816,6 +844,8 @@ export const mockBuildingsData = {
         id: '5b',
         name: 'Lalahon Hall',
         image: '/assets/images/random-building.jpg',
+        type: 'building',
+        slug: null,
         floors: [
             {
                 name: '1st Floor',
@@ -839,6 +869,8 @@ export const mockBuildingsData = {
         id: '5c',
         name: 'Liadlaw Hall',
         image: '/assets/images/random-building.jpg',
+        type: 'building',
+        slug: null,
         floors: [
             {
                 name: '1st Floor',
@@ -862,6 +894,8 @@ export const mockBuildingsData = {
         id: '4',
         name: 'Library Building',
         image: '/assets/images/random-building.jpg',
+        type: 'building',
+        slug: null,
         floors: [
             {
                 name: '1st Floor',
@@ -897,6 +931,8 @@ export const mockBuildingsData = {
         id: '3',
         name: 'Technology Innovation Center Bldg.',
         image: '/assets/images/random-building.jpg',
+        type: 'building',
+        slug: null,
         floors: [
             {
                 name: '1st Floor',
@@ -920,6 +956,8 @@ export const mockBuildingsData = {
         id: '3b',
         name: 'Clinic',
         image: '/assets/images/random-building.jpg',
+        type: 'building',
+        slug: null,
         floors: [
             {
                 name: '1st Floor',
@@ -945,6 +983,8 @@ export const mockBuildingsData = {
         id: '3a',
         name: 'Cafeteria',
         image: '/assets/images/random-building.jpg',
+        type: 'building',
+        slug: null,
         floors: [
             {
                 name: 'Ground Floor',
@@ -961,6 +1001,8 @@ export const mockBuildingsData = {
         id: '13',
         name: 'Cebu Cultural Center',
         image: '/assets/images/random-building.jpg',
+        type: 'building',
+        slug: null,
         floors: [
             {
                 name: '1st Floor',
@@ -980,6 +1022,8 @@ export const mockBuildingsData = {
         id: '11',
         name: 'Arts and Sciences (AS) Bldg.',
         image: '/assets/images/random-building.jpg',
+        type: 'building',
+        slug: null,
         floors: [
             {
                 name: '1st Floor',
@@ -1003,6 +1047,8 @@ export const mockBuildingsData = {
         id: '11a',
         name: 'AS Conference Hall',
         image: '/assets/images/random-building.jpg',
+        type: 'building',
+        slug: null,
         floors: [
             {
                 name: '1st Floor',
@@ -1026,6 +1072,8 @@ export const mockBuildingsData = {
         id: '11b',
         name: 'AS East Wing',
         image: '/assets/images/random-building.jpg',
+        type: 'building',
+        slug: null,
         floors: [
             {
                 name: '1st Floor',
@@ -1049,6 +1097,8 @@ export const mockBuildingsData = {
         id: '11c',
         name: 'AS West Wing',
         image: '/assets/images/random-building.jpg',
+        type: 'building',
+        slug: null,
         floors: [
             {
                 name: '1st Floor',
@@ -1072,6 +1122,8 @@ export const mockBuildingsData = {
         id: '14',
         name: 'High School Area',
         image: '/assets/images/random-building.jpg',
+        type: 'building',
+        slug: null,
         floors: [
             {
                 name: '1st Floor',

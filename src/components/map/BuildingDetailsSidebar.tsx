@@ -1,9 +1,18 @@
 import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
+import Link from 'next/link';
 import { ArrowLeftToLine } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 import { useMapStore } from '@/store/mapStore';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { mockBuildingsData } from '@/lib/types/buildings';
+
+// Coming Soon Ribbon component
+const ComingSoonRibbon = () => (
+    <div className="absolute -right-2 top-2 transform rotate-[30deg] bg-red-600 text-white text-[8px] font-bold py-[2px] w-24 text-center shadow-sm">
+        COMING SOON
+    </div>
+);
 
 // Updated interface to accommodate all building types
 interface BuildingDetail {
@@ -11,6 +20,7 @@ interface BuildingDetail {
     name: string;
     image: string;
     type?: string;
+    slug?: string | null;
     // Building-specific properties
     floors?: {
         name: string;
@@ -270,14 +280,16 @@ const BuildingDetailsSidebar: React.FC = () => {
         // For any type (we only have one image now, but this could be expanded)
         return (
             <div className="px-4 py-3">
-                <div className="relative h-48 w-full rounded-md overflow-hidden">
-                    <Image
-                        src={building.image}
-                        alt={`Additional image of ${building.name}`}
-                        fill
-                        style={{ objectFit: 'cover' }}
-                        className="border border-white/20 rounded-md"
-                    />
+                <div className="w-full h-48 relative mb-2 bg-maroon-accent p-2">
+                    <div className="w-full h-full rounded-md border-2 border-maroon-accent overflow-hidden">
+                        <Image
+                            src={building.image}
+                            alt={`Additional image of ${building.name}`}
+                            fill
+                            style={{ objectFit: 'cover' }}
+                            className="w-full h-full"
+                        />
+                    </div>
                 </div>
             </div>
         );
@@ -295,7 +307,7 @@ const BuildingDetailsSidebar: React.FC = () => {
                     }
                     className="w-full"
                 >
-                    <TabsList className="grid grid-cols-2 w-full bg-maroon-accent/60">
+                    <TabsList className="w-[95%] mx-auto grid grid-cols-2 bg-maroon-accent/60">
                         <TabsTrigger
                             value="about"
                             className="text-white data-[state=active]:text-foreground"
@@ -327,7 +339,7 @@ const BuildingDetailsSidebar: React.FC = () => {
                     }
                     className="w-full"
                 >
-                    <TabsList className="grid grid-cols-3 w-full bg-maroon-accent/60">
+                    <TabsList className="w-[95%] mx-auto grid grid-cols-3 bg-maroon-accent/60">
                         <TabsTrigger
                             value="about"
                             className="text-white data-[state=active]:text-foreground"
@@ -365,9 +377,9 @@ const BuildingDetailsSidebar: React.FC = () => {
                 onValueChange={(value) =>
                     setActiveTab((prev) => ({ ...prev, building: value }))
                 }
-                className="w-full"
+                className="w-full "
             >
-                <TabsList className="grid grid-cols-4 w-full bg-maroon-accent/60">
+                <TabsList className="w-[95%] mx-auto grid grid-cols-4 bg-maroon-accent/60">
                     <TabsTrigger
                         value="floors"
                         className="text-white data-[state=active]:text-foreground"
@@ -442,18 +454,40 @@ const BuildingDetailsSidebar: React.FC = () => {
                 {/* Scrollable content area */}
                 <div className="overflow-y-auto h-[calc(100%-56px)]">
                     {/* Building Image */}
-                    <div className="w-full h-48 relative mb-2">
+                    <div className="w-full h-48 relative my-4 bg-maroon-accent">
                         <Image
                             src={building.image}
                             alt={building.name}
                             fill
                             style={{ objectFit: 'cover' }}
-                            className="border-y border-white/20"
+                            className="w-full h-full border-8 border-maroon-accent"
                         />
                     </div>
 
+                    {/* Go inside building button */}
+                    {building.type === 'building' && (
+                        <div className="w-full px-2 mb-2">
+                            {building.slug ? (
+                                <Link href={`/map/${building.slug}`}>
+                                    <Button className="w-full rounded-xl">
+                                        View Building
+                                    </Button>
+                                </Link>
+                            ) : (
+                                <div className="relative overflow-hidden">
+                                    <Button
+                                        className="w-full rounded-xl"
+                                        disabled
+                                    >
+                                        View Building
+                                    </Button>
+                                    <ComingSoonRibbon />
+                                </div>
+                            )}
+                        </div>
+                    )}
                     {/* Tabs based on building type */}
-                    <div className="w-full px-2">{renderTabs()}</div>
+                    <div className="w-full">{renderTabs()}</div>
                 </div>
             </div>
         </>
