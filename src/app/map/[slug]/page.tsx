@@ -3,10 +3,31 @@
 import { useState, useEffect } from 'react';
 import BuildingSearchBar from '@/components/map/building/BuildingSearchBar';
 import FloorPlanView from '@/components/map/building/FloorPlanView';
+import FloorSidebar from '@/components/map/building/FloorSidebar';
+import RoomSidebar from '@/components/map/building/RoomSidebar';
 import { useParams, useRouter } from 'next/navigation';
 import { mockBuildingsData } from '@/lib/types/buildings';
 
 type BuildingData = (typeof mockBuildingsData)[keyof typeof mockBuildingsData];
+
+// Define Floor and Room types for better type checking
+interface Room {
+    code: string;
+    name: string;
+    icon: string;
+    position: {
+        x: number;
+        y: number;
+    };
+    category: string;
+}
+
+interface Floor {
+    name: string;
+    code: string;
+    floorPlan?: string;
+    rooms?: Room[];
+}
 
 // Local building data that matches the expected structure
 const buildingData = [
@@ -191,6 +212,9 @@ function Page() {
     const [selectedBuilding, setSelectedBuilding] =
         useState<BuildingData | null>(null);
 
+    const [selectedFloor, setSelectedFloor] = useState<Floor | null>(null);
+    const [selectedRoom, setSelectedRoom] = useState<Room | null>(null);
+
     useEffect(() => {
         const building = buildingData.find((b) => b.slug === slug);
         if (building) {
@@ -201,9 +225,57 @@ function Page() {
         }
     }, [slug]);
 
+    // Update selectedFloor when selectedFloorCode changes
     useEffect(() => {
+        if (selectedBuilding && selectedFloorCode) {
+            const floors =
+                'floors' in selectedBuilding &&
+                Array.isArray(selectedBuilding.floors)
+                    ? selectedBuilding.floors
+                    : [];
+
+            // Find floor by code and validate it has required properties
+            const floor = floors.find(
+                (floor: any) =>
+                    floor &&
+                    typeof floor === 'object' &&
+                    'code' in floor &&
+                    floor.code === selectedFloorCode,
+            );
+
+            // Type check the floor object to ensure it matches our Floor interface
+            if (floor && 'name' in floor && 'code' in floor) {
+                setSelectedFloor(floor as Floor);
+            } else {
+                setSelectedFloor(null);
+            }
+
+            setSelectedRoom(null); // Reset selected room when floor changes
+            setSelectedRoomCode(null);
+        }
+    }, [selectedFloorCode, selectedBuilding]);
+
+    // Update selectedRoom when selectedRoomCode changes
+    useEffect(() => {
+        if (selectedFloor && selectedRoomCode && selectedFloor.rooms) {
+            const room = selectedFloor.rooms.find(
+                (room) => room.code === selectedRoomCode,
+            );
+            if (room) {
+                setSelectedRoom(room);
+            } else {
+                setSelectedRoom(null);
+            }
+        } else {
+            setSelectedRoom(null);
+        }
+    }, [selectedRoomCode, selectedFloor]);
+
+    // Handle closing the room sidebar
+    const handleCloseRoomSidebar = () => {
         setSelectedRoomCode(null);
-    }, [selectedFloorCode]);
+        setSelectedRoom(null);
+    };
 
     return (
         <div className="h-screen w-screen relative overflow-hidden">
@@ -217,6 +289,15 @@ function Page() {
                 selectedBuilding={selectedBuilding}
                 selectedRoomCode={selectedRoomCode}
                 setSelectedRoomCode={setSelectedRoomCode}
+            />
+            <FloorSidebar
+                selectedFloor={selectedFloor}
+                selectedRoomCode={selectedRoomCode}
+                setSelectedRoomCode={setSelectedRoomCode}
+            />
+            <RoomSidebar
+                selectedRoom={selectedRoom}
+                onClose={handleCloseRoomSidebar}
             />
         </div>
     );
