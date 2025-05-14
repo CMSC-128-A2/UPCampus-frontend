@@ -350,7 +350,7 @@ const SearchBar: React.FC = () => {
                             ref={inputRef}
                             type="text"
                             placeholder="Search buildings, facilities, offices..."
-                            className="flex-1 bg-transparent outline-none text-[#7F1532]"
+                            className="flex-1 bg-transparent outline-none text-[#7F1532] h-8"
                             value={searchTerm}
                             onChange={handleSearchChange}
                             onClick={() => {

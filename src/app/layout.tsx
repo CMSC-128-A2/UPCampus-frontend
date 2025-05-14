@@ -35,7 +35,7 @@ export const metadata: Metadata = {
         'buildings',
         'campus explorer',
     ],
-    authors: [{ name: 'UP Cebu' }],
+    authors: [{ name: 'UP Cebu' }, { name: 'Sheldon Arthurs Sagrado' }],
     creator: 'UP Cebu',
     publisher: 'UP Cebu',
     openGraph: {
