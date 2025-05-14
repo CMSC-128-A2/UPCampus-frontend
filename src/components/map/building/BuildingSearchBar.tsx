@@ -93,7 +93,7 @@ const BuildingSearchBar: React.FC<{
                     type="text"
                     placeholder="Search buildings, facilities, offices..."
                     className="flex-1 bg-transparent outline-none text-[#7F1532] h-8"
-                    disabled={true}
+                    // disabled={true}
                 />
             </div>
 
