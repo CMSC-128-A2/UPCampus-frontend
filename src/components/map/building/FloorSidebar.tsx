@@ -195,11 +195,7 @@ const FloorSidebar: React.FC<FloorSidebarProps> = ({
                                     {rooms.map((room) => (
                                         <div
                                             key={room.code}
-                                            className={`flex items-center p-2 text-white cursor-pointer hover:bg-white/10 transition-colors ${
-                                                selectedRoomCode === room.code
-                                                    ? 'bg-gray-200'
-                                                    : ''
-                                            }`}
+                                            className={`flex items-center p-2 text-white cursor-pointer hover:bg-white/10 transition-colors`}
                                             onClick={() =>
                                                 setSelectedRoomCode(room.code)
                                             }
