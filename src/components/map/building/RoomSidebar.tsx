@@ -60,7 +60,7 @@ const RoomSidebar: React.FC<RoomSidebarProps> = ({ selectedRoom, onClose }) => {
             <div
                 className={`fixed sm:top-2 sm:right-2 w-full sm:w-[320px] md:w-[350px] bg-white shadow-lg z-30 overflow-y-auto
                 transition-all duration-300 ease-in-out rounded-xl
-                top-[30%] h-[70%] rounded-t-2xl
+                top-[50%] h-[50%] rounded-t-2xl
                 sm:h-[calc(100%-1rem)] ${
                     sidebarOpen
                         ? 'translate-y-0 sm:translate-y-0 sm:translate-x-0 opacity-100'
