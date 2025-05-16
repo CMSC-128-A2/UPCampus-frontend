@@ -117,7 +117,7 @@ export default function Home() {
                             </div>
                             <div className="w-full lg:w-6/12 px-4 ml-auto mr-auto mt-8 lg:mt-0">
                                 <Image
-                                    src="/assets/images/up_map.png"
+                                    src="/assets/images/up_map.svg"
                                     alt="UP Cebu Campus Map"
                                     width={800}
                                     height={480}
