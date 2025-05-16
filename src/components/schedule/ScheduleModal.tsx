@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Icon } from '@iconify/react';
 import Image from 'next/image';
 import { Save } from 'lucide-react';
 import TimePickerModal from './TimePickerModal';
 import { TimeValue } from './MUITimePicker';
 import dayjs from 'dayjs';
+import { facultyApi, Faculty } from '@/lib/api';
 
 interface ScheduleModalProps {
     isOpen: boolean;
@@ -16,6 +17,7 @@ interface ScheduleModalProps {
         room: string;
         day: string;
         time: string;
+        facultyId: string;
     }) => void;
 }
 
@@ -25,6 +27,8 @@ function ScheduleModal({ isOpen, onClose, onSave }: ScheduleModalProps) {
     const [type, setType] = useState('Lecture');
     const [room, setRoom] = useState('');
     const [day, setDay] = useState('');
+    const [facultyId, setFacultyId] = useState<string>('');
+    const [facultyList, setFacultyList] = useState<Faculty[]>([]);
     
     // Time state - using separate start and end time
     const [startTime, setStartTime] = useState<TimeValue>(null);
@@ -35,6 +39,31 @@ function ScheduleModal({ isOpen, onClose, onSave }: ScheduleModalProps) {
     const [endTimeModalOpen, setEndTimeModalOpen] = useState(false);
     
     const [isSaving, setIsSaving] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
+    
+    // Fetch faculty list when modal opens
+    useEffect(() => {
+        const fetchFaculty = async () => {
+            if (!isOpen) return;
+            
+            try {
+                setIsLoading(true);
+                const data = await facultyApi.getAllFaculty();
+                setFacultyList(data);
+                
+                // Set default faculty if available
+                if (data.length > 0 && !facultyId) {
+                    setFacultyId(data[0].id);
+                }
+            } catch (error) {
+                console.error('Failed to fetch faculty list:', error);
+            } finally {
+                setIsLoading(false);
+            }
+        };
+        
+        fetchFaculty();
+    }, [isOpen]);
     
     // Format time to 12-hour format
     const formatTime = (time: TimeValue): string => {
@@ -64,6 +93,7 @@ function ScheduleModal({ isOpen, onClose, onSave }: ScheduleModalProps) {
         setDay('');
         setStartTime(null);
         setEndTime(null);
+        // Don't reset faculty to maintain selected faculty for next use
     };
 
     const handleClose = () => {
@@ -78,7 +108,7 @@ function ScheduleModal({ isOpen, onClose, onSave }: ScheduleModalProps) {
         
         // Validate form
         if (!courseCode || !section || !type || !room || !day || !timeString) {
-            alert('Please fill in all fields');
+            alert('Please fill in all required fields');
             return;
         }
 
@@ -90,7 +120,8 @@ function ScheduleModal({ isOpen, onClose, onSave }: ScheduleModalProps) {
                 type,
                 room,
                 day,
-                time: timeString
+                time: timeString,
+                facultyId: facultyId || ''
             });
             // Don't close modal here, let the parent component decide based on success/failure
         } catch (error) {
@@ -166,9 +197,31 @@ function ScheduleModal({ isOpen, onClose, onSave }: ScheduleModalProps) {
                             </div>
 
                             <div className="space-y-2">
+                                <label className="block text-gray-700">Professor</label>
+                                <select
+                                    value={facultyId}
+                                    onChange={(e) => setFacultyId(e.target.value)}
+                                    className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                    disabled={isLoading}
+                                >
+                                    {isLoading ? (
+                                        <option value="">Loading professors...</option>
+                                    ) : facultyList.length === 0 ? (
+                                        <option value="">No professors available</option>
+                                    ) : (
+                                        facultyList.map(faculty => (
+                                            <option key={faculty.id} value={faculty.id}>
+                                                {faculty.name}
+                                            </option>
+                                        ))
+                                    )}
+                                </select>
+                            </div>
+
+                            <div className="space-y-2">
                                 <label className="block text-gray-700">Day</label>
                                 <div className="flex flex-wrap gap-2">
-                                    {['M', 'T', 'W', 'Th', 'F', 'S'].map((dayOption) => (
+                                    {['M', 'T', 'W', 'TH', 'F', 'S'].map((dayOption) => (
                                         <button
                                             key={dayOption}
                                             type="button"

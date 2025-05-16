@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Icon } from '@iconify/react';
 import { Edit } from 'lucide-react';
-import { parseSchedule } from '@/lib/api';
+import { parseSchedule, facultyApi, Faculty } from '@/lib/api';
 import TimePickerModal from './TimePickerModal';
 import { TimeValue } from './MUITimePicker';
 import dayjs from 'dayjs';
@@ -16,6 +16,7 @@ interface EditScheduleModalProps {
         type: 'Lecture' | 'Laboratory';
         room: string;
         schedule: string;
+        faculty?: string;
     };
     onSave?: (sectionId: string, scheduleData: {
         course_code?: string;
@@ -24,6 +25,7 @@ interface EditScheduleModalProps {
         room: string;
         day: string;
         time: string;
+        faculty_id?: string;
     }) => void;
 }
 
@@ -33,6 +35,9 @@ function EditScheduleModal({ isOpen, onClose, sectionId, initialData, onSave }: 
     const [type, setType] = useState<'Lecture' | 'Laboratory'>('Lecture');
     const [room, setRoom] = useState('');
     const [day, setDay] = useState<string[]>([]);
+    const [facultyId, setFacultyId] = useState<string>('');
+    const [facultyList, setFacultyList] = useState<Faculty[]>([]);
+    const [isLoadingFaculty, setIsLoadingFaculty] = useState(false);
     
     // Time state using separate start and end times
     const [startTime, setStartTime] = useState<TimeValue>(null);
@@ -43,6 +48,25 @@ function EditScheduleModal({ isOpen, onClose, sectionId, initialData, onSave }: 
     const [endTimeModalOpen, setEndTimeModalOpen] = useState(false);
     
     const [isSaving, setIsSaving] = useState(false);
+    
+    // Fetch faculty list when modal opens
+    useEffect(() => {
+        const fetchFaculty = async () => {
+            if (!isOpen) return;
+            
+            try {
+                setIsLoadingFaculty(true);
+                const data = await facultyApi.getAllFaculty();
+                setFacultyList(data);
+            } catch (error) {
+                console.error('Failed to fetch faculty list:', error);
+            } finally {
+                setIsLoadingFaculty(false);
+            }
+        };
+        
+        fetchFaculty();
+    }, [isOpen]);
     
     // Format time to 12-hour format
     const formatTime = (time: TimeValue): string => {
@@ -94,6 +118,11 @@ function EditScheduleModal({ isOpen, onClose, sectionId, initialData, onSave }: 
             setType(initialData.type);
             setRoom(initialData.room);
             
+            // Set faculty ID if it exists
+            if (initialData.faculty) {
+                setFacultyId(initialData.faculty);
+            }
+            
             // Parse schedule string into day and time
             const { day: scheduleDay, time: scheduleTime } = parseSchedule(initialData.schedule);
             // Split the day string into an array of days and filter out empty strings
@@ -135,7 +164,8 @@ function EditScheduleModal({ isOpen, onClose, sectionId, initialData, onSave }: 
                 type,
                 room,
                 day: dayString,
-                time: timeString
+                time: timeString,
+                faculty_id: facultyId || undefined
             });
             // Don't close modal here, let the parent component decide based on success/failure
         } catch (error) {
@@ -204,6 +234,27 @@ function EditScheduleModal({ isOpen, onClose, sectionId, initialData, onSave }: 
                                     className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                                     placeholder="e.g., SCI 405"
                                 />
+                            </div>
+
+                            <div className="space-y-2">
+                                <label className="block text-gray-700">Professor</label>
+                                <select
+                                    value={facultyId}
+                                    onChange={(e) => setFacultyId(e.target.value)}
+                                    className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                    disabled={isLoadingFaculty}
+                                >
+                                    <option value="">None (Unassigned)</option>
+                                    {isLoadingFaculty ? (
+                                        <option value="" disabled>Loading professors...</option>
+                                    ) : (
+                                        facultyList.map(faculty => (
+                                            <option key={faculty.id} value={faculty.id}>
+                                                {faculty.name} ({faculty.email})
+                                            </option>
+                                        ))
+                                    )}
+                                </select>
                             </div>
 
                             <div className="space-y-2">
