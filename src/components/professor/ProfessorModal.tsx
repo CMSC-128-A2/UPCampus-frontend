@@ -1,19 +1,21 @@
 import React, { useState, useEffect } from 'react';
 import { Icon } from '@iconify/react';
 import { Save } from 'lucide-react';
-import { Professor } from '@/lib/api';
+import { Faculty } from '@/lib/api';
 
 interface ProfessorModalProps {
     isOpen: boolean;
     onClose: () => void;
-    professor?: Professor | null;
-    onSave?: (professorData: {
-        name: string;
-        email: string;
-    }) => void;
+    professor?: Faculty | null;
+    onSave?: (professorData: { name: string; email: string }) => void;
 }
 
-function ProfessorModal({ isOpen, onClose, professor, onSave }: ProfessorModalProps) {
+function ProfessorModal({
+    isOpen,
+    onClose,
+    professor,
+    onSave,
+}: ProfessorModalProps) {
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [emailError, setEmailError] = useState<string | null>(null);
@@ -37,19 +39,19 @@ function ProfessorModal({ isOpen, onClose, professor, onSave }: ProfessorModalPr
 
     const validateEmail = (email: string) => {
         if (!email) return 'Email is required';
-        
+
         const emailRegex = /^[\w\.-]+@up\.edu\.ph$/;
         if (!emailRegex.test(email)) {
             return 'Email must be in the format: example@up.edu.ph';
         }
-        
+
         return null;
     };
 
     const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const newEmail = e.target.value;
         setEmail(newEmail);
-        
+
         // Validate email
         setEmailError(validateEmail(newEmail));
     };
@@ -61,13 +63,13 @@ function ProfessorModal({ isOpen, onClose, professor, onSave }: ProfessorModalPr
 
     const handleSave = async () => {
         if (!onSave) return;
-        
+
         // Validate form
         if (!name) {
             alert('Please enter a name');
             return;
         }
-        
+
         const emailValidationError = validateEmail(email);
         if (emailValidationError) {
             setEmailError(emailValidationError);
@@ -79,7 +81,7 @@ function ProfessorModal({ isOpen, onClose, professor, onSave }: ProfessorModalPr
             setIsSaving(true);
             await onSave({
                 name,
-                email
+                email,
             });
             handleClose();
         } catch (error) {
@@ -101,7 +103,10 @@ function ProfessorModal({ isOpen, onClose, professor, onSave }: ProfessorModalPr
                         <h2 className="text-2xl font-semibold">
                             {professor ? 'Edit Professor' : 'Add Professor'}
                         </h2>
-                        <button onClick={handleClose} className="text-gray-400 hover:text-gray-600">
+                        <button
+                            onClick={handleClose}
+                            className="text-gray-400 hover:text-gray-600"
+                        >
                             <Icon icon="ph:x-bold" width="24" height="24" />
                         </button>
                     </div>
@@ -125,13 +130,21 @@ function ProfessorModal({ isOpen, onClose, professor, onSave }: ProfessorModalPr
                                 type="email"
                                 value={email}
                                 onChange={handleEmailChange}
-                                className={`w-full p-3 border ${emailError ? 'border-red-500' : 'border-gray-300'} rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500`}
+                                className={`w-full p-3 border ${
+                                    emailError
+                                        ? 'border-red-500'
+                                        : 'border-gray-300'
+                                } rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500`}
                                 placeholder="example@up.edu.ph"
                             />
                             {emailError && (
-                                <p className="text-red-500 text-sm mt-1">{emailError}</p>
+                                <p className="text-red-500 text-sm mt-1">
+                                    {emailError}
+                                </p>
                             )}
-                            <p className="text-gray-500 text-xs mt-1">Email must end with @up.edu.ph</p>
+                            <p className="text-gray-500 text-xs mt-1">
+                                Email must end with @up.edu.ph
+                            </p>
                         </div>
                     </div>
 
@@ -164,4 +177,4 @@ function ProfessorModal({ isOpen, onClose, professor, onSave }: ProfessorModalPr
     );
 }
 
-export default ProfessorModal; 
+export default ProfessorModal;
