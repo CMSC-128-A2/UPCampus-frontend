@@ -39,3 +39,19 @@ npm run dev
 ```
 
 Access the app at `http://localhost:3000`
+
+## CI/CD
+
+This project uses GitHub Actions for continuous integration. The workflow automatically builds the application whenever changes are pushed to any branch or when pull requests are created.
+
+### Build Workflow
+
+The build workflow:
+
+1. Runs on all branch pushes and pull requests
+2. Sets up Node.js v18
+3. Installs dependencies
+4. Builds the Next.js application
+5. Uploads the build artifacts for later use
+
+You can view the workflow status in the Actions tab of the GitHub repository.
