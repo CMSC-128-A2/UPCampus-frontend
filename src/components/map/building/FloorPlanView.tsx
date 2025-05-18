@@ -8,9 +8,9 @@ type BuildingData = (typeof mockBuildingsData)[keyof typeof mockBuildingsData];
 
 // Define a floor type to match what's in BuildingSearchBar
 interface Floor {
-    code: string;
+    code?: string;
     name: string;
-    facilities?: string[];
+    facilities?: any[];
     floorPlan?: string;
     rooms?: Room[];
 }
@@ -76,7 +76,9 @@ const FloorPlanView: React.FC<FloorPlanViewProps> = ({
                 : [];
 
         const selectedFloor = floors.find(
-            (floor) => floor.code === selectedFloorCode,
+            (floor) =>
+                floor.code === selectedFloorCode ||
+                floor.name === selectedFloorCode,
         );
 
         if (!selectedFloor || !selectedFloor.floorPlan) {

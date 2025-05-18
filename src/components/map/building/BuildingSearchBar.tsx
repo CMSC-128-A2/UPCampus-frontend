@@ -9,9 +9,9 @@ type BuildingData = (typeof mockBuildingsData)[keyof typeof mockBuildingsData];
 
 // Define a floor type to avoid implicit any
 interface Floor {
-    code: string;
+    code?: string;
     name: string;
-    facilities?: string[];
+    facilities?: any[];
 }
 
 const BuildingSearchBar: React.FC<{
@@ -32,16 +32,23 @@ const BuildingSearchBar: React.FC<{
 
         if (floors.length === 0) return;
 
-        const currentIndex = floors.findIndex(
-            (floor) => floor.code === selectedFloorCode,
-        );
+        // Find current index by floor code or name if code is not available
+        const currentIndex = selectedFloorCode
+            ? floors.findIndex(
+                  (floor) =>
+                      floor.code === selectedFloorCode ||
+                      floor.name === selectedFloorCode,
+              )
+            : -1;
 
         if (currentIndex === -1) return;
 
         if (direction === 'up' && currentIndex < floors.length - 1) {
-            setSelectedFloorCode(floors[currentIndex + 1].code);
+            const nextFloor = floors[currentIndex + 1];
+            setSelectedFloorCode(nextFloor.code || nextFloor.name);
         } else if (direction === 'down' && currentIndex > 0) {
-            setSelectedFloorCode(floors[currentIndex - 1].code);
+            const prevFloor = floors[currentIndex - 1];
+            setSelectedFloorCode(prevFloor.code || prevFloor.name);
         }
     };
 
@@ -56,7 +63,9 @@ const BuildingSearchBar: React.FC<{
         if (floors.length === 0) return true;
 
         const currentIndex = floors.findIndex(
-            (floor) => floor.code === selectedFloorCode,
+            (floor) =>
+                floor.code === selectedFloorCode ||
+                floor.name === selectedFloorCode,
         );
         return currentIndex === 0;
     };
@@ -71,7 +80,9 @@ const BuildingSearchBar: React.FC<{
         if (floors.length === 0) return true;
 
         const currentIndex = floors.findIndex(
-            (floor) => floor.code === selectedFloorCode,
+            (floor) =>
+                floor.code === selectedFloorCode ||
+                floor.name === selectedFloorCode,
         );
         return currentIndex === floors.length - 1;
     };
