@@ -27,7 +27,7 @@ npm install
 1. Create a new file in the root directory named `.env.local`
 2. Paste this:
     ```
-    NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN=pk.eyJ1IjoiZG9uZG9uZG9uIiwiYSI6ImNsdDFycmgzeTAwamoya3A3N2RzaWRqYXIifQ.HvB01bmNjXn-eqwJ2FSP5Q
+    NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN=<your-access-token>
     ```
 
 ### 4. Development Server

@@ -5,15 +5,17 @@ import { facultyApi, Department } from '@/lib/api';
 interface FacultyModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onSave: (faculty: { name: string; department: string }) => void;
+  onSave: (faculty: { name: string; email: string; department: string }) => void;
 }
 
 const FacultyModal: React.FC<FacultyModalProps> = ({ isOpen, onClose, onSave }) => {
   const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
   const [departmentId, setDepartmentId] = useState('');
   const [departments, setDepartments] = useState<Department[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [emailError, setEmailError] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchDepartments = async () => {
@@ -50,104 +52,149 @@ const FacultyModal: React.FC<FacultyModalProps> = ({ isOpen, onClose, onSave }) 
     }
   }, [isOpen]);
 
+  const validateEmail = (email: string) => {
+    if (!email) return 'Email is required';
+    
+    const emailRegex = /^[\w\.-]+@up\.edu\.ph$/;
+    if (!emailRegex.test(email)) {
+      return 'Email must be in the format: example@up.edu.ph';
+    }
+    
+    return null;
+  };
+
+  const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newEmail = e.target.value;
+    setEmail(newEmail);
+    
+    // Validate email
+    setEmailError(validateEmail(newEmail));
+  };
+
   if (!isOpen) return null;
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!name || !departmentId) {
-      alert('Please fill in all fields');
+    
+    // Validate all fields
+    if (!name) {
+      alert('Please enter a name');
+      return;
+    }
+    
+    const emailValidationError = validateEmail(email);
+    if (emailValidationError) {
+      setEmailError(emailValidationError);
+      alert(emailValidationError);
+      return;
+    }
+    
+    if (!departmentId) {
+      alert('Please select a department');
       return;
     }
 
     onSave({
       name,
+      email,
       department: departmentId
     });
     
     // Reset form
     setName('');
+    setEmail('');
+    setEmailError(null);
     setDepartmentId(departments.length > 0 ? departments[0].id : '');
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-      <div className="bg-white rounded-lg shadow-lg w-full max-w-md mx-4">
-        <div className="p-6 relative">
-          <div className="flex justify-between items-center mb-6">
-            <h2 className="text-2xl font-medium">New Faculty</h2>
-            <button 
-              onClick={onClose} 
-              className="text-gray-400 hover:text-gray-600"
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
+      <div className="bg-white rounded-lg p-6 w-full max-w-md">
+        <div className="flex justify-between items-center mb-4">
+          <h2 className="text-xl font-bold">Add Faculty</h2>
+          <button 
+            onClick={onClose}
+            className="text-gray-500 hover:text-gray-700"
+          >
+            <Icon icon="ph:x-bold" className="w-5 h-5" />
+          </button>
+        </div>
+
+        {error && (
+          <div className="bg-red-50 text-red-600 p-3 rounded-md mb-4">
+            {error}
+          </div>
+        )}
+
+        <form onSubmit={handleSubmit}>
+          <div className="mb-4">
+            <label htmlFor="name" className="block text-gray-700 mb-1">Name</label>
+            <input
+              id="name"
+              type="text"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              className="w-full p-2 border border-gray-300 rounded-md"
+              placeholder="Enter faculty name"
+              required
+            />
+          </div>
+
+          <div className="mb-4">
+            <label htmlFor="email" className="block text-gray-700 mb-1">Email</label>
+            <input
+              id="email"
+              type="email"
+              value={email}
+              onChange={handleEmailChange}
+              className={`w-full p-2 border rounded-md ${emailError ? 'border-red-500' : 'border-gray-300'}`}
+              placeholder="example@up.edu.ph"
+              required
+            />
+            {emailError && (
+              <p className="text-red-500 text-sm mt-1">{emailError}</p>
+            )}
+            <p className="text-gray-500 text-xs mt-1">Email must end with @up.edu.ph</p>
+          </div>
+
+          <div className="mb-6">
+            <label htmlFor="department" className="block text-gray-700 mb-1">Department</label>
+            <select
+              id="department"
+              value={departmentId}
+              onChange={(e) => setDepartmentId(e.target.value)}
+              className="w-full p-2 border border-gray-300 rounded-md"
+              required
             >
-              <Icon icon="ph:x" width="20" height="20" />
+              {departments.length === 0 ? (
+                <option value="">No departments available</option>
+              ) : (
+                departments.map(dept => (
+                  <option key={dept.id} value={dept.id}>
+                    {dept.name}
+                  </option>
+                ))
+              )}
+            </select>
+          </div>
+
+          <div className="flex justify-end">
+            <button
+              type="button"
+              onClick={onClose}
+              className="px-4 py-2 text-gray-600 border border-gray-300 rounded-md mr-2 hover:bg-gray-100"
+            >
+              Cancel
+            </button>
+            <button
+              type="submit"
+              disabled={isLoading || departments.length === 0}
+              className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 disabled:opacity-50"
+            >
+              {isLoading ? 'Saving...' : 'Save Faculty'}
             </button>
           </div>
-          
-          {isLoading ? (
-            <div className="flex justify-center py-4">
-              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#8BC34A]"></div>
-            </div>
-          ) : error ? (
-            <div className="bg-red-50 text-red-600 p-4 rounded-lg mb-4">
-              <p>{error}</p>
-              <button 
-                onClick={() => window.location.reload()}
-                className="bg-[#8BC34A] text-white px-4 py-2 rounded-lg mt-2"
-              >
-                Try Again
-              </button>
-            </div>
-          ) : (
-            <form onSubmit={handleSubmit}>
-              <div className="space-y-4">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Name</label>
-                  <input
-                    type="text"
-                    placeholder="Enter faculty name"
-                    className="w-full p-2 bg-gray-100 border border-gray-200 rounded-md focus:outline-none"
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
-                  />
-                </div>
-                
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Department</label>
-                  {departments.length > 0 ? (
-                    <select
-                      className="w-full p-2 bg-gray-100 border border-gray-200 rounded-md focus:outline-none"
-                      value={departmentId}
-                      onChange={(e) => setDepartmentId(e.target.value)}
-                    >
-                      {departments.map(dept => (
-                        <option key={dept.id} value={dept.id}>{dept.name}</option>
-                      ))}
-                    </select>
-                  ) : (
-                    <p className="text-sm text-gray-500">No departments available</p>
-                  )}
-                </div>
-              </div>
-              
-              <div className="mt-6 flex justify-end">
-                <button
-                  type="button"
-                  onClick={onClose}
-                  className="mr-3 px-4 py-2 text-gray-600 border border-gray-300 rounded-md hover:bg-gray-50"
-                >
-                  Cancel
-                </button>
-                <button
-                  type="submit"
-                  className="px-4 py-2 bg-[#8BC34A] text-white rounded-md hover:bg-[#7cb342]"
-                  disabled={departments.length === 0}
-                >
-                  Save
-                </button>
-              </div>
-            </form>
-          )}
-        </div>
+        </form>
       </div>
     </div>
   );

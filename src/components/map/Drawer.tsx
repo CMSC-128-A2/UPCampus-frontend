@@ -84,7 +84,7 @@ export default function Drawer({ title, onClose, isOpen = true }: DrawerProps) {
                 className={`absolute sm:top-2 h-full w-full sm:w-[320px] md:w-[350px] text-[#FFFFFF] bg-[#D45756] shadow-lg z-10 
                 transition-all duration-300 ease-in-out rounded-xl
                 /* Mobile: Bottom half of screen */
-                top-[30%] max-h-[70%] rounded-t-2xl
+                top-[50%] max-h-[50%] rounded-t-2xl
                 /* Desktop: Full height */
                 sm:max-h-full sm:h-[calc(100%-1rem)] sm:right-2 ${
                     drawerOpen

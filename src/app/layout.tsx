@@ -76,7 +76,7 @@ export default function RootLayout({
                 className={`${inter.variable} antialiased`}
                 suppressHydrationWarning={true}
             >
-                <div className="h-screen">{children}</div>
+                <div className="min-h-screen">{children}</div>
             </body>
         </html>
     );

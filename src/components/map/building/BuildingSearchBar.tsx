@@ -78,7 +78,7 @@ const BuildingSearchBar: React.FC<{
 
     return (
         <div className="flex items-center max-w-[calc(100vw-20px)] w-[518px] h-[69.2px] m-[10px] rounded-[10px] p-[10px] gap-[10px] bg-[#7F1532] z-50 absolute top-0 left-0">
-            <Link href="/">
+            <Link href="/map">
                 <Image
                     src="/assets/images/upseelogo.png"
                     alt="Upsee Logo"
