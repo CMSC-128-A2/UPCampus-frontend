@@ -5,12 +5,18 @@ import SearchBar from '@/components/map/SearchBar';
 import SearchResults from '@/components/map/SearchResults';
 import Drawer from '@/components/map/Drawer';
 import { useMapStore } from '@/store/mapStore';
+import Lottie from 'lottie-react';
+import loadingAnimation from '../../../public/assets/animations/loading.json';
 
 const Map = dynamic(() => import('@/components/map/Map'), {
     ssr: false,
     loading: () => (
         <div className="h-full flex items-center justify-center">
-            Loading map...
+            <Lottie
+                animationData={loadingAnimation}
+                loop={true}
+                style={{ width: 200, height: 200 }}
+            />
         </div>
     ),
 });
