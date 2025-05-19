@@ -142,23 +142,17 @@ const RoomSidebar: React.FC<RoomSidebarProps> = ({ selectedRoom, onClose }) => {
                             {selectedRoom.email && (
                                 <div className="flex items-center gap-2 mb-1">
                                     <span className="text-white">Email:</span>
-                                    <a 
-                                        href={`mailto:${selectedRoom.email}`}
-                                        className="text-white hover:text-gray-200 underline"
-                                    >
+                                    <span className="text-white">
                                         {selectedRoom.email}
-                                    </a>
+                                    </span>
                                 </div>
                             )}
                             {selectedRoom.phone && (
                                 <div className="flex items-center gap-2">
                                     <span className="text-white">Phone:</span>
-                                    <a 
-                                        href={`tel:${selectedRoom.phone}`}
-                                        className="text-white hover:text-gray-200 underline"
-                                    >
+                                    <span className="text-white">
                                         {selectedRoom.phone}
-                                    </a>
+                                    </span>
                                 </div>
                             )}
                         </div>
