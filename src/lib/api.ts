@@ -47,6 +47,9 @@ export interface AdminUser {
     email: string;
     user_id: string;
     password?: string;
+    department?: string;
+    department_name?: string;
+    is_superuser: boolean;
 }
 
 // Convert backend course format to frontend format
@@ -393,24 +396,35 @@ export const schedulesApi = {
 
 // Faculty API
 export const facultyApi = {
-    // Get all faculty members
-    getAllFaculty: async () => {
+    getAllFaculty: async (adminId?: string) => {
         try {
-            console.log('Fetching faculty from:', `${API_BASE_URL}/api/schedules/faculty/`);
-            const response = await fetch(`${API_BASE_URL}/api/schedules/faculty/`, {
+            const url = new URL(`${API_BASE_URL}/api/schedules/faculty/`);
+            if (adminId) {
+                url.searchParams.append('admin_id', adminId);
+            }
+            const response = await fetch(url.toString(), {
                 headers: {
                     'Accept': 'application/json',
                 },
             });
             
+            // Log the response for debugging
+            console.log('Faculty API Response:', {
+                status: response.status,
+                statusText: response.statusText,
+                headers: Object.fromEntries(response.headers.entries())
+            });
+            
             if (!response.ok) {
-                throw new Error(`Error: ${response.status}`);
+                const errorText = await response.text();
+                console.error('Error response:', errorText);
+                throw new Error(`Error: ${response.status} - ${errorText}`);
             }
             
             const data = await response.json();
             return data;
         } catch (error) {
-            console.error('Failed to fetch faculty members:', error);
+            console.error('Failed to fetch faculty:', error);
             throw error;
         }
     },
@@ -647,6 +661,8 @@ export const adminApi = {
         email: string;
         user_id: string;
         password: string;
+        department?: string;
+        is_superuser: boolean;
     }) => {
         try {
             console.log('Creating admin with data:', adminData);
@@ -688,6 +704,8 @@ export const adminApi = {
             email: string;
             user_id: string;
             password?: string;
+            department?: string;
+            is_superuser: boolean;
         }
     ) => {
         try {

@@ -23,12 +23,20 @@ function FacultyPage() {
   const fetchFaculty = async () => {
     try {
       setIsLoading(true);
-      const data = await facultyApi.getAllFaculty();
-      setFacultyData(data);
+      // Get the current admin ID from localStorage
+      const adminUser = localStorage.getItem('adminUser');
+      const adminId = adminUser ? JSON.parse(adminUser).id : undefined;
+      
+      console.log('Fetching faculty with admin ID:', adminId);
+      const data = await facultyApi.getAllFaculty(adminId);
+      
+      // Handle both array and paginated responses
+      const facultyArray = Array.isArray(data) ? data : (data.results || []);
+      setFacultyData(facultyArray);
       setError(null);
     } catch (err) {
       console.error('Failed to fetch faculty members:', err);
-      setError('Failed to load faculty members. Please try again later.');
+      setError(err instanceof Error ? err.message : 'Failed to load faculty members. Please try again later.');
     } finally {
       setIsLoading(false);
     }

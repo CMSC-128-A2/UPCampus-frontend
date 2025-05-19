@@ -15,6 +15,8 @@ interface AdminUserFrontend {
   email: string;
   userId: string;
   password: string;
+  department?: string;
+  is_superuser: boolean;
 }
 
 // Toast notification state
@@ -78,7 +80,9 @@ function AdminPage() {
         name: admin.name,
         email: admin.email,
         userId: admin.user_id,
-        password: admin.password || ''  // Handle potential undefined password
+        password: admin.password || '',  // Handle potential undefined password
+        department: admin.department || '',
+        is_superuser: admin.is_superuser || false
       }));
       
       setAdminUsers(frontendAdmins);
@@ -141,7 +145,9 @@ function AdminPage() {
         name: admin.name,
         email: admin.email,
         user_id: admin.userId,
-        password: admin.password
+        password: admin.password,
+        department: admin.department,
+        is_superuser: admin.is_superuser
       };
       
       await adminApi.createAdmin(backendAdmin);
@@ -165,7 +171,9 @@ function AdminPage() {
         name: updatedAdmin.name,
         email: updatedAdmin.email,
         user_id: updatedAdmin.userId,
-        password: updatedAdmin.password
+        password: updatedAdmin.password,
+        department: updatedAdmin.department,
+        is_superuser: updatedAdmin.is_superuser
       };
       
       await adminApi.updateAdmin(selectedAdmin.id, backendAdmin);
