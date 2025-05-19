@@ -20,6 +20,8 @@ interface Room {
         y: number;
     };
     category: string;
+    email?: string;
+    phone?: string;
 }
 
 interface Floor {
@@ -52,6 +54,7 @@ const buildingData = [
                             y: 6.5,
                         },
                         category: 'Offices',
+                        email: 'budget.upcebu@up.edu.ph'
                     },
                     {
                         code: '1b',
@@ -62,6 +65,7 @@ const buildingData = [
                             y: 1,
                         },
                         category: 'Offices',
+                        email: 'our.upcebu@up.edu.ph'
                     },
                     {
                         code: '1c',
@@ -72,6 +76,8 @@ const buildingData = [
                             y: -6,
                         },
                         category: 'Offices',
+                        phone: '(032) 233 3497',
+                        email: 'spmo.upcebu@up.edu.ph'
                     },
                     {
                         code: '1d',
@@ -82,6 +88,7 @@ const buildingData = [
                             y: 7,
                         },
                         category: 'Offices',
+                        email: 'cos.upcebu@up.edu.ph'
                     },
                     {
                         code: '1e',
@@ -92,6 +99,7 @@ const buildingData = [
                             y: 3,
                         },
                         category: 'Offices',
+                        email: 'bac_sec.upcebu@up.edu.ph'
                     },
                     {
                         code: '1f',
@@ -102,6 +110,7 @@ const buildingData = [
                             y: -1,
                         },
                         category: 'Offices',
+                        email: 'cash.upcebu@up.edu.ph'
                     },
                     {
                         code: '1g',
@@ -112,6 +121,7 @@ const buildingData = [
                             y: -7,
                         },
                         category: 'Offices',
+                        email: 'accounting.upcebu@up.edu.ph'
                     },
                     {
                         code: '1h',
