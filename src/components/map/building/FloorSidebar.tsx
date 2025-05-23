@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import {
+    Presentation,
     Briefcase,
     Siren,
     Toilet,
@@ -10,6 +11,7 @@ import {
     ArrowRightToLine,
     ChevronLeft,
     BrickWall,
+    GraduationCap
 } from 'lucide-react';
 
 // Use same Room interface as in FloorPlanView
@@ -102,10 +104,14 @@ const FloorSidebar: React.FC<FloorSidebarProps> = ({
         switch (iconName) {
             case 'briefcase':
                 return <Briefcase className="w-4 h-4" />;
+            case 'presentation':
+                return <Presentation className="w-4 h-4" />;
             case 'emergency':
                 return <Siren className="w-4 h-4" />;
             case 'toilet':
                 return <Toilet className="w-4 h-4" />;
+            case 'graduation':
+                return <GraduationCap className="w-4 h-4" />;
             default:
                 return <Briefcase className="w-4 h-4" />;
         }
@@ -186,7 +192,27 @@ const FloorSidebar: React.FC<FloorSidebarProps> = ({
 
                 <div className="overflow-y-auto h-[calc(100%-89px)]">
                     {Object.entries(roomsByCategory).map(
-                        ([category, rooms]) => (
+                        ([category, rooms]) => 
+                            category === "Comfort Rooms" ?
+                                <div key={category} className="">
+                                    {rooms.map((room) => (
+                                        <div
+                                            key={room.code}
+                                            className={`flex items-center p-2 text-white cursor-pointer`}
+                                            onClick={() =>
+                                                setSelectedRoomCode(room.code)
+                                            }
+                                        >
+                                            <div className=" rounded-[5px] bg-white border-2 border-maroon-accent text-maroon-accent flex items-center gap-1 justify-center px-2 py-1 mr-2 mb-2">
+                                                <span className="text-xs">
+                                                    {getIconForRoom(room.icon)}
+                                                </span>
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
+                        
+                        :    (
                             <div key={category} className="mb-2">
                                 <div className="p-2 bg-[#AA4645] text-white font-medium">
                                     {category}

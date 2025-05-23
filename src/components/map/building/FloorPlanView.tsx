@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useRef, ReactNode } from 'react';
 import { mockBuildingsData } from '@/lib/types/buildings';
-import { Briefcase, Expand, Minus, Plus, Siren, Toilet } from 'lucide-react';
+import { Briefcase, Expand, Minus, Plus, Presentation, Siren, Toilet, GraduationCap } from 'lucide-react';
 
 type BuildingData = (typeof mockBuildingsData)[keyof typeof mockBuildingsData];
 
@@ -322,13 +322,20 @@ const FloorPlanView: React.FC<FloorPlanViewProps> = ({
                                             <Siren className="w-3 h-3 md:w-5 md:h-5" />
                                         ) : room.icon === 'toilet' ? (
                                             <Toilet className="w-3 h-3 md:w-5 md:h-5" />
+                                        ) : room.icon === 'presentation' ? (
+                                            <Presentation className="w-3 h-3 md:w-5 md:h-5" /> 
+                                        ) : room.icon === 'graduation' ? (
+                                            <GraduationCap className="w-3 h-3 md:w-5 md:h-5" /> 
                                         ) : (
                                             room.icon
                                         )}
                                     </span>
-                                    <span className="text-xs md:text-xl select-none">
-                                        {room.code}
-                                    </span>
+
+                                    {room.icon !== "toilet" && (
+                                        <span className="text-xs md:text-xl select-none">
+                                            {room.code}
+                                        </span>
+                                    )}
                                 </div>
                             );
                         })}
