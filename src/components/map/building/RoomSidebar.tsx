@@ -12,6 +12,8 @@ interface Room {
         x: number;
         y: number;
     };
+    email?: string;
+    phone?: string;
 }
 
 interface RoomSidebarProps {
@@ -131,7 +133,32 @@ const RoomSidebar: React.FC<RoomSidebarProps> = ({ selectedRoom, onClose }) => {
                         <p className="text-white">{selectedRoom.category}</p>
                     </div>
 
-                    {/* Additional information about the room could be added here */}
+                    {/* Contact Information - Only for Offices */}
+                    {selectedRoom.category === 'Offices' && (selectedRoom.email || selectedRoom.phone) && (
+                        <div className="mb-4">
+                            <h3 className="text-sm font-medium text-white mb-1">
+                                Contact Information
+                            </h3>
+                            {selectedRoom.email && (
+                                <div className="flex items-center gap-2 mb-1">
+                                    <span className="text-white">Email:</span>
+                                    <span className="text-white">
+                                        {selectedRoom.email}
+                                    </span>
+                                </div>
+                            )}
+                            {selectedRoom.phone && (
+                                <div className="flex items-center gap-2">
+                                    <span className="text-white">Phone:</span>
+                                    <span className="text-white">
+                                        {selectedRoom.phone}
+                                    </span>
+                                </div>
+                            )}
+                        </div>
+                    )}
+
+                    {/* Location Information */}
                     <div className="mb-4">
                         <h3 className="text-sm font-medium text-white mb-1">
                             Location
