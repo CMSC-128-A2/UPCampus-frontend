@@ -105,13 +105,51 @@ const SearchBar: React.FC = () => {
 
                 if (Array.isArray(floor.facilities)) {
                     if (
-                        floor.facilities.some(
-                            (facility: unknown) =>
-                                typeof facility === 'string' &&
-                                facility
+                        floor.facilities.some((facility: any) => {
+                            // Check facility name
+                            if (
+                                facility.name &&
+                                typeof facility.name === 'string' &&
+                                facility.name
                                     .toLowerCase()
-                                    .includes(searchTermLower),
-                        )
+                                    .includes(searchTermLower)
+                            ) {
+                                return true;
+                            }
+
+                            // Check facility email
+                            if (
+                                facility.email &&
+                                typeof facility.email === 'string' &&
+                                facility.email
+                                    .toLowerCase()
+                                    .includes(searchTermLower)
+                            ) {
+                                return true;
+                            }
+
+                            // Check facility contact number
+                            if (
+                                facility.contactNumber &&
+                                typeof facility.contactNumber === 'string' &&
+                                facility.contactNumber.includes(searchTermLower)
+                            ) {
+                                return true;
+                            }
+
+                            // Check facility site
+                            if (
+                                facility.site &&
+                                typeof facility.site === 'string' &&
+                                facility.site
+                                    .toLowerCase()
+                                    .includes(searchTermLower)
+                            ) {
+                                return true;
+                            }
+
+                            return false;
+                        })
                     ) {
                         return true;
                     }
@@ -173,6 +211,33 @@ const SearchBar: React.FC = () => {
                 ) {
                     return true;
                 }
+            }
+
+            // Check capacity and description for security/parking locations
+            if (
+                hasProperty(buildingData, 'capacity') &&
+                typeof buildingData.capacity === 'string' &&
+                buildingData.capacity.toLowerCase().includes(searchTermLower)
+            ) {
+                return true;
+            }
+
+            if (
+                hasProperty(buildingData, 'description') &&
+                typeof buildingData.description === 'string' &&
+                buildingData.description.toLowerCase().includes(searchTermLower)
+            ) {
+                return true;
+            }
+
+            if (
+                hasProperty(buildingData, 'restrictions') &&
+                typeof buildingData.restrictions === 'string' &&
+                buildingData.restrictions
+                    .toLowerCase()
+                    .includes(searchTermLower)
+            ) {
+                return true;
             }
         }
 
@@ -268,11 +333,46 @@ const SearchBar: React.FC = () => {
             for (const floor of buildingData.floors) {
                 if (Array.isArray(floor.facilities)) {
                     for (const facility of floor.facilities) {
+                        // Check facility name
                         if (
-                            typeof facility === 'string' &&
-                            facility.toLowerCase().includes(searchTermLower)
+                            facility.name &&
+                            typeof facility.name === 'string' &&
+                            facility.name
+                                .toLowerCase()
+                                .includes(searchTermLower)
                         ) {
-                            return `${floor.name}: ${facility}`;
+                            return `${floor.name}: ${facility.name}`;
+                        }
+
+                        // Check facility email
+                        if (
+                            facility.email &&
+                            typeof facility.email === 'string' &&
+                            facility.email
+                                .toLowerCase()
+                                .includes(searchTermLower)
+                        ) {
+                            return `${floor.name}: ${facility.name} (${facility.email})`;
+                        }
+
+                        // Check facility contact number
+                        if (
+                            facility.contactNumber &&
+                            typeof facility.contactNumber === 'string' &&
+                            facility.contactNumber.includes(searchTermLower)
+                        ) {
+                            return `${floor.name}: ${facility.name} (${facility.contactNumber})`;
+                        }
+
+                        // Check facility site
+                        if (
+                            facility.site &&
+                            typeof facility.site === 'string' &&
+                            facility.site
+                                .toLowerCase()
+                                .includes(searchTermLower)
+                        ) {
+                            return `${floor.name}: ${facility.name} (${facility.site})`;
                         }
                     }
                 }
@@ -325,6 +425,24 @@ const SearchBar: React.FC = () => {
                         return `Service: ${service}`;
                     }
                 }
+            }
+
+            // Check capacity for parking locations
+            if (
+                hasProperty(buildingData, 'capacity') &&
+                typeof buildingData.capacity === 'string' &&
+                buildingData.capacity.toLowerCase().includes(searchTermLower)
+            ) {
+                return `Capacity: ${buildingData.capacity}`;
+            }
+
+            // Check description
+            if (
+                hasProperty(buildingData, 'description') &&
+                typeof buildingData.description === 'string' &&
+                buildingData.description.toLowerCase().includes(searchTermLower)
+            ) {
+                return buildingData.description;
             }
         }
 
