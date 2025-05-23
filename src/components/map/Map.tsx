@@ -376,7 +376,7 @@ const MapboxExample = () => {
                 // Add a custom layer for the SVG
                 mapRef.current?.addSource('svg-overlay', {
                     type: 'image',
-                    url: '/assets/images/up_map_2.png',
+                    url: '/assets/images/up_map_2.webp',
                     coordinates: calculateRotatedCoordinates(
                         [center[0], center[1]],
                         overlaySize,
