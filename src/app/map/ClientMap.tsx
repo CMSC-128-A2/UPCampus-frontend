@@ -1,6 +1,7 @@
 'use client';
 
 import dynamic from 'next/dynamic';
+import { useState, useEffect } from 'react';
 import SearchBar from '@/components/map/SearchBar';
 import SearchResults from '@/components/map/SearchResults';
 import Drawer from '@/components/map/Drawer';
@@ -9,12 +10,23 @@ import LottieLoading from '@/components/LottieLoading';
 
 const Map = dynamic(() => import('@/components/map/Map'), {
     ssr: false,
-    loading: () => <LottieLoading />,
 });
 
 export default function ClientMap() {
     // Use global state for drawer management
     const { activeDrawer, setActiveDrawer } = useMapStore();
+
+    // State to control when to start loading the map
+    const [shouldLoadMap, setShouldLoadMap] = useState(false);
+
+    // Start the 2-second timer when component mounts
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            setShouldLoadMap(true);
+        }, 2000);
+
+        return () => clearTimeout(timer);
+    }, []);
 
     return (
         <div className="h-screen w-screen relative overflow-hidden">
@@ -39,9 +51,9 @@ export default function ClientMap() {
                 isOpen={activeDrawer === 'security'}
             />
 
-            {/* Map component */}
+            {/* Map component with 2-second delay */}
             <div className="h-full w-full overflow-hidden">
-                <Map />
+                {shouldLoadMap ? <Map /> : <LottieLoading />}
             </div>
         </div>
     );
