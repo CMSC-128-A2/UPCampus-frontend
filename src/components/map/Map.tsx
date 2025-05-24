@@ -17,11 +17,13 @@ const MapboxExample = () => {
     const markerRef = useRef<mapboxgl.Marker | null>(null);
     const popupRef = useRef<mapboxgl.Popup | null>(null);
     const [isLocating, setIsLocating] = useState(false);
+    const [locatedUser, setLocatedUser] = useState(false);
     const [mapLoaded, setMapLoaded] = useState(false);
     const svgOverlayRef = useRef<HTMLDivElement>(null);
     const markersRef = useRef<{ [key: string]: mapboxgl.Marker }>({});
     const testMarkerRef = useRef<mapboxgl.Marker | null>(null);
     const clickPopupRef = useRef<mapboxgl.Popup | null>(null);
+    const intervalRef = useRef<NodeJS.Timeout | null>(null);
 
     // Store initial center and zoom for reset functionality
     const initialCenter: [number, number] = [123.898675, 10.322775];
@@ -191,21 +193,21 @@ const MapboxExample = () => {
         });
     };
 
-    // Function to get and show user's location
-    const locateUser = () => {
-        setIsLocating(true);
-
+    // Function to update user location (with optional zoom)
+    const updateUserLocation = (shouldZoom: boolean = false) => {
         if ('geolocation' in navigator) {
             navigator.geolocation.getCurrentPosition(
                 (position) => {
                     const { longitude, latitude } = position.coords;
 
                     if (mapRef.current) {
-                        // Move map to user location
-                        mapRef.current.flyTo({
-                            center: [longitude, latitude],
-                            zoom: 19,
-                        });
+                        // Only zoom if explicitly requested (first time)
+                        if (shouldZoom) {
+                            mapRef.current.flyTo({
+                                center: [longitude, latitude],
+                                zoom: 19,
+                            });
+                        }
 
                         // Remove previous marker and popup if they exist
                         if (markerRef.current) {
@@ -229,7 +231,7 @@ const MapboxExample = () => {
                         // Create custom marker with man emoji
                         const el = document.createElement('div');
                         el.className = 'user-location-marker';
-                        el.innerHTML = '👨';
+                        el.innerHTML = '🤸';
                         el.style.fontSize = '30px';
                         el.style.display = 'flex';
                         el.style.justifyContent = 'center';
@@ -258,17 +260,58 @@ const MapboxExample = () => {
                             .setLngLat([longitude, latitude])
                             .addTo(mapRef.current);
                     }
+                },
+                (error) => {
+                    console.error('Error getting location:', error);
+                    // If it's the first time, update state
+                    if (shouldZoom) {
+                        setIsLocating(false);
+                        setLocatedUser(false);
+                    }
+                    // Clear interval if location fails during tracking
+                    if (intervalRef.current) {
+                        clearInterval(intervalRef.current);
+                        intervalRef.current = null;
+                    }
+                },
+            );
+        }
+    };
 
+    // Function to get and show user's location
+    const locateUser = () => {
+        setIsLocating(true);
+
+        // Clear any existing interval
+        if (intervalRef.current) {
+            clearInterval(intervalRef.current);
+            intervalRef.current = null;
+        }
+
+        if ('geolocation' in navigator) {
+            navigator.geolocation.getCurrentPosition(
+                (position) => {
+                    setLocatedUser(true);
                     setIsLocating(false);
+
+                    // Update location with zoom for first time
+                    updateUserLocation(true);
+
+                    // Start interval to refetch location every 10 seconds
+                    intervalRef.current = setInterval(() => {
+                        updateUserLocation(false); // No zoom for subsequent updates
+                    }, 10000);
                 },
                 (error) => {
                     console.error('Error getting location:', error);
                     setIsLocating(false);
+                    setLocatedUser(false);
                 },
             );
         } else {
             console.error('Geolocation is not supported by this browser');
             setIsLocating(false);
+            setLocatedUser(false);
         }
     };
 
@@ -341,9 +384,7 @@ const MapboxExample = () => {
                 .mapboxgl-canvas {
                     overflow: hidden !important;
                 }
-                .yellow-popup .mapboxgl-popup-content {
-                    background-color: yellow !important;
-                }
+
             `;
             document.head.appendChild(mapboxCanvasStyle);
 
@@ -457,6 +498,9 @@ const MapboxExample = () => {
         }
 
         return () => {
+            if (intervalRef.current) {
+                clearInterval(intervalRef.current);
+            }
             mapRef.current?.off('move', updateSvgOverlay);
             mapRef.current?.off('zoom', updateSvgOverlay);
             mapRef.current?.off('resize', updateSvgOverlay);
