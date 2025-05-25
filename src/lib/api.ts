@@ -870,4 +870,39 @@ export const roomsApi = {
             throw error;
         }
     },
+};
+
+// New Semester API
+export const newSemesterApi = {
+    // Reset data for new semester (delete all schedules but keep rooms and courses)
+    resetForNewSemester: async () => {
+        try {
+            console.log('Starting new semester reset...');
+            const response = await fetch(`${API_BASE_URL}/api/schedules/new-semester/`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json',
+                },
+            });
+            
+            if (!response.ok) {
+                const errorText = await response.text();
+                let errorData;
+                try {
+                    errorData = JSON.parse(errorText);
+                } catch (e) {
+                    throw new Error(`Error: ${response.status} - ${errorText}`);
+                }
+                throw new Error(errorData.detail || `Error: ${response.status}`);
+            }
+            
+            const result = await response.json();
+            console.log('New semester reset successful:', result);
+            return result;
+        } catch (error) {
+            console.error('Failed to reset for new semester:', error);
+            throw error;
+        }
+    },
 }; 
