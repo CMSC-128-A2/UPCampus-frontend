@@ -46,6 +46,10 @@ function ScheduleModal({ isOpen, onClose, facultyId, onSave }: ScheduleModalProp
     const [roomList, setRoomList] = useState<Room[]>([]);
     const [courseList, setCourseList] = useState<FrontendCourse[]>([]);
     
+    // Custom dropdown states
+    const [isRoomDropdownOpen, setIsRoomDropdownOpen] = useState(false);
+    const [isCourseDropdownOpen, setIsCourseDropdownOpen] = useState(false);
+    
     // Time state - using separate start and end time
     const [startTime, setStartTime] = useState<TimeValue>(null);
     const [endTime, setEndTime] = useState<TimeValue>(null);
@@ -82,6 +86,25 @@ function ScheduleModal({ isOpen, onClose, facultyId, onSave }: ScheduleModalProp
         
         fetchData();
     }, [isOpen]);
+    
+    // Close dropdowns when clicking outside
+    useEffect(() => {
+        const handleClickOutside = (event: MouseEvent) => {
+            const target = event.target as Element;
+            if (!target.closest('.dropdown-container')) {
+                setIsRoomDropdownOpen(false);
+                setIsCourseDropdownOpen(false);
+            }
+        };
+
+        if (isRoomDropdownOpen || isCourseDropdownOpen) {
+            document.addEventListener('mousedown', handleClickOutside);
+        }
+
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, [isRoomDropdownOpen, isCourseDropdownOpen]);
     
     // Format time to 12-hour format
     const formatTime = (time: TimeValue): string => {
@@ -168,25 +191,51 @@ function ScheduleModal({ isOpen, onClose, facultyId, onSave }: ScheduleModalProp
                         <div className="space-y-4 mb-6">
                             <div className="space-y-2">
                                 <label className="block text-gray-700">Course Code</label>
-                                <select
-                                    value={courseCode}
-                                    onChange={(e) => setCourseCode(e.target.value)}
-                                    className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                    disabled={isLoading}
-                                >
-                                    <option value="">Select a course</option>
-                                    {isLoading ? (
-                                        <option value="">Loading courses...</option>
-                                    ) : courseList.length === 0 ? (
-                                        <option value="">No courses available</option>
-                                    ) : (
-                                        courseList.map(course => (
-                                            <option key={course.id} value={course.courseCode}>
-                                                {course.courseCode}
-                                            </option>
-                                        ))
+                                <div className="relative dropdown-container">
+                                    <button
+                                        type="button"
+                                        onClick={() => setIsCourseDropdownOpen(!isCourseDropdownOpen)}
+                                        className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-left bg-white flex justify-between items-center"
+                                        disabled={isLoading}
+                                    >
+                                        <span className={courseCode ? 'text-gray-800' : 'text-gray-400'}>
+                                            {courseCode || 'Select a course'}
+                                        </span>
+                                        <Icon icon="ph:caret-down" className="text-gray-400" width="16" height="16" />
+                                    </button>
+                                    
+                                    {isCourseDropdownOpen && (
+                                        <div className="absolute z-10 w-full mt-1 bg-white border border-gray-300 rounded-lg shadow-lg max-h-48 overflow-y-auto">
+                                            <div
+                                                className="p-3 hover:bg-gray-100 cursor-pointer text-gray-400"
+                                                onClick={() => {
+                                                    setCourseCode('');
+                                                    setIsCourseDropdownOpen(false);
+                                                }}
+                                            >
+                                                Select a course
+                                            </div>
+                                            {isLoading ? (
+                                                <div className="p-3 text-gray-400">Loading courses...</div>
+                                            ) : courseList.length === 0 ? (
+                                                <div className="p-3 text-gray-400">No courses available</div>
+                                            ) : (
+                                                courseList.map(course => (
+                                                    <div
+                                                        key={course.id}
+                                                        className="p-3 hover:bg-gray-100 cursor-pointer"
+                                                        onClick={() => {
+                                                            setCourseCode(course.courseCode);
+                                                            setIsCourseDropdownOpen(false);
+                                                        }}
+                                                    >
+                                                        {course.courseCode}
+                                                    </div>
+                                                ))
+                                            )}
+                                        </div>
                                     )}
-                                </select>
+                                </div>
                             </div>
 
                             <div className="grid grid-cols-2 gap-4">
@@ -216,25 +265,51 @@ function ScheduleModal({ isOpen, onClose, facultyId, onSave }: ScheduleModalProp
 
                             <div className="space-y-2">
                                 <label className="block text-gray-700">Room</label>
-                                <select
-                                    value={roomId}
-                                    onChange={(e) => setRoomId(e.target.value)}
-                                    className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                    disabled={isLoading}
-                                >
-                                    <option value="">Select a room</option>
-                                    {isLoading ? (
-                                        <option value="">Loading rooms...</option>
-                                    ) : roomList.length === 0 ? (
-                                        <option value="">No rooms available</option>
-                                    ) : (
-                                        roomList.map(room => (
-                                            <option key={room.id} value={room.id}>
-                                                {room.room}
-                                            </option>
-                                        ))
+                                <div className="relative dropdown-container">
+                                    <button
+                                        type="button"
+                                        onClick={() => setIsRoomDropdownOpen(!isRoomDropdownOpen)}
+                                        className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-left bg-white flex justify-between items-center"
+                                        disabled={isLoading}
+                                    >
+                                        <span className={roomId ? 'text-gray-800' : 'text-gray-400'}>
+                                            {roomId ? roomList.find(r => r.id === roomId)?.room  : 'Select a room'}
+                                        </span>
+                                        <Icon icon="ph:caret-down" className="text-gray-400" width="16" height="16" />
+                                    </button>
+                                    
+                                    {isRoomDropdownOpen && (
+                                        <div className="absolute z-10 w-full mt-1 bg-white border border-gray-300 rounded-lg shadow-lg max-h-48 overflow-y-auto">
+                                            <div
+                                                className="p-3 hover:bg-gray-100 cursor-pointer text-gray-400"
+                                                onClick={() => {
+                                                    setRoomId('');
+                                                    setIsRoomDropdownOpen(false);
+                                                }}
+                                            >
+                                                Select a room
+                                            </div>
+                                            {isLoading ? (
+                                                <div className="p-3 text-gray-400">Loading rooms...</div>
+                                            ) : roomList.length === 0 ? (
+                                                <div className="p-3 text-gray-400">No rooms available</div>
+                                            ) : (
+                                                roomList.map(room => (
+                                                    <div
+                                                        key={room.id}
+                                                        className="p-3 hover:bg-gray-100 cursor-pointer"
+                                                        onClick={() => {
+                                                            setRoomId(room.id);
+                                                            setIsRoomDropdownOpen(false);
+                                                        }}
+                                                    >
+                                                        {room.room}
+                                                    </div>
+                                                ))
+                                            )}
+                                        </div>
                                     )}
-                                </select>
+                                </div>
                             </div>
 
                             <div className="space-y-2">
