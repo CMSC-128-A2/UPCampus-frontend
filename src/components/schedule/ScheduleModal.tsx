@@ -5,7 +5,22 @@ import { Save } from 'lucide-react';
 import TimePickerModal from './TimePickerModal';
 import { TimeValue } from './MUITimePicker';
 import dayjs from 'dayjs';
-import { facultyApi, Faculty } from '@/lib/api';
+import { facultyApi, Faculty, roomsApi, Room, schedulesApi } from '@/lib/api';
+
+// Frontend course format (mapped from backend)
+interface FrontendCourse {
+    id: string;
+    courseCode: string;
+    sections: {
+        id: string;
+        section: string;
+        type: 'Lecture' | 'Laboratory';
+        room: string;
+        schedule: string;
+        faculty: string | null;
+        facultyName?: string;
+    }[];
+}
 
 interface ScheduleModalProps {
     isOpen: boolean;
@@ -14,7 +29,7 @@ interface ScheduleModalProps {
         courseCode: string;
         section: string;
         type: string;
-        room: string;
+        roomId: string;
         day: string;
         time: string;
         facultyId: string;
@@ -25,10 +40,12 @@ function ScheduleModal({ isOpen, onClose, onSave }: ScheduleModalProps) {
     const [courseCode, setCourseCode] = useState('');
     const [section, setSection] = useState('');
     const [type, setType] = useState('Lecture');
-    const [room, setRoom] = useState('');
+    const [roomId, setRoomId] = useState('');
     const [day, setDay] = useState('');
     const [facultyId, setFacultyId] = useState<string>('');
     const [facultyList, setFacultyList] = useState<Faculty[]>([]);
+    const [roomList, setRoomList] = useState<Room[]>([]);
+    const [courseList, setCourseList] = useState<FrontendCourse[]>([]);
     
     // Time state - using separate start and end time
     const [startTime, setStartTime] = useState<TimeValue>(null);
@@ -41,28 +58,39 @@ function ScheduleModal({ isOpen, onClose, onSave }: ScheduleModalProps) {
     const [isSaving, setIsSaving] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     
-    // Fetch faculty list when modal opens
+    // Fetch faculty, rooms, and courses when modal opens
     useEffect(() => {
-        const fetchFaculty = async () => {
+        const fetchData = async () => {
             if (!isOpen) return;
             
             try {
                 setIsLoading(true);
-                const data = await facultyApi.getAllFaculty();
-                setFacultyList(data);
+                
+                // Fetch faculty list
+                const facultyData = await facultyApi.getAllFaculty();
+                setFacultyList(facultyData);
                 
                 // Set default faculty if available
-                if (data.length > 0 && !facultyId) {
-                    setFacultyId(data[0].id);
+                if (facultyData.length > 0 && !facultyId) {
+                    setFacultyId(facultyData[0].id);
                 }
+                
+                // Fetch rooms list
+                const roomsData = await roomsApi.getAllRooms();
+                setRoomList(roomsData);
+                
+                // Fetch courses list
+                const coursesData = await schedulesApi.getCourses();
+                setCourseList(coursesData);
+                
             } catch (error) {
-                console.error('Failed to fetch faculty list:', error);
+                console.error('Failed to fetch data:', error);
             } finally {
                 setIsLoading(false);
             }
         };
         
-        fetchFaculty();
+        fetchData();
     }, [isOpen]);
     
     // Format time to 12-hour format
@@ -89,11 +117,11 @@ function ScheduleModal({ isOpen, onClose, onSave }: ScheduleModalProps) {
         setCourseCode('');
         setSection('');
         setType('Lecture');
-        setRoom('');
+        setRoomId('');
         setDay('');
         setStartTime(null);
         setEndTime(null);
-        // Don't reset faculty to maintain selected faculty for next use
+        setFacultyId('');
     };
 
     const handleClose = () => {
@@ -107,7 +135,7 @@ function ScheduleModal({ isOpen, onClose, onSave }: ScheduleModalProps) {
         const timeString = getTimeString();
         
         // Validate form
-        if (!courseCode || !section || !type || !room || !day || !timeString) {
+        if (!courseCode || !section || !type || !roomId || !day || !timeString) {
             alert('Please fill in all required fields');
             return;
         }
@@ -118,7 +146,7 @@ function ScheduleModal({ isOpen, onClose, onSave }: ScheduleModalProps) {
                 courseCode,
                 section,
                 type,
-                room,
+                roomId,
                 day,
                 time: timeString,
                 facultyId: facultyId || ''
@@ -142,7 +170,7 @@ function ScheduleModal({ isOpen, onClose, onSave }: ScheduleModalProps) {
                         {/* Header */}
                         <div className="flex justify-between items-center mb-6">
                             <h2 className="text-2xl font-semibold">Add Schedule</h2>
-                            <button onClick={handleClose} className="text-gray-400 hover:text-gray-600">
+                            <button onClick={handleClose} className="text-gray-500 hover:text-gray-700">
                                 <Icon icon="ph:x-bold" width="24" height="24" />
                             </button>
                         </div>
@@ -151,13 +179,25 @@ function ScheduleModal({ isOpen, onClose, onSave }: ScheduleModalProps) {
                         <div className="space-y-4 mb-6">
                             <div className="space-y-2">
                                 <label className="block text-gray-700">Course Code</label>
-                                <input
-                                    type="text"
+                                <select
                                     value={courseCode}
                                     onChange={(e) => setCourseCode(e.target.value)}
                                     className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                    placeholder="e.g., CMSC 126"
-                                />
+                                    disabled={isLoading}
+                                >
+                                    <option value="">Select a course</option>
+                                    {isLoading ? (
+                                        <option value="">Loading courses...</option>
+                                    ) : courseList.length === 0 ? (
+                                        <option value="">No courses available</option>
+                                    ) : (
+                                        courseList.map(course => (
+                                            <option key={course.id} value={course.courseCode}>
+                                                {course.courseCode}
+                                            </option>
+                                        ))
+                                    )}
+                                </select>
                             </div>
 
                             <div className="grid grid-cols-2 gap-4">
@@ -187,13 +227,25 @@ function ScheduleModal({ isOpen, onClose, onSave }: ScheduleModalProps) {
 
                             <div className="space-y-2">
                                 <label className="block text-gray-700">Room</label>
-                                <input
-                                    type="text"
-                                    value={room}
-                                    onChange={(e) => setRoom(e.target.value)}
+                                <select
+                                    value={roomId}
+                                    onChange={(e) => setRoomId(e.target.value)}
                                     className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                    placeholder="e.g., SCI 405"
-                                />
+                                    disabled={isLoading}
+                                >
+                                    <option value="">Select a room</option>
+                                    {isLoading ? (
+                                        <option value="">Loading rooms...</option>
+                                    ) : roomList.length === 0 ? (
+                                        <option value="">No rooms available</option>
+                                    ) : (
+                                        roomList.map(room => (
+                                            <option key={room.id} value={room.id}>
+                                                {room.room}
+                                            </option>
+                                        ))
+                                    )}
+                                </select>
                             </div>
 
                             <div className="space-y-2">

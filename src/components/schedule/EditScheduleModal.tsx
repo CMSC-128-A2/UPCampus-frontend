@@ -1,10 +1,25 @@
 import React, { useState, useEffect } from 'react';
 import { Icon } from '@iconify/react';
 import { Edit } from 'lucide-react';
-import { parseSchedule, facultyApi, Faculty } from '@/lib/api';
+import { parseSchedule, facultyApi, Faculty, roomsApi, Room, schedulesApi } from '@/lib/api';
 import TimePickerModal from './TimePickerModal';
 import { TimeValue } from './MUITimePicker';
 import dayjs from 'dayjs';
+
+// Frontend course format (mapped from backend)
+interface FrontendCourse {
+    id: string;
+    courseCode: string;
+    sections: {
+        id: string;
+        section: string;
+        type: 'Lecture' | 'Laboratory';
+        room: string;
+        schedule: string;
+        faculty: string | null;
+        facultyName?: string;
+    }[];
+}
 
 interface EditScheduleModalProps {
     isOpen: boolean;
@@ -22,7 +37,7 @@ interface EditScheduleModalProps {
         course_code?: string;
         section: string;
         type: string;
-        room: string;
+        room_id: string;
         day: string;
         time: string;
         faculty_id?: string;
@@ -37,7 +52,10 @@ function EditScheduleModal({ isOpen, onClose, sectionId, initialData, onSave }: 
     const [day, setDay] = useState<string[]>([]);
     const [facultyId, setFacultyId] = useState<string>('');
     const [facultyList, setFacultyList] = useState<Faculty[]>([]);
+    const [roomList, setRoomList] = useState<Room[]>([]);
+    const [courseList, setCourseList] = useState<FrontendCourse[]>([]);
     const [isLoadingFaculty, setIsLoadingFaculty] = useState(false);
+    const [isLoadingData, setIsLoadingData] = useState(false);
     
     // Time state using separate start and end times
     const [startTime, setStartTime] = useState<TimeValue>(null);
@@ -49,23 +67,34 @@ function EditScheduleModal({ isOpen, onClose, sectionId, initialData, onSave }: 
     
     const [isSaving, setIsSaving] = useState(false);
     
-    // Fetch faculty list when modal opens
+    // Fetch faculty, rooms, and courses when modal opens
     useEffect(() => {
-        const fetchFaculty = async () => {
+        const fetchData = async () => {
             if (!isOpen) return;
             
             try {
-                setIsLoadingFaculty(true);
-                const data = await facultyApi.getAllFaculty();
-                setFacultyList(data);
+                setIsLoadingData(true);
+                
+                // Fetch faculty list
+                const facultyData = await facultyApi.getAllFaculty();
+                setFacultyList(facultyData);
+                
+                // Fetch rooms list
+                const roomsData = await roomsApi.getAllRooms();
+                setRoomList(roomsData);
+                
+                // Fetch courses list
+                const coursesData = await schedulesApi.getCourses();
+                setCourseList(coursesData);
+                
             } catch (error) {
-                console.error('Failed to fetch faculty list:', error);
+                console.error('Failed to fetch data:', error);
             } finally {
-                setIsLoadingFaculty(false);
+                setIsLoadingData(false);
             }
         };
         
-        fetchFaculty();
+        fetchData();
     }, [isOpen]);
     
     // Format time to 12-hour format
@@ -116,7 +145,10 @@ function EditScheduleModal({ isOpen, onClose, sectionId, initialData, onSave }: 
             setCourseCode(initialData.courseCode);
             setSection(initialData.section);
             setType(initialData.type);
-            setRoom(initialData.room);
+            
+            // Find the room ID that matches the room display name
+            const matchingRoom = roomList.find(roomItem => roomItem.room === initialData.room);
+            setRoom(matchingRoom ? matchingRoom.id : '');
             
             // Set faculty ID if it exists
             if (initialData.faculty) {
@@ -138,7 +170,7 @@ function EditScheduleModal({ isOpen, onClose, sectionId, initialData, onSave }: 
                 setEndTime(parseTimeString(endTimeStr.trim()));
             }
         }
-    }, [isOpen, initialData]);
+    }, [isOpen, initialData, roomList]);
 
     const handleClose = () => {
         onClose();
@@ -162,7 +194,7 @@ function EditScheduleModal({ isOpen, onClose, sectionId, initialData, onSave }: 
                 course_code: courseCode, // Optional, only needed if changing the course
                 section,
                 type,
-                room,
+                room_id: room,
                 day: dayString,
                 time: timeString,
                 faculty_id: facultyId || undefined
@@ -193,13 +225,25 @@ function EditScheduleModal({ isOpen, onClose, sectionId, initialData, onSave }: 
                         <div className="space-y-4">
                             <div className="space-y-2">
                                 <label className="block text-gray-700">Course Code</label>
-                                <input
-                                    type="text"
+                                <select
                                     value={courseCode}
                                     onChange={(e) => setCourseCode(e.target.value)}
                                     className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                    placeholder="e.g., CMSC 123"
-                                />
+                                    disabled={isLoadingData}
+                                >
+                                    <option value="">Select a course</option>
+                                    {isLoadingData ? (
+                                        <option value="">Loading courses...</option>
+                                    ) : courseList.length === 0 ? (
+                                        <option value="">No courses available</option>
+                                    ) : (
+                                        courseList.map(course => (
+                                            <option key={course.id} value={course.courseCode}>
+                                                {course.courseCode}
+                                            </option>
+                                        ))
+                                    )}
+                                </select>
                             </div>
 
                             <div className="space-y-2">
@@ -227,13 +271,25 @@ function EditScheduleModal({ isOpen, onClose, sectionId, initialData, onSave }: 
 
                             <div className="space-y-2">
                                 <label className="block text-gray-700">Room</label>
-                                <input
-                                    type="text"
+                                <select
                                     value={room}
                                     onChange={(e) => setRoom(e.target.value)}
                                     className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                    placeholder="e.g., SCI 405"
-                                />
+                                    disabled={isLoadingData}
+                                >
+                                    <option value="">Select a room</option>
+                                    {isLoadingData ? (
+                                        <option value="">Loading rooms...</option>
+                                    ) : roomList.length === 0 ? (
+                                        <option value="">No rooms available</option>
+                                    ) : (
+                                        roomList.map(roomItem => (
+                                            <option key={roomItem.id} value={roomItem.id}>
+                                                {roomItem.room}
+                                            </option>
+                                        ))
+                                    )}
+                                </select>
                             </div>
 
                             <div className="space-y-2">
@@ -242,10 +298,10 @@ function EditScheduleModal({ isOpen, onClose, sectionId, initialData, onSave }: 
                                     value={facultyId}
                                     onChange={(e) => setFacultyId(e.target.value)}
                                     className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                    disabled={isLoadingFaculty}
+                                    disabled={isLoadingData}
                                 >
                                     <option value="">None (Unassigned)</option>
-                                    {isLoadingFaculty ? (
+                                    {isLoadingData ? (
                                         <option value="" disabled>Loading professors...</option>
                                     ) : (
                                         facultyList.map(faculty => (

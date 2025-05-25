@@ -31,7 +31,12 @@ interface CourseSchedule {
 }
 
 // Helper function to extract floor number from room code
-const getFloorFromRoom = (room: string): number | null => {
+const getFloorFromRoom = (room: string | undefined | null): number | null => {
+    // Handle cases where room is not a string or is empty
+    if (!room || typeof room !== 'string') {
+        return null;
+    }
+    
     // Match a digit that appears after spaces or non-digit characters
     const match = room.match(/\s*(\d)/);
     if (match && match[1]) {
@@ -41,7 +46,7 @@ const getFloorFromRoom = (room: string): number | null => {
 };
 
 // Helper function to check if a section belongs to a specific floor
-const isOnFloor = (room: string, floor: Floor): boolean => {
+const isOnFloor = (room: string | undefined | null, floor: Floor): boolean => {
     if (floor === 'All Floors') return true;
     
     const floorNumber = getFloorFromRoom(room);
@@ -238,13 +243,14 @@ export default function SchedulePage() {
         courseCode: string;
         section: string;
         type: string;
-        room: string;
+        roomId: string;
         day: string;
         time: string;
+        facultyId: string;
     }) => {
         // Check if all required fields are filled
         if (!scheduleData.courseCode || !scheduleData.section || !scheduleData.type ||
-            !scheduleData.room || !scheduleData.day || !scheduleData.time) {
+            !scheduleData.roomId || !scheduleData.day || !scheduleData.time) {
             showToast('Please fill in all fields', 'error');
             return;
         }
@@ -255,7 +261,7 @@ export default function SchedulePage() {
                 course_code: scheduleData.courseCode,
                 section: scheduleData.section,
                 type: scheduleData.type,
-                room: scheduleData.room,
+                room_id: scheduleData.roomId,
                 day: scheduleData.day,
                 time: scheduleData.time,
                 faculty_id: professorId,
@@ -321,31 +327,29 @@ export default function SchedulePage() {
                             id: newSection.id,
                             section: scheduleData.section,
                             type,
-                            room: scheduleData.room,
+                            room: newSection.room_display || 'Unknown Room', // Use room_display from response
                             schedule
                         }
                     ]
                 };
             } else {
-                // Create new course
+                // Create new course with this section
                 updatedSchedules.push({
-                    id: newSection.course, // API returns course ID
+                    id: newSection.course || scheduleData.courseCode, // Use course ID from response or fallback
                     courseCode: scheduleData.courseCode,
-                    sections: [
-                        {
-                            id: newSection.id,
-                            section: scheduleData.section,
-                            type,
-                            room: scheduleData.room,
-                            schedule
-                        }
-                    ]
+                    sections: [{
+                        id: newSection.id,
+                        section: scheduleData.section,
+                        type,
+                        room: newSection.room_display || 'Unknown Room', // Use room_display from response
+                        schedule
+                    }]
                 });
             }
             
             setClassSchedules(updatedSchedules);
             closeModal(); // Only close modal on success
-            showToast(`Successfully added ${scheduleData.courseCode} ${scheduleData.section} schedule`, 'success');
+            showToast('Schedule added successfully', 'success');
         } catch (error: any) {
             console.error('Error saving schedule:', error);
             showToast('An unexpected error occurred. Please try again.', 'error');
@@ -357,9 +361,10 @@ export default function SchedulePage() {
         course_code?: string;
         section: string;
         type: string;
-        room: string;
+        room_id: string;
         day: string;
         time: string;
+        faculty_id?: string;
     }) => {
         try {
             // Update via API
@@ -402,7 +407,7 @@ export default function SchedulePage() {
                 return; // Exit without closing modal
             }
             
-            // Format schedule for frontend
+            // If we've reached here, the update was successful
             const schedule = `${scheduleData.day} | ${scheduleData.time}`;
             const type = scheduleData.type as ScheduleType;
             
@@ -415,7 +420,7 @@ export default function SchedulePage() {
                             ...section,
                             section: scheduleData.section,
                             type,
-                            room: scheduleData.room,
+                            room: response.room_display || 'Unknown Room', // Use room_display from response
                             schedule
                         } : section
                     )
