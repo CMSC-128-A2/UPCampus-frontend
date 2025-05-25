@@ -14,7 +14,7 @@ import { schedulesApi, facultyApi, parseSchedule, Course, ClassSection as ApiCla
 
 // Define TypeScript types for the data structure
 type ScheduleType = 'Lecture' | 'Laboratory';
-type Floor = '1st Floor' | '2nd Floor' | '3rd Floor' | '4th Floor' | '5th Floor' | 'All Floors';
+type Floor = '1st Floor' | '2nd Floor' | '3rd Floor' | '4th Floor' | '5th Floor' | '6th Floor' | 'All Floors';
 
 interface ClassSection {
     id: string;
@@ -58,6 +58,7 @@ const isOnFloor = (room: string | undefined | null, floor: Floor): boolean => {
         case '3rd Floor': return floorNumber === 3;
         case '4th Floor': return floorNumber === 4;
         case '5th Floor': return floorNumber === 5;
+        case '6th Floor': return floorNumber === 6;
         default: return false;
     }
 };
@@ -76,7 +77,7 @@ export default function SchedulePage() {
     const [searchQuery, setSearchQuery] = useState('');
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
-    const [selectedFloor, setSelectedFloor] = useState<Floor>('4th Floor');
+    const [selectedFloor, setSelectedFloor] = useState<Floor>('All Floors');
     const [toastOpen, setToastOpen] = useState(false);
     const [toastMessage, setToastMessage] = useState('');
     const [toastType, setToastType] = useState<ToastType>('info');
@@ -518,6 +519,7 @@ export default function SchedulePage() {
                                     <option value="3rd Floor">3rd Floor</option>
                                     <option value="4th Floor">4th Floor</option>
                                     <option value="5th Floor">5th Floor</option>
+                                    <option value="6th Floor">6th Floor</option>
                                 </select>
                                 <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
                                     <Icon icon="ph:caret-down" className="text-[#8BC34A]" width="16" height="16" />
