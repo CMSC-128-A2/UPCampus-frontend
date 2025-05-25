@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Icon } from '@iconify/react';
 import { Edit } from 'lucide-react';
-import { parseSchedule, facultyApi, Faculty, roomsApi, Room, schedulesApi } from '@/lib/api';
+import { parseSchedule, roomsApi, Room, schedulesApi } from '@/lib/api';
 import TimePickerModal from './TimePickerModal';
 import { TimeValue } from './MUITimePicker';
 import dayjs from 'dayjs';
@@ -50,11 +50,8 @@ function EditScheduleModal({ isOpen, onClose, sectionId, initialData, onSave }: 
     const [type, setType] = useState<'Lecture' | 'Laboratory'>('Lecture');
     const [room, setRoom] = useState('');
     const [day, setDay] = useState<string[]>([]);
-    const [facultyId, setFacultyId] = useState<string>('');
-    const [facultyList, setFacultyList] = useState<Faculty[]>([]);
     const [roomList, setRoomList] = useState<Room[]>([]);
     const [courseList, setCourseList] = useState<FrontendCourse[]>([]);
-    const [isLoadingFaculty, setIsLoadingFaculty] = useState(false);
     const [isLoadingData, setIsLoadingData] = useState(false);
     
     // Time state using separate start and end times
@@ -67,17 +64,13 @@ function EditScheduleModal({ isOpen, onClose, sectionId, initialData, onSave }: 
     
     const [isSaving, setIsSaving] = useState(false);
     
-    // Fetch faculty, rooms, and courses when modal opens
+    // Fetch rooms and courses when modal opens (removed faculty fetching)
     useEffect(() => {
         const fetchData = async () => {
             if (!isOpen) return;
             
             try {
                 setIsLoadingData(true);
-                
-                // Fetch faculty list
-                const facultyData = await facultyApi.getAllFaculty();
-                setFacultyList(facultyData);
                 
                 // Fetch rooms list
                 const roomsData = await roomsApi.getAllRooms();
@@ -150,11 +143,6 @@ function EditScheduleModal({ isOpen, onClose, sectionId, initialData, onSave }: 
             const matchingRoom = roomList.find(roomItem => roomItem.room === initialData.room);
             setRoom(matchingRoom ? matchingRoom.id : '');
             
-            // Set faculty ID if it exists
-            if (initialData.faculty) {
-                setFacultyId(initialData.faculty);
-            }
-            
             // Parse schedule string into day and time
             const { day: scheduleDay, time: scheduleTime } = parseSchedule(initialData.schedule);
             // Split the day string into an array of days and filter out empty strings
@@ -197,7 +185,7 @@ function EditScheduleModal({ isOpen, onClose, sectionId, initialData, onSave }: 
                 room_id: room,
                 day: dayString,
                 time: timeString,
-                faculty_id: facultyId || undefined
+                faculty_id: initialData.faculty // Use faculty from initialData
             });
             // Don't close modal here, let the parent component decide based on success/failure
         } catch (error) {
@@ -286,27 +274,6 @@ function EditScheduleModal({ isOpen, onClose, sectionId, initialData, onSave }: 
                                         roomList.map(roomItem => (
                                             <option key={roomItem.id} value={roomItem.id}>
                                                 {roomItem.room}
-                                            </option>
-                                        ))
-                                    )}
-                                </select>
-                            </div>
-
-                            <div className="space-y-2">
-                                <label className="block text-gray-700">Professor</label>
-                                <select
-                                    value={facultyId}
-                                    onChange={(e) => setFacultyId(e.target.value)}
-                                    className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                    disabled={isLoadingData}
-                                >
-                                    <option value="">None (Unassigned)</option>
-                                    {isLoadingData ? (
-                                        <option value="" disabled>Loading professors...</option>
-                                    ) : (
-                                        facultyList.map(faculty => (
-                                            <option key={faculty.id} value={faculty.id}>
-                                                {faculty.name} ({faculty.email})
                                             </option>
                                         ))
                                     )}

@@ -5,7 +5,7 @@ import { Save } from 'lucide-react';
 import TimePickerModal from './TimePickerModal';
 import { TimeValue } from './MUITimePicker';
 import dayjs from 'dayjs';
-import { facultyApi, Faculty, roomsApi, Room, schedulesApi } from '@/lib/api';
+import { roomsApi, Room, schedulesApi } from '@/lib/api';
 
 // Frontend course format (mapped from backend)
 interface FrontendCourse {
@@ -25,6 +25,7 @@ interface FrontendCourse {
 interface ScheduleModalProps {
     isOpen: boolean;
     onClose: () => void;
+    facultyId: string;
     onSave?: (scheduleData: {
         courseCode: string;
         section: string;
@@ -36,14 +37,12 @@ interface ScheduleModalProps {
     }) => void;
 }
 
-function ScheduleModal({ isOpen, onClose, onSave }: ScheduleModalProps) {
+function ScheduleModal({ isOpen, onClose, facultyId, onSave }: ScheduleModalProps) {
     const [courseCode, setCourseCode] = useState('');
     const [section, setSection] = useState('');
     const [type, setType] = useState('Lecture');
     const [roomId, setRoomId] = useState('');
     const [day, setDay] = useState('');
-    const [facultyId, setFacultyId] = useState<string>('');
-    const [facultyList, setFacultyList] = useState<Faculty[]>([]);
     const [roomList, setRoomList] = useState<Room[]>([]);
     const [courseList, setCourseList] = useState<FrontendCourse[]>([]);
     
@@ -58,22 +57,13 @@ function ScheduleModal({ isOpen, onClose, onSave }: ScheduleModalProps) {
     const [isSaving, setIsSaving] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     
-    // Fetch faculty, rooms, and courses when modal opens
+    // Fetch rooms and courses when modal opens (removed faculty fetching)
     useEffect(() => {
         const fetchData = async () => {
             if (!isOpen) return;
             
             try {
                 setIsLoading(true);
-                
-                // Fetch faculty list
-                const facultyData = await facultyApi.getAllFaculty();
-                setFacultyList(facultyData);
-                
-                // Set default faculty if available
-                if (facultyData.length > 0 && !facultyId) {
-                    setFacultyId(facultyData[0].id);
-                }
                 
                 // Fetch rooms list
                 const roomsData = await roomsApi.getAllRooms();
@@ -121,7 +111,6 @@ function ScheduleModal({ isOpen, onClose, onSave }: ScheduleModalProps) {
         setDay('');
         setStartTime(null);
         setEndTime(null);
-        setFacultyId('');
     };
 
     const handleClose = () => {
@@ -149,7 +138,7 @@ function ScheduleModal({ isOpen, onClose, onSave }: ScheduleModalProps) {
                 roomId,
                 day,
                 time: timeString,
-                facultyId: facultyId || ''
+                facultyId: facultyId
             });
             // Don't close modal here, let the parent component decide based on success/failure
         } catch (error) {
@@ -242,28 +231,6 @@ function ScheduleModal({ isOpen, onClose, onSave }: ScheduleModalProps) {
                                         roomList.map(room => (
                                             <option key={room.id} value={room.id}>
                                                 {room.room}
-                                            </option>
-                                        ))
-                                    )}
-                                </select>
-                            </div>
-
-                            <div className="space-y-2">
-                                <label className="block text-gray-700">Professor</label>
-                                <select
-                                    value={facultyId}
-                                    onChange={(e) => setFacultyId(e.target.value)}
-                                    className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                    disabled={isLoading}
-                                >
-                                    {isLoading ? (
-                                        <option value="">Loading professors...</option>
-                                    ) : facultyList.length === 0 ? (
-                                        <option value="">No professors available</option>
-                                    ) : (
-                                        facultyList.map(faculty => (
-                                            <option key={faculty.id} value={faculty.id}>
-                                                {faculty.name}
                                             </option>
                                         ))
                                     )}

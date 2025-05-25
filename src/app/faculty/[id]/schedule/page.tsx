@@ -586,6 +586,7 @@ export default function SchedulePage() {
                 <ScheduleModal
                     isOpen={isModalOpen}
                     onClose={closeModal}
+                    facultyId={professorId}
                     onSave={handleSaveSchedule}
                 />
 
