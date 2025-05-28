@@ -11,7 +11,7 @@ import {
     ArrowRightToLine,
     ChevronLeft,
     BrickWall,
-    GraduationCap
+    GraduationCap,
 } from 'lucide-react';
 
 // Use same Room interface as in FloorPlanView
@@ -191,28 +191,26 @@ const FloorSidebar: React.FC<FloorSidebarProps> = ({
                 </div>
 
                 <div className="overflow-y-auto h-[calc(100%-89px)]">
-                    {Object.entries(roomsByCategory).map(
-                        ([category, rooms]) => 
-                            category === "Comfort Rooms" ?
-                                <div key={category} className="">
-                                    {rooms.map((room) => (
-                                        <div
-                                            key={room.code}
-                                            className={`flex items-center p-2 text-white cursor-pointer`}
-                                            onClick={() =>
-                                                setSelectedRoomCode(room.code)
-                                            }
-                                        >
-                                            <div className=" rounded-[5px] bg-white border-2 border-maroon-accent text-maroon-accent flex items-center gap-1 justify-center px-2 py-1 mr-2 mb-2">
-                                                <span className="text-xs">
-                                                    {getIconForRoom(room.icon)}
-                                                </span>
-                                            </div>
+                    {Object.entries(roomsByCategory).map(([category, rooms]) =>
+                        category === 'Comfort Rooms' ? (
+                            <div key={category} className="">
+                                {rooms.map((room) => (
+                                    <div
+                                        key={room.code}
+                                        className={`flex items-center p-2 text-white cursor-pointer`}
+                                        onClick={() =>
+                                            setSelectedRoomCode(room.code)
+                                        }
+                                    >
+                                        <div className=" rounded-[5px] bg-white border-2 border-maroon-accent text-maroon-accent flex items-center gap-1 justify-center px-2 py-1 mr-2 mb-2">
+                                            <span className="text-xs">
+                                                {getIconForRoom(room.icon)}
+                                            </span>
                                         </div>
-                                    ))}
-                                </div>
-                        
-                        :    (
+                                    </div>
+                                ))}
+                            </div>
+                        ) : (
                             <div key={category} className="mb-2">
                                 <div className="p-2 bg-[#AA4645] text-white font-medium">
                                     {category}
@@ -221,12 +219,12 @@ const FloorSidebar: React.FC<FloorSidebarProps> = ({
                                     {rooms.map((room) => (
                                         <div
                                             key={room.code}
-                                            className={`flex items-center p-2 text-white cursor-pointer hover:bg-white/10 transition-colors`}
+                                            className={`flex items-start p-2 text-white cursor-pointer hover:bg-white/10 transition-colors`}
                                             onClick={() =>
                                                 setSelectedRoomCode(room.code)
                                             }
                                         >
-                                            <div className=" rounded-full bg-white border-2 border-maroon-accent text-maroon-accent flex items-center gap-1 justify-center px-2 py-1 mr-2">
+                                            <div className=" rounded-full items-start bg-white border-2 border-maroon-accent text-maroon-accent flex items-start gap-1 justify-center px-2 py-1 mr-2">
                                                 <span className="text-xs">
                                                     {getIconForRoom(room.icon)}
                                                 </span>

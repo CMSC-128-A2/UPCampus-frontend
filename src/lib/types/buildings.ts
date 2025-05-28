@@ -714,7 +714,9 @@ export const mockBuildingsData = {
                         contactNumber: 'Local - 325 | Direct - (032) 233 3497',
                     },
                     {
-                        name: 'College of Science',
+
+                        name: 'Office of the College Dean',
+
                         contactNumber: 'Local - 311',
                         email: 'cos.upcebu@up.edu.ph',
                     },
@@ -793,7 +795,9 @@ export const mockBuildingsData = {
                     { name: '308 Optimization Research Group' },
                     { name: '310 Natural Language Processing Group' },
                     { name: '311 Mini Library' },
-                    { name: '312 Office of the Chairperson' },
+
+                    { name: '312 Office of the DCS Chair' },
+
                     {
                         name: '204 Department of Computer Science Office',
                         contactNumber: 'Local - 206',
