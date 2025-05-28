@@ -6,18 +6,11 @@ const API_BASE_URL = config.apiUrl;
 console.log('API_BASE_URL:', API_BASE_URL); // Debug the API URL
 
 // Types
-export interface Room {
-    id: string;
-    room: string;
-    floor: string;
-}
-
 export interface ClassSection {
     id: string;
     section: string;
     type: 'Lecture' | 'Laboratory';
     room: string;
-    room_display?: string;
     schedule: string;
     faculty?: string;
     faculty_name?: string;
@@ -59,6 +52,20 @@ export interface AdminUser {
     is_superuser: boolean;
 }
 
+// Room interface for the rooms API
+export interface Room {
+    id: string;
+    code: string;
+    name: string;
+    category: string;
+    building?: string;
+    floor?: number;
+    capacity?: number;
+    equipment?: string[];
+    created_at?: string;
+    updated_at?: string;
+}
+
 // Convert backend course format to frontend format
 export const mapCourseToFrontend = (course: Course) => {
     console.log('Mapping course:', course); // Debug course mapping
@@ -69,7 +76,7 @@ export const mapCourseToFrontend = (course: Course) => {
             id: section.id,
             section: section.section,
             type: section.type,
-            room: section.room_display || section.room || 'Unknown Room', // Prefer room_display, fallback to room, then to 'Unknown Room'
+            room: section.room,
             schedule: section.schedule,
             faculty: section.faculty ? section.faculty.toString() : null,
             facultyName: section.faculty_name,
@@ -514,7 +521,7 @@ export const schedulesApi = {
         course_code: string;
         section: string;
         type: string;
-        room_id: string;
+        room: string;
         day: string;
         time: string;
         faculty_id?: string;
@@ -602,7 +609,7 @@ export const schedulesApi = {
             course_code?: string;
             section: string;
             type: string;
-            room_id: string;
+            room: string;
             day: string;
             time: string;
             faculty_id?: string;
