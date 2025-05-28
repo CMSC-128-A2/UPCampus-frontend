@@ -2,6 +2,7 @@
 
 import React from 'react';
 import { Icon } from '@iconify/react';
+import { Plus, Minus, Shrink, MapPin } from 'lucide-react';
 
 interface MapControlsProps {
     onZoomIn: () => void;
@@ -17,57 +18,63 @@ const MapControls: React.FC<MapControlsProps> = ({
     onLocate,
 }) => {
     return (
-        <div className="absolute bottom-2 left-2 z-10 flex flex-row bg-green-800 rounded-md shadow-md overflow-hidden">
-            <button
-                onClick={onZoomIn}
-                className="p-3 hover:bg-green-700 border-r border-green-900 transition-colors focus:outline-none"
-                aria-label="Zoom in"
-            >
-                <Icon
-                    icon="mdi:plus"
-                    width="24"
-                    height="24"
-                    className="text-white"
-                />
-            </button>
+        <div className="absolute bottom-4 left-4 flex gap-1 z-10 p-1.5 rounded-lg bg-green-accent">
+                    <button
+                        onClick={onZoomIn}
+                        className="bg-white rounded-tl-sm rounded-bl-sm w-10 h-10 flex items-center justify-center shadow-md hover:bg-gray-100"
+                        aria-label="Zoom in"
+                    >
+
+                            <Plus
+                                width="24"
+                                height="24"
+                                className="text-[#004D37]"
+                            />
+
+                    </button>
+         
+ 
 
             <button
                 onClick={onZoomOut}
-                className="p-3 hover:bg-green-700 border-r border-green-900 transition-colors focus:outline-none"
+                className="bg-white  w-10 h-10 flex items-center justify-center shadow-md hover:bg-gray-100"
                 aria-label="Zoom out"
             >
-                <Icon
-                    icon="mdi:minus"
-                    width="24"
-                    height="24"
-                    className="text-white"
-                />
+
+                    <Minus
+                        width="24"
+                        height="24"
+                        className="text-[#004D37]"
+                    />
+
             </button>
 
             <button
                 onClick={onReset}
-                className="p-3 hover:bg-green-700 border-r border-green-900 transition-colors focus:outline-none"
+                className="bg-white  w-10 h-10 flex items-center justify-center shadow-md hover:bg-gray-100"
                 aria-label="Reset map view"
             >
-                <Icon
-                    icon="mdi:restore"
-                    width="24"
-                    height="24"
-                    className="text-white"
-                />
+ 
+                    <Shrink
+                        width="24"
+                        height="24"
+                        className="text-[#004D37]"
+                    />
+
             </button>
 
             <button
                 onClick={onLocate}
-                className="p-3 hover:bg-green-700 transition-colors focus:outline-none"
+                className="bg-white rounded-tr-sm rounded-br-sm w-10 h-10 flex items-center justify-center shadow-md hover:bg-gray-100"
                 aria-label="Show my location"
             >
-                <Icon
-                    icon="mdi:map-marker"
-                    width="24"
-                    height="24"
-                    className="text-white"
-                />
+
+                    <MapPin
+                        width="24"
+                        height="24"
+                        className="text-[#004D37]"
+                    />
+
             </button>
         </div>
     );

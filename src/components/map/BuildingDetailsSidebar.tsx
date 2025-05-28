@@ -23,11 +23,11 @@ interface BuildingDetail {
     slug?: string | null;
     // Building-specific properties
     floors?: {
-        name: string;
-        facilities: (
+        name?: string;
+        facilities?: (
             | string
             | {
-                  name: string;
+                  name?: string;
                   email?: string;
                   contactNumber?: string;
                   site?: string;
@@ -51,6 +51,7 @@ const BuildingDetailsSidebar: React.FC = () => {
     // Get the selected mark ID from the global store
     const { selectedMarkId, setSelectedMarkId } = useMapStore();
 
+    
     // State to track sidebar open/close state for animations
     const [sidebarOpen, setSidebarOpen] = useState(false);
 
@@ -69,6 +70,7 @@ const BuildingDetailsSidebar: React.FC = () => {
     const building = selectedMarkId
         ? (mockBuildingsData as Record<string, BuildingDetail>)[selectedMarkId]
         : null;
+
 
     // Update sidebar open state when selectedMarkId changes
     useEffect(() => {
@@ -131,7 +133,9 @@ const BuildingDetailsSidebar: React.FC = () => {
         );
     }
 
-    // Floors tab content for buildings
+
+
+// Floors tab content for buildings
 const renderFloorsTab = () => {
     return (
         <div className="pt-2">
@@ -248,6 +252,7 @@ const renderFloorsTab = () => {
 
     // Contacts tab content
 const renderContactsTab = () => {
+    
     // For security type
     if (building.type === 'security') {
         return (
@@ -279,6 +284,8 @@ const renderContactsTab = () => {
                 </div>
             )}
 
+
+
             {building.floors && (
                 <div>
                     <h4 className="font-semibold">Facility Contacts:</h4>
@@ -306,7 +313,7 @@ const renderContactsTab = () => {
                                                 <br />Email:{' '}
                                                 <a
                                                     href={`mailto:${facility.email}`}
-                                                    className="text-blue-500 underline"
+                                                    className="text-white underline"
                                                 >
                                                     {facility.email}
                                                 </a>
@@ -362,9 +369,19 @@ const renderContactsTab = () => {
             </div>
         );
     };
+    const hasFacilityContacts = () => {
+        return building.floors?.some((floor) =>
+            floor.facilities?.some(
+                (facility) =>
+                    typeof facility === 'object' &&
+                    (facility.email || facility.contactNumber)
+            )
+        );
+    };
 
     // Render tabs based on building type
     const renderTabs = () => {
+
         // For activity type
         if (building.type === 'activity') {
             return (
@@ -375,19 +392,19 @@ const renderContactsTab = () => {
                     }
                     className="w-full"
                 >
-                    <TabsList className="w-[95%] mx-auto grid grid-cols-2 bg-maroon-accent/60">
+                    <TabsList className="w-[95%] mx-auto grid grid-cols-1 bg-maroon-accent/60">
                         <TabsTrigger
                             value="about"
                             className="text-white data-[state=active]:text-foreground"
                         >
                             About
                         </TabsTrigger>
-                        <TabsTrigger
+                        {/* <TabsTrigger
                             value="images"
                             className="text-white data-[state=active]:text-foreground"
                         >
                             Images
-                        </TabsTrigger>
+                        </TabsTrigger> */}
                     </TabsList>
                     <TabsContent value="about">{renderAboutTab()}</TabsContent>
                     <TabsContent value="images">
@@ -397,8 +414,12 @@ const renderContactsTab = () => {
             );
         }
 
+        
+
         // For security type
         if (building.type === 'security') {
+
+            
             return (
                 <Tabs
                     value={activeTab.security}
@@ -407,33 +428,41 @@ const renderContactsTab = () => {
                     }
                     className="w-full"
                 >
-                    <TabsList className="w-[95%] mx-auto grid grid-cols-3 bg-maroon-accent/60">
+                    
+            <TabsList
+            className={`w-[95%] mx-auto grid ${
+                hasFacilityContacts() ? 'grid-cols-2' : 'grid-cols-1'
+            } bg-maroon-accent/60`}
+            >
                         <TabsTrigger
                             value="about"
                             className="text-white data-[state=active]:text-foreground"
                         >
                             About
                         </TabsTrigger>
+
+                        {hasFacilityContacts() && (
                         <TabsTrigger
                             value="contacts"
                             className="text-white data-[state=active]:text-foreground"
                         >
                             Contacts
                         </TabsTrigger>
-                        <TabsTrigger
+                        )}
+                        {/* <TabsTrigger
                             value="images"
                             className="text-white data-[state=active]:text-foreground"
                         >
                             Images
-                        </TabsTrigger>
+                        </TabsTrigger> */}
                     </TabsList>
                     <TabsContent value="about">{renderAboutTab()}</TabsContent>
                     <TabsContent value="contacts">
                         {renderContactsTab()}
                     </TabsContent>
-                    <TabsContent value="images">
+                    {/* <TabsContent value="images">
                         {renderImagesTab()}
-                    </TabsContent>
+                    </TabsContent> */}
                 </Tabs>
             );
         }
@@ -447,38 +476,48 @@ const renderContactsTab = () => {
                 }
                 className="w-full "
             >
-                <TabsList className="w-[95%] mx-auto grid grid-cols-4 bg-maroon-accent/60">
-                    <TabsTrigger
-                        value="floors"
-                        className="text-white data-[state=active]:text-foreground"
-                    >
-                        Floors
-                    </TabsTrigger>
-                    <TabsTrigger
-                        value="about"
-                        className="text-white data-[state=active]:text-foreground"
-                    >
-                        About
-                    </TabsTrigger>
-                    <TabsTrigger
-                        value="contacts"
-                        className="text-white data-[state=active]:text-foreground"
-                    >
-                        Contacts
-                    </TabsTrigger>
-                    <TabsTrigger
-                        value="images"
-                        className="text-white data-[state=active]:text-foreground"
-                    >
-                        Images
-                    </TabsTrigger>
-                </TabsList>
+
+            <TabsList
+            className={`w-[95%] mx-auto grid ${
+                hasFacilityContacts() ? 'grid-cols-3' : 'grid-cols-2'
+            } bg-maroon-accent/60`}
+            >
+            <TabsTrigger
+                value="floors"
+                className="text-white data-[state=active]:text-foreground"
+            >
+                Floors
+            </TabsTrigger>
+            <TabsTrigger
+                value="about"
+                className="text-white data-[state=active]:text-foreground"
+            >
+                About
+            </TabsTrigger>
+
+            {hasFacilityContacts() && (
+                <TabsTrigger
+                value="contacts"
+                className="text-white data-[state=active]:text-foreground"
+                >
+                Contacts
+                </TabsTrigger>
+            )}
+
+            {/* <TabsTrigger
+                value="images"
+                className="text-white data-[state=active]:text-foreground"
+            >
+                Images
+            </TabsTrigger> */}
+            </TabsList>
+
                 <TabsContent value="floors">{renderFloorsTab()}</TabsContent>
                 <TabsContent value="about">{renderAboutTab()}</TabsContent>
                 <TabsContent value="contacts">
                     {renderContactsTab()}
                 </TabsContent>
-                <TabsContent value="images">{renderImagesTab()}</TabsContent>
+                {/* <TabsContent value="images">{renderImagesTab()}</TabsContent> */}
             </Tabs>
         );
     };

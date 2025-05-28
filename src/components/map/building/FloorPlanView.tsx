@@ -291,51 +291,51 @@ const FloorPlanView: React.FC<FloorPlanViewProps> = ({
                         {currentFloor?.rooms?.map((room) => {
                             const position = getRoomPosition(room);
 
-                            return (
-                                <div
-                                    key={room.code}
-                                    className={`room-badge absolute flex items-center gap-1.4 md:gap-1 px-2 py-1 rounded-full cursor-pointer transition-all select-none
-                                        ${
-                                            selectedRoomCode === room.code
-                                                ? 'bg-[#7F1532] text-white'
-                                                : 'bg-white text-[#7F1532] border border-[#7F1532]'
-                                        } 
-                                        hover:bg-[#7F1532] hover:text-white`}
-                                    style={{
-                                        left: position.left,
-                                        top: position.top,
-                                        transform: 'translate(-50%, -50%)',
-                                        zIndex: 100,
-                                        boxShadow: '0 2px 5px rgba(0,0,0,0.2)',
-                                        userSelect: 'none',
-                                        WebkitUserSelect: 'none',
-                                    }}
-                                    onClick={() => handleRoomClick(room.code)}
-                                    title={room.name}
-                                >
-                                    <span className="text-sm select-none">
-                                        {room.icon === 'briefcase' ? (
-                                            <Briefcase className="w-3 h-3 md:w-5 md:h-5" />
-                                        ) : room.icon === 'emergency' ? (
-                                            <Siren className="w-3 h-3 md:w-5 md:h-5" />
-                                        ) : room.icon === 'toilet' ? (
-                                            <Toilet className="w-3 h-3 md:w-5 md:h-5" />
-                                        ) : room.icon === 'presentation' ? (
-                                            <Presentation className="w-3 h-3 md:w-5 md:h-5" /> 
-                                        ) : room.icon === 'graduation' ? (
-                                            <GraduationCap className="w-3 h-3 md:w-5 md:h-5" /> 
-                                        ) : (
-                                            room.icon
-                                        )}
-                                    </span>
+                 return (
+<div
+  key={room.code}
+  className={`
+    absolute z-50 transform -translate-x-1/2 -translate-y-1/2
+    flex items-center  px-3 py-1.5 rounded-full cursor-pointer
+    text-sm md:text-base font-medium transition-colors duration-200
+    select-none shadow-md
+    ${selectedRoomCode === room.code
+      ? 'bg-[#7F1532] text-white'
+      : 'bg-white text-[#7F1532] border-[3px] border-[#7F1532]'}
+    hover:bg-[#7F1532] hover:text-white
+  `}
+  style={{
+    left: position.left,
+    top: position.top,
+    userSelect: 'none',
+    WebkitUserSelect: 'none',
+  }}
+  onClick={() => handleRoomClick(room.code)}
+  title={room.name}
+>
+  <span className="flex items-center justify-center">
+    {room.icon === 'briefcase' ? (
+      <Briefcase className="w-4 h-4 md:w-5 md:h-5" strokeWidth={2.5}/>
+    ) : room.icon === 'emergency' ? (
+      <Siren className="w-4 h-4 md:w-5 md:h-5"  strokeWidth={2.5}/>
+    ) : room.icon === 'toilet' ? (
+      <Toilet className="w-4 h-4 md:w-5 md:h-5" strokeWidth={2.5}/>
+    ) : room.icon === 'presentation' ? (
+      <Presentation className="w-4 h-4 md:w-5 md:h-5" strokeWidth={2.5}/>
+    ) : room.icon === 'graduation' ? (
+      <GraduationCap className="w-4 h-4 md:w-5 md:h-5" strokeWidth={2.5}/>
+    ) : (
+      room.icon
+    )}
+  </span>
 
-                                    {room.icon !== "toilet" && (
-                                        <span className="text-xs md:text-xl select-none">
-                                            {room.code}
-                                        </span>
-                                    )}
-                                </div>
-                            );
+  {room.icon !== "toilet" && (
+    <span className="ml-1 text-xs md:text-lg font-bold">{room.code}</span>
+  )}
+</div>
+
+);
+
                         })}
                     </div>
                 )}

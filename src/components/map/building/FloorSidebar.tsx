@@ -103,17 +103,17 @@ const FloorSidebar: React.FC<FloorSidebarProps> = ({
     const getIconForRoom = (iconName: string) => {
         switch (iconName) {
             case 'briefcase':
-                return <Briefcase className="w-4 h-4" />;
+                return <Briefcase className="w-4 h-4" strokeWidth={2.5}/>;
             case 'presentation':
-                return <Presentation className="w-4 h-4" />;
+                return <Presentation className="w-4 h-4" strokeWidth={2.5}/>;
             case 'emergency':
-                return <Siren className="w-4 h-4" />;
+                return <Siren className="w-4 h-4" strokeWidth={2.5}/>;
             case 'toilet':
-                return <Toilet className="w-4 h-4" />;
+                return <Toilet className="w-4 h-4" strokeWidth={2.5}/>;
             case 'graduation':
-                return <GraduationCap className="w-4 h-4" />;
+                return <GraduationCap className="w-4 h-4" strokeWidth={2.5}/>;
             default:
-                return <Briefcase className="w-4 h-4" />;
+                return <Briefcase className="w-4 h-4" strokeWidth={2.5}/>;
         }
     };
 
@@ -230,7 +230,7 @@ const FloorSidebar: React.FC<FloorSidebarProps> = ({
                                                 <span className="text-xs">
                                                     {getIconForRoom(room.icon)}
                                                 </span>
-                                                <span className="text-xs">
+                                                <span className="text-xs font-bold">
                                                     {room.code}
                                                 </span>
                                             </div>

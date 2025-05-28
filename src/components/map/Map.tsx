@@ -672,6 +672,7 @@ const MapboxExample = () => {
                 onLocate={locateUser}
             />
 
+
             {/* Building Details Sidebar */}
             <BuildingDetailsSidebar />
         </div>
