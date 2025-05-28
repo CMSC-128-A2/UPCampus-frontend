@@ -219,12 +219,12 @@ const FloorSidebar: React.FC<FloorSidebarProps> = ({
                                     {rooms.map((room) => (
                                         <div
                                             key={room.code}
-                                            className={`flex items-center p-2 text-white cursor-pointer hover:bg-white/10 transition-colors`}
+                                            className={`flex items-start p-2 text-white cursor-pointer hover:bg-white/10 transition-colors`}
                                             onClick={() =>
                                                 setSelectedRoomCode(room.code)
                                             }
                                         >
-                                            <div className=" rounded-full bg-white border-2 border-maroon-accent text-maroon-accent flex items-center gap-1 justify-center px-2 py-1 mr-2">
+                                            <div className=" rounded-full items-start bg-white border-2 border-maroon-accent text-maroon-accent flex items-start gap-1 justify-center px-2 py-1 mr-2">
                                                 <span className="text-xs">
                                                     {getIconForRoom(room.icon)}
                                                 </span>

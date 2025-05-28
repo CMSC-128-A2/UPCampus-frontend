@@ -228,7 +228,7 @@ const RoomSidebar: React.FC<RoomSidebarProps> = ({ selectedRoom, onClose }) => {
     const shouldShowSchedules = (room: Room): boolean => {
         const nonScheduleCategories = [
             'Offices',
-            'Restrooms',
+            'Comfort Rooms',
             'Storage',
             'Cafeteria',
             'Library',
@@ -241,6 +241,7 @@ const RoomSidebar: React.FC<RoomSidebarProps> = ({ selectedRoom, onClose }) => {
             'Reception',
             'Hallways',
             'Stairs',
+            'Emergency Exits',
             'Elevators',
             // Add any other room types that shouldn't show schedules
         ];
