@@ -450,7 +450,7 @@ const SearchBar: React.FC = () => {
     };
 
     return (
-        <div className="flex items-center max-w-[calc(100vw-20px)] w-[518px] h-[69.2px] m-[10px] rounded-[10px] p-[10px] gap-[10px] bg-[#7F1532] z-50 absolute top-0 left-0">
+        <div className="flex items-center max-w-[calc(100vw-20px)] w-[538px] h-[69.2px] m-[10px] rounded-[10px] p-[10px] gap-[10px] bg-[#7F1532] z-50 absolute top-0 left-0">
             {!showSearchInput && (
                 <>
                     <Link href="/">
@@ -467,7 +467,7 @@ const SearchBar: React.FC = () => {
                         <input
                             ref={inputRef}
                             type="text"
-                            placeholder="Search buildings, facilities, offices..."
+                            placeholder="Search buildings or facilities"
                             className="flex-1 bg-transparent outline-none text-[#7F1532] h-8"
                             value={searchTerm}
                             onChange={handleSearchChange}

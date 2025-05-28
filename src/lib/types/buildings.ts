@@ -355,7 +355,7 @@ export const mockBuildingsData = {
     '12': {
         id: '12',
         name: 'Union Building',
-        image: '/assets/images/random-building.jpg',
+        image: '/assets/images/buildings/union.jpg',
         type: 'building',
         slug: null,
         floors: [
@@ -413,7 +413,7 @@ export const mockBuildingsData = {
     '9': {
         id: '9',
         name: 'Fine Arts Workshop Bldg. 2',
-        image: '/assets/images/random-building.jpg',
+        image: '/assets/images/buildings/workshop2.jpg',
         type: 'building',
         slug: null,
         floors: [
@@ -426,7 +426,7 @@ export const mockBuildingsData = {
     '10': {
         id: '10',
         name: 'Arts and Science Extension Bldg. (ASX)',
-        image: '/assets/images/random-building.jpg',
+        image: '/assets/images/buildings/asx.jpg',
         type: 'building',
         slug: null,
         floors: [
@@ -458,7 +458,7 @@ export const mockBuildingsData = {
     '8': {
         id: '8',
         name: 'Fine Arts Workshop Bldg.',
-        image: '/assets/images/random-building.jpg',
+        image: '/assets/images/buildings/workshop1.jpg',
         type: 'building',
         slug: null,
         floors: [
@@ -486,7 +486,7 @@ export const mockBuildingsData = {
     '7': {
         id: '7',
         name: 'Undergraduate Building',
-        image: '/assets/images/random-building.jpg',
+        image: '/assets/images/buildings/undergraduate.jpg',
         type: 'building',
         slug: null,
         floors: [
@@ -560,7 +560,7 @@ export const mockBuildingsData = {
     '6b': {
         id: '6b',
         name: 'Management Bldg. 1',
-        image: '/assets/images/random-building.jpg',
+        image: '/assets/images/buildings/man1.jpg',
         type: 'building',
         slug: null,
         floors: [
@@ -586,7 +586,7 @@ export const mockBuildingsData = {
     '6a': {
         id: '6a',
         name: 'Management Administration',
-        image: '/assets/images/random-building.jpg',
+        image: '/assets/images/buildings/manAdmin.jpg',
         type: 'building',
         slug: null,
         floors: [
@@ -602,7 +602,7 @@ export const mockBuildingsData = {
     '6c': {
         id: '6c',
         name: 'Management Bldg. 2',
-        image: '/assets/images/random-building.jpg',
+        image: '/assets/images/buildings/man2.jpg',
         type: 'building',
         slug: null,
         floors: [
@@ -624,7 +624,7 @@ export const mockBuildingsData = {
     '6': {
         id: '6',
         name: 'School of Management',
-        image: '/assets/images/random-building.jpg',
+        image: '/assets/images/buildings/man.jpg',
         type: 'building',
         slug: null,
         floors: [
@@ -651,7 +651,7 @@ export const mockBuildingsData = {
     '1': {
         id: '1',
         name: 'Administration Building',
-        image: '/assets/images/random-building.jpg',
+        image: '/assets/images/buildings/admin.jpg',
         type: 'building',
         slug: null,
         floors: [
@@ -691,7 +691,7 @@ export const mockBuildingsData = {
     '2': {
         id: '2',
         name: 'College of Science Building',
-        image: '/assets/images/random-building.jpg',
+        image: '/assets/images/buildings/cos.jpg',
         slug: 'science-building',
         type: 'building',
         floors: [
@@ -714,7 +714,9 @@ export const mockBuildingsData = {
                         contactNumber: 'Local - 325 | Direct - (032) 233 3497',
                     },
                     {
+
                         name: 'Office of the College Dean',
+
                         contactNumber: 'Local - 311',
                         email: 'cos.upcebu@up.edu.ph',
                     },
@@ -793,7 +795,9 @@ export const mockBuildingsData = {
                     { name: '308 Optimization Research Group' },
                     { name: '310 Natural Language Processing Group' },
                     { name: '311 Mini Library' },
+
                     { name: '312 Office of the DCS Chair' },
+
                     {
                         name: '204 Department of Computer Science Office',
                         contactNumber: 'Local - 206',
@@ -867,7 +871,7 @@ export const mockBuildingsData = {
     '5d': {
         id: '5d',
         name: 'Lihangin Hall',
-        image: '/assets/images/random-building.jpg',
+        image: '/assets/images/buildings/lihangin.jpg',
         type: 'building',
         slug: null,
         floors: [
@@ -892,7 +896,7 @@ export const mockBuildingsData = {
     '5a': {
         id: '5a',
         name: 'Balay Varangao',
-        image: '/assets/images/random-building.jpg',
+        image: '/assets/images/buildings/varangao.jpg',
         type: 'building',
         slug: null,
         floors: [
@@ -917,7 +921,7 @@ export const mockBuildingsData = {
     '5': {
         id: '5',
         name: 'Residence Halls',
-        image: '/assets/images/random-building.jpg',
+        image: '/assets/images/buildings/residence.jpg',
         type: 'building',
         slug: null,
         floors: [
@@ -942,7 +946,7 @@ export const mockBuildingsData = {
     '5b': {
         id: '5b',
         name: 'Lalahon Hall',
-        image: '/assets/images/random-building.jpg',
+        image: '/assets/images/buildings/lalahon.jpg',
         type: 'building',
         slug: null,
         floors: [
@@ -967,7 +971,7 @@ export const mockBuildingsData = {
     '5c': {
         id: '5c',
         name: 'Liadlaw Hall',
-        image: '/assets/images/random-building.jpg',
+        image: '/assets/images/buildings/liadlaw.jpg',
         type: 'building',
         slug: null,
         floors: [
@@ -993,7 +997,7 @@ export const mockBuildingsData = {
     '4': {
         id: '4',
         name: 'Library Building',
-        image: '/assets/images/random-building.jpg',
+        image: '/assets/images/buildings/library.jpg',
         type: 'building',
         slug: null,
         floors: [
@@ -1018,7 +1022,7 @@ export const mockBuildingsData = {
     '3': {
         id: '3',
         name: 'Technology Innovation Center Building',
-        image: '/assets/images/random-building.jpg',
+        image: '/assets/images/buildings/ticb.jpg',
         type: 'building',
         slug: null,
         floors: [
@@ -1052,7 +1056,7 @@ export const mockBuildingsData = {
     '3b': {
         id: '3b',
         name: 'Clinic',
-        image: '/assets/images/random-building.jpg',
+        image: '/assets/images/buildings/clinic.jpg',
         type: 'building',
         slug: null,
         floors: [
@@ -1079,7 +1083,7 @@ export const mockBuildingsData = {
     '3a': {
         id: '3a',
         name: 'Cafeteria',
-        image: '/assets/images/random-building.jpg',
+        image: '/assets/images/buildings/canteen.jpg',
         type: 'building',
         slug: null,
         floors: [
@@ -1130,7 +1134,7 @@ export const mockBuildingsData = {
     '11': {
         id: '11',
         name: 'Arts and Sciences (AS) Bldg.',
-        image: '/assets/images/random-building.jpg',
+        image: '/assets/images/buildings/as.jpg',
         type: 'building',
         slug: null,
         floors: [
@@ -1155,7 +1159,7 @@ export const mockBuildingsData = {
     '11a': {
         id: '11a',
         name: 'AS Conference Hall',
-        image: '/assets/images/random-building.jpg',
+        image: '/assets/images/buildings/asHall.jpg',
         type: 'building',
         slug: null,
         floors: [
@@ -1180,7 +1184,7 @@ export const mockBuildingsData = {
     '11b': {
         id: '11b',
         name: 'AS East Wing',
-        image: '/assets/images/random-building.jpg',
+        image: '/assets/images/buildings/asEast.jpg',
         type: 'building',
         slug: null,
         floors: [
@@ -1268,7 +1272,7 @@ export const mockBuildingsData = {
     '11c': {
         id: '11c',
         name: 'AS West Wing',
-        image: '/assets/images/random-building.jpg',
+        image: '/assets/images/buildings/asWest.jpg',
         type: 'building',
         slug: null,
         floors: [
@@ -1352,7 +1356,7 @@ export const mockBuildingsData = {
     '14': {
         id: '14',
         name: 'UP High School Cebu',
-        image: '/assets/images/random-building.jpg',
+        image: '/assets/images/buildings/hs.jpg',
         type: 'building',
         slug: null,
         floors: [
@@ -1387,7 +1391,7 @@ export const mockBuildingsData = {
     A9: {
         id: 'A9',
         name: 'Amphitheater/Sunset Garden',
-        image: '/assets/images/random-building.jpg',
+        image: '/assets/images/buildings/amphitheater.jpg',
         type: 'activity',
         description:
             'Outdoor performance space for university events and cultural shows.',
@@ -1399,7 +1403,7 @@ export const mockBuildingsData = {
     A8: {
         id: 'A8',
         name: 'Volleyball Court',
-        image: '/assets/images/random-building.jpg',
+        image: '/assets/images/buildings/volleyball.jpg',
         type: 'activity',
         description:
             'Volleyball and basketball courts for recreational and varsity games.',
@@ -1411,7 +1415,7 @@ export const mockBuildingsData = {
     A7: {
         id: 'A7',
         name: 'Basketball Court',
-        image: '/assets/images/random-building.jpg',
+        image: '/assets/images/buildings/basketball.jpg',
         type: 'activity',
         description:
             'Full-sized basketball court for recreational play and varsity team practices.',
@@ -1423,7 +1427,7 @@ export const mockBuildingsData = {
     A6: {
         id: 'A6',
         name: 'Undergraduate Cottages',
-        image: '/assets/images/random-building.jpg',
+        image: '/assets/images/buildings/cottageUg.jpg',
         type: 'activity',
         description:
             'Designated area for student camping activities and outdoor events.',
@@ -1435,7 +1439,7 @@ export const mockBuildingsData = {
     A4: {
         id: 'A4',
         name: 'Admin Field',
-        image: '/assets/images/random-building.jpg',
+        image: '/assets/images/buildings/fieldAdmin.jpg',
         type: 'activity',
         description:
             'Professional archery range for training and competitions.',
@@ -1447,7 +1451,7 @@ export const mockBuildingsData = {
     A2: {
         id: 'A2',
         name: 'Admin Cottages',
-        image: '/assets/images/random-building.jpg',
+        image: '/assets/images/buildings/cottageAdmin.jpg',
         type: 'activity',
         description:
             'Picnic and relaxation area within the university botanical garden.',
@@ -1459,7 +1463,7 @@ export const mockBuildingsData = {
     A3: {
         id: 'A3',
         name: 'Malacañang Cottage',
-        image: '/assets/images/random-building.jpg',
+        image: '/assets/images/buildings/malacs.jpg',
         type: 'activity',
         description:
             'Secondary camping area for student organizational activities.',
@@ -1471,7 +1475,7 @@ export const mockBuildingsData = {
     A1: {
         id: 'A1',
         name: 'Oblation Square',
-        image: '/assets/images/random-building.jpg',
+        image: '/assets/images/buildings/oble.jpg',
         type: 'activity',
         description:
             'Central gathering space for university events and activities.',
@@ -1483,7 +1487,7 @@ export const mockBuildingsData = {
     A5: {
         id: 'A5',
         name: 'College Mini Stage',
-        image: '/assets/images/random-building.jpg',
+        image: '/assets/images/buildings/stage.jpg',
         type: 'activity',
         description: 'Open space for art installations and exhibitions.',
         schedule: 'Open daily from 8:00 AM to 8:00 PM',
@@ -1494,7 +1498,7 @@ export const mockBuildingsData = {
     A10: {
         id: 'A10',
         name: 'High School Open Field',
-        image: '/assets/images/random-building.jpg',
+        image: '/assets/images/buildings/fieldHs.jpg',
         type: 'activity',
         description:
             'Park dedicated to university alumni with monuments and memorials.',
@@ -1506,7 +1510,7 @@ export const mockBuildingsData = {
     A11: {
         id: 'A11',
         name: 'High School Open Court',
-        image: '/assets/images/random-building.jpg',
+        image: '/assets/images/buildings/courtHsOpen.jpg',
         type: 'activity',
         description:
             'Artificial lagoon for recreation and environmental studies.',
@@ -1518,7 +1522,7 @@ export const mockBuildingsData = {
     A12: {
         id: 'A12',
         name: 'High School Covered Court',
-        image: '/assets/images/random-building.jpg',
+        image: '/assets/images/buildings/courtHsCovered.jpg',
         type: 'activity',
         description: 'Quiet space for meditation and mindfulness activities.',
         schedule: 'Open daily from 6:00 AM to 6:00 PM',
@@ -1529,7 +1533,7 @@ export const mockBuildingsData = {
     A13: {
         id: 'A13',
         name: 'Soccer Field',
-        image: '/assets/images/random-building.jpg',
+        image: '/assets/images/buildings/soccer.jpg',
         type: 'activity',
         description:
             'Regulation-size football field for varsity games and practices.',
@@ -1542,7 +1546,7 @@ export const mockBuildingsData = {
     G1: {
         id: 'G1',
         name: 'Entrance Gate Guard House',
-        image: '/assets/images/random-building.jpg',
+        image: '/assets/images/buildings/guardEntrance.jpg',
         type: 'security',
         personnel: '5 security officers',
         services: [
@@ -1557,7 +1561,7 @@ export const mockBuildingsData = {
     G3: {
         id: 'G3',
         name: 'High School Guard House',
-        image: '/assets/images/random-building.jpg',
+        image: '/assets/images/buildings/guardHs.jpg',
         type: 'security',
         personnel: '3 security officers',
         services: [
@@ -1572,7 +1576,7 @@ export const mockBuildingsData = {
     G4: {
         id: 'G4',
         name: 'AS Guard House',
-        image: '/assets/images/random-building.jpg',
+        image: '/assets/images/buildings/guardAs.jpg',
         type: 'security',
         personnel: '4 security officers',
         services: [
@@ -1587,7 +1591,7 @@ export const mockBuildingsData = {
     G2: {
         id: 'G2',
         name: 'Exit Gate Guard House',
-        image: '/assets/images/random-building.jpg',
+        image: '/assets/images/buildings/guardExit.jpg',
         type: 'security',
         personnel: '3 security officers',
         services: [
@@ -1603,7 +1607,7 @@ export const mockBuildingsData = {
     P1: {
         id: 'P1',
         name: 'COS Bldg. Parking',
-        image: '/assets/images/random-building.jpg',
+        image: '/assets/images/buildings/parkingCos.jpg',
         type: 'security',
         capacity: '30 vehicles',
         description:
@@ -1615,7 +1619,7 @@ export const mockBuildingsData = {
     P2: {
         id: 'P2',
         name: 'Canteen Parking',
-        image: '/assets/images/random-building.jpg',
+        image: '/assets/images/buildings/parkingCanteen.jpg',
         type: 'security',
         capacity: '25 vehicles',
         description: 'Short-term parking for canteen and cafeteria visitors.',
@@ -1626,7 +1630,7 @@ export const mockBuildingsData = {
     P3: {
         id: 'P3',
         name: 'Library Parking',
-        image: '/assets/images/random-building.jpg',
+        image: '/assets/images/buildings/parkingLibrary.jpg',
         type: 'security',
         capacity: '40 vehicles',
         description:
@@ -1638,7 +1642,7 @@ export const mockBuildingsData = {
     P4: {
         id: 'P4',
         name: 'Motorcycle Parking',
-        image: '/assets/images/random-building.jpg',
+        image: '/assets/images/buildings/parkingMotor.jpg',
         type: 'security',
         capacity: '60 motorcycles',
         description: 'Main motorcycle parking area for students and visitors.',
@@ -1649,7 +1653,7 @@ export const mockBuildingsData = {
     P5: {
         id: 'P5',
         name: 'Undergraduate Bldg. Parking',
-        image: '/assets/images/random-building.jpg',
+        image: '/assets/images/buildings/parkingUndergrad.jpg',
         type: 'security',
         capacity: '35 vehicles',
         description: 'Parking lot adjacent to the Undergraduate Building.',
@@ -1660,7 +1664,7 @@ export const mockBuildingsData = {
     P6: {
         id: 'P6',
         name: 'AS Motorcycle Parking',
-        image: '/assets/images/random-building.jpg',
+        image: '/assets/images/buildings/parkingMotorAs.jpg',
         type: 'security',
         capacity: '50 motorcycles',
         description:
@@ -1672,7 +1676,7 @@ export const mockBuildingsData = {
     P7: {
         id: 'P7',
         name: 'AS Parking',
-        image: '/assets/images/random-building.jpg',
+        image: '/assets/images/buildings/parkingAs.jpg',
         type: 'security',
         capacity: '45 vehicles',
         description:

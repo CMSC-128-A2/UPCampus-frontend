@@ -23,24 +23,24 @@ const renderBuildings = (buildings: any[], level = 0) => {
         <div
             key={building.index}
             style={{ paddingLeft: `${level * 15}px` }}
-            className="mb-3"
+            className="py-3 hover:bg-[#BF4043] ransition-colors duration-100"
         >
-            {/* Add margin-top to first child only */}
+            {/* If building has children, render as div, otherwise as button */}
+
             <button
-                className={`flex items-start text-left ${
-                    index === 0 && level > 0 ? 'mt-2' : ''
-                }`}
+                className={`flex items-start text-left px-3 `}
                 onClick={() => {
                     setSelectedMarkId(building.index);
                 }}
             >
-                <div className="mr-3 flex-shrink-0">
+                <div className="mr-3 flex-shrink-0 ">
                     <IndexButton index={building.index} icon={building.icon} />
                 </div>
                 <div className="font-inter font-normal text-lg tracking-tight">
                     {building.name}
                 </div>
             </button>
+
             {/* Recursively render children with further increased indentation */}
             {building.children && renderBuildings(building.children, level + 2)}
         </div>
@@ -102,7 +102,7 @@ export default function Drawer({ title, onClose, isOpen = true }: DrawerProps) {
                     </button>
                 </div>
 
-                <div className="px-3 py-2 overflow-y-auto h-[calc(100%-56px)]">
+                <div className=" py-2 overflow-y-auto h-[calc(100%-56px)]">
                     {title === 'Buildings' && renderBuildings(buildingsData)}
                     {title === 'Activity Area' &&
                         renderBuildings(activityAreaData)}

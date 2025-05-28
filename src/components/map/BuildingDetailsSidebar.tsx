@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { ArrowLeftToLine } from 'lucide-react';
+import { ArrowRightToLine } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useMapStore } from '@/store/mapStore';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -45,7 +45,6 @@ interface BuildingDetail {
     services?: string[];
     operatingHours?: string;
 }
-
 
 const BuildingDetailsSidebar: React.FC = () => {
     // Get the selected mark ID from the global store
@@ -132,35 +131,36 @@ const BuildingDetailsSidebar: React.FC = () => {
     }
 
     // Floors tab content for buildings
-const renderFloorsTab = () => {
-    return (
-        <div className="pt-2">
-            <h3 className="text-xl mb-1 px-2">Facilities</h3>
+    const renderFloorsTab = () => {
+        return (
+            <div className="pt-2">
+                <h3 className="text-xl mb-1 px-2">Facilities</h3>
 
-            {building.floors &&
-                building.floors.map((floor, index: number) => (
-                    <div key={index} className="mb-4">
-                        <h4 className="font-semibold bg-white/20 px-2 my-2 py-2">
-                            {floor.name}
-                        </h4>
-                        <ul className="space-y-1 text-sm px-4">
-                            {floor.facilities.map(
-                                (facility, facilityIndex: number) => (
-                                    <li key={facilityIndex} className="pl-2">
-                                        {typeof facility === 'string'
-                                            ? facility
-                                            : facility.name}
-                                    </li>
-                                )
-                            )}
-                        </ul>
-                    </div>
-                ))}
-        </div>
-    );
-};
-
-
+                {building.floors &&
+                    building.floors.map((floor, index: number) => (
+                        <div key={index} className="mb-4">
+                            <h4 className="font-semibold bg-white/20 px-2 my-2 py-2">
+                                {floor.name}
+                            </h4>
+                            <ul className="space-y-1 text-sm px-4">
+                                {floor.facilities.map(
+                                    (facility, facilityIndex: number) => (
+                                        <li
+                                            key={facilityIndex}
+                                            className="pl-2"
+                                        >
+                                            {typeof facility === 'string'
+                                                ? facility
+                                                : facility.name}
+                                        </li>
+                                    ),
+                                )}
+                            </ul>
+                        </div>
+                    ))}
+            </div>
+        );
+    };
 
     // About tab content for all types
     const renderAboutTab = () => {
@@ -247,101 +247,108 @@ const renderFloorsTab = () => {
     };
 
     // Contacts tab content
-const renderContactsTab = () => {
-    // For security type
-    if (building.type === 'security') {
+    const renderContactsTab = () => {
+        // For security type
+        if (building.type === 'security') {
+            return (
+                <div className="px-4 py-3 space-y-4">
+                    {building.contactNumber && (
+                        <div>
+                            <h4 className="font-semibold">Contact Number</h4>
+                            <p className="mt-1">{building.contactNumber}</p>
+                        </div>
+                    )}
+                </div>
+            );
+        }
+
+        // For activity type and building type
         return (
             <div className="px-4 py-3 space-y-4">
+                {building.contactPerson && (
+                    <div>
+                        <h4 className="font-semibold">Contact Person</h4>
+                        <p className="mt-1">{building.contactPerson}</p>
+                    </div>
+                )}
+
                 {building.contactNumber && (
                     <div>
                         <h4 className="font-semibold">Contact Number</h4>
                         <p className="mt-1">{building.contactNumber}</p>
                     </div>
                 )}
+
+                {building.floors && (
+                    <div>
+                        <h4 className="font-semibold">Facility Contacts:</h4>
+                        <ul className="list-disc pl-5 space-y-2">
+                            {building.floors.flatMap((floor) =>
+                                floor.facilities
+                                    .filter(
+                                        (
+                                            facility,
+                                        ): facility is {
+                                            name: string;
+                                            email?: string;
+                                            contactNumber?: string;
+                                            site?: string;
+                                        } =>
+                                            typeof facility === 'object' &&
+                                            'name' in facility &&
+                                            Boolean(
+                                                facility.email ||
+                                                    facility.contactNumber ||
+                                                    facility.site,
+                                            ),
+                                    )
+                                    .map((facility) => (
+                                        <li
+                                            key={`${floor.name}-${facility.name}`}
+                                        >
+                                            <span className="font-medium">
+                                                {facility.name}
+                                            </span>
+                                            {facility.email && (
+                                                <>
+                                                    <br />
+                                                    Email:{' '}
+                                                    <a
+                                                        href={`mailto:${facility.email}`}
+                                                        className="text-blue-500 underline"
+                                                    >
+                                                        {facility.email}
+                                                    </a>
+                                                </>
+                                            )}
+                                            {facility.contactNumber && (
+                                                <div>
+                                                    <span>Contact:</span>{' '}
+                                                    {facility.contactNumber}
+                                                </div>
+                                            )}
+                                            {facility.site && (
+                                                <div>
+                                                    <span>Website:</span>{' '}
+                                                    <a
+                                                        href={facility.site}
+                                                        target="_blank"
+                                                        rel="noopener noreferrer"
+                                                        className="text-blue-500 underline"
+                                                    >
+                                                        {facility.site}
+                                                    </a>
+                                                </div>
+                                            )}
+                                        </li>
+                                    )),
+                            )}
+                        </ul>
+                    </div>
+                )}
             </div>
         );
-    }
-
-    // For activity type and building type
-    return (
-        <div className="px-4 py-3 space-y-4">
-            {building.contactPerson && (
-                <div>
-                    <h4 className="font-semibold">Contact Person</h4>
-                    <p className="mt-1">{building.contactPerson}</p>
-                </div>
-            )}
-
-            {building.contactNumber && (
-                <div>
-                    <h4 className="font-semibold">Contact Number</h4>
-                    <p className="mt-1">{building.contactNumber}</p>
-                </div>
-            )}
-
-            {building.floors && (
-                <div>
-                    <h4 className="font-semibold">Facility Contacts:</h4>
-                    <ul className="list-disc pl-5 space-y-2">
-                        {building.floors.flatMap(floor =>
-                            floor.facilities
-                                .filter(
-                                    (
-                                        facility
-                                    ): facility is {
-                                        name: string;
-                                        email?: string;
-                                        contactNumber?: string;
-                                        site?: string;
-                                    } =>
-                                        typeof facility === 'object' &&
-                                        'name' in facility &&
-                                        Boolean(facility.email || facility.contactNumber || facility.site)
-                                )
-                                .map(facility => (
-                                    <li key={`${floor.name}-${facility.name}`}>
-                                        <span className="font-medium">{facility.name}</span>
-                                        {facility.email && (
-                                            <>
-                                                <br />Email:{' '}
-                                                <a
-                                                    href={`mailto:${facility.email}`}
-                                                    className="text-blue-500 underline"
-                                                >
-                                                    {facility.email}
-                                                </a>
-                                            </>
-                                        )}
-                                        {facility.contactNumber && (
-                                            <div>
-                                                <span>Contact:</span> {facility.contactNumber}
-                                            </div>
-                                        )}
-                                        {facility.site && (
-                                            <div>
-                                                <span>Website:</span>{' '}
-                                                <a
-                                                    href={facility.site}
-                                                    target="_blank"
-                                                    rel="noopener noreferrer"
-                                                    className="text-blue-500 underline"
-                                                >
-                                                    {facility.site}
-                                                </a>
-                                            </div>
-                                        )}
-                                    </li>
-                            ))
-                        )}
-                    </ul>
-                </div>
-            )}
-        </div>
-    );
-};
-
-
-
+    };
 
     // Images tab content
     const renderImagesTab = () => {
@@ -515,7 +522,7 @@ const renderContactsTab = () => {
                         className="p-1.5 hover:bg-white/20 rounded-full transition-colors"
                         aria-label="Close sidebar"
                     >
-                        <ArrowLeftToLine size={22} className="text-white" />
+                        <ArrowRightToLine size={22} className="text-white" />
                     </button>
                 </div>
 
