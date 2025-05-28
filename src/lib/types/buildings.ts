@@ -419,12 +419,9 @@ export const mockBuildingsData = {
         floors: [
             {
                 name: '1st Floor',
-                facilities: [
-                    { name: 'Workshop 3' },
-                ],
+                facilities: [{ name: 'Workshop 3' }],
             },
         ],
-
     },
     '10': {
         id: '10',
@@ -467,15 +464,11 @@ export const mockBuildingsData = {
         floors: [
             {
                 name: '1st Floor',
-                facilities: [
-                    { name: 'Workshop 1' },
-                ],
+                facilities: [{ name: 'Workshop 1' }],
             },
             {
                 name: '2nd Floor',
-                facilities: [
-                    { name: 'Workshop 2' },
-                ],
+                facilities: [{ name: 'Workshop 2' }],
             },
             {
                 name: '3rd Floor',
@@ -500,7 +493,11 @@ export const mockBuildingsData = {
             {
                 name: '1st Floor',
                 facilities: [
-                    { name: 'Teaching and Learning Resources Center', email:'lrc.upcebu@up.edu.ph', contactNumber:'(032) 232 8187'},
+                    {
+                        name: 'Teaching and Learning Resources Center',
+                        email: 'lrc.upcebu@up.edu.ph',
+                        contactNumber: '(032) 232 8187',
+                    },
                     { name: 'Lawak Sinehan' },
                     { name: 'Department of Biology and Environmental Science' },
                     { name: 'UG123A Zoology Lab' },
@@ -524,7 +521,6 @@ export const mockBuildingsData = {
                     { name: 'UG118 Computer Laboratory' },
                     { name: 'Male Comfort Room' },
                     { name: 'Female Comfort Room' },
-                    
                 ],
             },
             {
@@ -579,16 +575,11 @@ export const mockBuildingsData = {
             },
             {
                 name: '2nd Floor',
-                facilities: [
-                    { name: '202' },
-                    { name: 'Case Room' },
-                ],
+                facilities: [{ name: '202' }, { name: 'Case Room' }],
             },
             {
                 name: '3rd Floor',
-                facilities: [
-                    { name: 'Roofdeck' },
-                ],
+                facilities: [{ name: 'Roofdeck' }],
             },
         ],
     },
@@ -620,15 +611,12 @@ export const mockBuildingsData = {
                 facilities: [
                     { name: 'RM103' },
                     { name: 'RM104' },
-                    { name: 'Stock room'}
+                    { name: 'Stock room' },
                 ],
             },
             {
                 name: '2nd Floor',
-                facilities: [
-                    { name: 'RM203' },
-                    { name: 'RM204' },
-                ],
+                facilities: [{ name: 'RM203' }, { name: 'RM204' }],
             },
         ],
     },
@@ -672,12 +660,18 @@ export const mockBuildingsData = {
                 facilities: [
                     { name: 'PE Office' },
                     { name: 'Office of the Chancellor' },
-                    { name: 'Office of the Vice Chancellor for Academic Affairs', email:'ovcaa.upcebu@up.edu.ph'},
-                    { name: 'Office of the Vice Chancellor for Administration', email:'ovca.upcebu@up.edu.ph'},
+                    {
+                        name: 'Office of the Vice Chancellor for Academic Affairs',
+                        email: 'ovcaa.upcebu@up.edu.ph',
+                    },
+                    {
+                        name: 'Office of the Vice Chancellor for Administration',
+                        email: 'ovca.upcebu@up.edu.ph',
+                    },
                     { name: 'Mindscape' },
                     { name: 'Myths' },
                     { name: 'Male Comfort Room' },
-                    { name: 'Female Comfort Room' }
+                    { name: 'Female Comfort Room' },
                 ],
             },
             {
@@ -704,17 +698,45 @@ export const mockBuildingsData = {
             {
                 name: '1st Floor',
                 facilities: [
-                    { name: 'Budget Office', contactNumber:'Local - 122/305', email:'budget.upcebu@up.edu.ph'},
-                    { name: 'Office of the University Registrar', contactNumber:'Local - 324', email:'our.upcebu@up.edu.ph' },
-                    { name: 'Supply and Property Management Office',email:'spmo.upcebu@up.edu.ph' ,contactNumber:'Local - 325 | Direct - (032) 233 3497', },
-                    { name: 'College of Science', contactNumber:'Local - 311', email:'cos.upcebu@up.edu.ph'},
-                    { name: 'Bids and Awards Committee Office', contactNumber:'Local - 317', email:'bac_sec.upcebu@up.edu.ph'},
-                    { name: 'Cash Office', contactNumber:'Local - 101', email:'cash.upcebu@up.edu.ph'},
-                    { name: 'Accounting Office', contactNumber:'Local - 104', email:'accounting.upcebu@up.edu.ph'},
-                    { name: 'Server Room'},
-                    { name: 'Emergency Exit 1'},
-                    { name: 'Emergency Exit 2'},
-                    { name: 'Emergency Exit 3'},
+                    {
+                        name: 'Budget Office',
+                        contactNumber: 'Local - 122/305',
+                        email: 'budget.upcebu@up.edu.ph',
+                    },
+                    {
+                        name: 'Office of the University Registrar',
+                        contactNumber: 'Local - 324',
+                        email: 'our.upcebu@up.edu.ph',
+                    },
+                    {
+                        name: 'Supply and Property Management Office',
+                        email: 'spmo.upcebu@up.edu.ph',
+                        contactNumber: 'Local - 325 | Direct - (032) 233 3497',
+                    },
+                    {
+                        name: 'Office of the College Dean',
+                        contactNumber: 'Local - 311',
+                        email: 'cos.upcebu@up.edu.ph',
+                    },
+                    {
+                        name: 'Bids and Awards Committee Office',
+                        contactNumber: 'Local - 317',
+                        email: 'bac_sec.upcebu@up.edu.ph',
+                    },
+                    {
+                        name: 'Cash Office',
+                        contactNumber: 'Local - 101',
+                        email: 'cash.upcebu@up.edu.ph',
+                    },
+                    {
+                        name: 'Accounting Office',
+                        contactNumber: 'Local - 104',
+                        email: 'accounting.upcebu@up.edu.ph',
+                    },
+                    { name: 'Server Room' },
+                    { name: 'Emergency Exit 1' },
+                    { name: 'Emergency Exit 2' },
+                    { name: 'Emergency Exit 3' },
                     { name: 'Male Comfort Room' },
                     { name: 'Female Comfort Room' },
                 ],
@@ -723,8 +745,16 @@ export const mockBuildingsData = {
                 name: 'Mezzanine Floor',
                 facilities: [
                     { name: 'Stock Room' },
-                    { name: 'Human Resource Office', contactNumber:'Local - 319', email:'hrdo.upcebu@up.edu.ph'},
-                    { name: 'Legal Office', contactNumber:'Local - 326', email:'legal.upcebu@up.edu.ph'},
+                    {
+                        name: 'Human Resource Office',
+                        contactNumber: 'Local - 319',
+                        email: 'hrdo.upcebu@up.edu.ph',
+                    },
+                    {
+                        name: 'Legal Office',
+                        contactNumber: 'Local - 326',
+                        email: 'legal.upcebu@up.edu.ph',
+                    },
                     { name: 'Spare Room' },
                     { name: 'Resident Psychologist' },
                     { name: 'Common Conference Room & Staff Lounge' },
@@ -738,12 +768,16 @@ export const mockBuildingsData = {
                     { name: '201 Lecture Room' },
                     { name: '202 Lecture Room' },
                     { name: '203 Lecture Room' },
-                    { name: '204 Mathematics and Statistics Office', contactNumber:'Local - 205', email:'math.upcebu@up.edu.ph'},
+                    {
+                        name: '204 Mathematics and Statistics Office',
+                        contactNumber: 'Local - 205',
+                        email: 'math.upcebu@up.edu.ph',
+                    },
                     { name: 'Emergency Exit 1' },
                     { name: 'Emergency Exit 2' },
                     { name: 'Emergency Exit 3' },
                     { name: 'Male Comfort Room' },
-                    { name: 'Female Comfort Room' }
+                    { name: 'Female Comfort Room' },
                 ],
             },
             {
@@ -752,7 +786,7 @@ export const mockBuildingsData = {
                     { name: '301' },
                     { name: '302 Robotics and Internet of Things Group' },
                     { name: '303 Bioinformatics Research Interest Group' },
-                    { name: '304'},
+                    { name: '304' },
                     { name: '305' },
                     { name: '306' },
                     { name: '307 Image and Video Analysis Research Group' },
@@ -760,12 +794,16 @@ export const mockBuildingsData = {
                     { name: '310 Natural Language Processing Group' },
                     { name: '311 Mini Library' },
                     { name: '312 Office of the Chairperson' },
-                    { name: '204 Department of Computer Science Office', contactNumber:'Local - 206', email:'dcs.upcebu@up.edu.ph'},
+                    {
+                        name: '204 Department of Computer Science Office',
+                        contactNumber: 'Local - 206',
+                        email: 'dcs.upcebu@up.edu.ph',
+                    },
                     { name: 'Emergency Exit 1' },
                     { name: 'Emergency Exit 2' },
                     { name: 'Emergency Exit 3' },
                     { name: 'Male Comfort Room' },
-                    { name: 'Female Comfort Room' }
+                    { name: 'Female Comfort Room' },
                 ],
             },
             {
@@ -774,7 +812,7 @@ export const mockBuildingsData = {
                     { name: '401 Computer Laboratory' },
                     { name: '402 Computer Laboratory' },
                     { name: '403 Computer Laboratory' },
-                    { name: '404 Computer Laboratory'},
+                    { name: '404 Computer Laboratory' },
                     { name: '405 Lecture Room' },
                     { name: '406 Lecture Room' },
                     { name: '407 Lecture Room' },
@@ -792,8 +830,12 @@ export const mockBuildingsData = {
                     { name: '501 Faculty Research Laboratory 1' },
                     { name: '502 Faculty Research Laboratory 2' },
                     { name: '503 Faculty Research Laboratory 3' },
-                    { name: '504 Department of Biology and Environmental Science Conference Room'},
-                    { name: '505 Department of Biology and Environmental Science Office' },
+                    {
+                        name: '504 Department of Biology and Environmental Science Conference Room',
+                    },
+                    {
+                        name: '505 Department of Biology and Environmental Science Office',
+                    },
                     { name: 'Emergency Exit 1' },
                     { name: 'Emergency Exit 2' },
                     { name: 'Emergency Exit 3' },
@@ -807,7 +849,7 @@ export const mockBuildingsData = {
                     { name: '601 Bioassay Laboratory' },
                     { name: '602 Histology Laboratory' },
                     { name: '603 Botany Laboratory' },
-                    { name: '604 Zoology Laboratory'},
+                    { name: '604 Zoology Laboratory' },
                     { name: '605 Microbiology Laboratory' },
                     { name: '606 Biology Instrumentation Room' },
                     { name: '607 Biology Laboratory Stockroom' },
@@ -983,8 +1025,8 @@ export const mockBuildingsData = {
             {
                 name: '1st Floor',
                 facilities: [
-                    { name: 'Canteen'},
-                    { name: 'Clinic'},
+                    { name: 'Canteen' },
+                    { name: 'Clinic' },
                     { name: 'Male Comfort Room' },
                     { name: 'Female Comfort Room' },
                 ],
@@ -1151,7 +1193,10 @@ export const mockBuildingsData = {
                     { name: 'AS 161' },
                     { name: 'AS 164' },
                     { name: 'Student Council Room' },
-                    { name: 'Ugnayan sg Pahinungod Office (AS 152)', email: 'pahinungod.upc@up.edu.ph'},
+                    {
+                        name: 'Ugnayan sg Pahinungod Office (AS 152)',
+                        email: 'pahinungod.upc@up.edu.ph',
+                    },
                     { name: 'AS 151' },
                     { name: 'AS 150' },
                     { name: 'Male Restroom' },
@@ -1161,15 +1206,27 @@ export const mockBuildingsData = {
             {
                 name: '2nd Floor',
                 facilities: [
-                    { name: 'GAD Office (AS 251)', email: 'gad.upcebu@up.edu.ph'},
+                    {
+                        name: 'GAD Office (AS 251)',
+                        email: 'gad.upcebu@up.edu.ph',
+                    },
                     { name: 'Research Ethics Committee Room (AS 250)' },
                     { name: 'AS 249' },
                     { name: 'AS 248' },
                     { name: 'AS 247' },
                     { name: 'AS 246' },
-                    { name: 'Office of Alumni Relations (AS 257)', email: 'oar.upcebu@up.edu.ph'},
-                    { name: 'Cebuano Language & Cultural Office (AS 256)', email: 'our.upcebu@up.edu.ph | vaas.upcebu@up.edu.ph'},
-                    { name: 'NSTP Office (AS 258)', email:'nstp.upcebu@up.edu.ph'},
+                    {
+                        name: 'Office of Alumni Relations (AS 257)',
+                        email: 'oar.upcebu@up.edu.ph',
+                    },
+                    {
+                        name: 'Cebuano Language & Cultural Office (AS 256)',
+                        email: 'our.upcebu@up.edu.ph | vaas.upcebu@up.edu.ph',
+                    },
+                    {
+                        name: 'NSTP Office (AS 258)',
+                        email: 'nstp.upcebu@up.edu.ph',
+                    },
                     { name: 'AS 259' },
                     { name: 'AS 260' },
                     { name: 'AS 261' },
@@ -1180,19 +1237,27 @@ export const mockBuildingsData = {
             {
                 name: '3rd Floor',
                 facilities: [
-                    { name: 'Technology Transfer and Business Development Office (TTBDO)', email: 'cebuinit.upcebu@up.edu.ph'},
-                    { name: 'LO1 (BloodRed Office)', site: 'www.bloodredclothing.com'},
+                    {
+                        name: 'Technology Transfer and Business Development Office (TTBDO)',
+                        email: 'cebuinit.upcebu@up.edu.ph',
+                    },
+                    {
+                        name: 'LO1 (BloodRed Office)',
+                        site: 'www.bloodredclothing.com',
+                    },
                     { name: 'LO2 (The Backbone office)' },
                     { name: 'LO3 (Blood Red Office)' },
                     { name: 'LO4 (Artistko)' },
                     { name: 'LO7' },
-                    { name: 'LO8'},
-                    { name: 'LO6 (R7 Bountiful Maharlika Producers Cooperative)' },
+                    { name: 'LO8' },
+                    {
+                        name: 'LO6 (R7 Bountiful Maharlika Producers Cooperative)',
+                    },
                     { name: 'R07' },
                     { name: 'R06' },
                     { name: 'R05' },
                     { name: 'R03' },
-                    { name: 'R02 (Arka Office)', site:'www.arka.asia'},
+                    { name: 'R02 (Arka Office)', site: 'www.arka.asia' },
                     { name: 'R01' },
                     { name: 'Male Restroom' },
                     { name: 'Female Restroom' },
@@ -1214,13 +1279,19 @@ export const mockBuildingsData = {
                     { name: 'Faculty Room 1 (AS 146)' },
                     { name: 'Faculty Room 2 (AS 147)' },
                     { name: 'Faculty Room 3 (AS 149)' },
-                    { name: 'Office of the Dean, CSS (AS 148)', email:'css.upcebu@up.edu.ph'},
+                    {
+                        name: 'Office of the Dean, CSS (AS 148)',
+                        email: 'css.upcebu@up.edu.ph',
+                    },
                     { name: 'Faculty Room 2 (AS 147)' },
                     { name: 'Faculty Room 2 (AS 147)' },
                     { name: 'Faculty Room 2 (AS 147)' },
                     { name: 'AS 138 (Research Office of UP Cebu)' },
                     { name: 'AS 136' },
-                    { name: 'Office of the College Secretary - CSS (AS 135)', email:'ocs_css.upcebu@up.edu.ph'},
+                    {
+                        name: 'Office of the College Secretary - CSS (AS 135)',
+                        email: 'ocs_css.upcebu@up.edu.ph',
+                    },
                     { name: 'AS 133' },
                     { name: 'AS 134 UP Open University Office - Learning Hub' },
                     { name: 'Male Restroom' },
@@ -1233,7 +1304,10 @@ export const mockBuildingsData = {
                     { name: 'AS 239' },
                     { name: 'AS 240' },
                     { name: 'AS 241' },
-                    { name: 'Information Technology Center', email: 'itc.upcebu@up.edu.ph'},
+                    {
+                        name: 'Information Technology Center',
+                        email: 'itc.upcebu@up.edu.ph',
+                    },
                     { name: 'AS 243' },
                     { name: 'AS 244' },
                     { name: 'AS 245' },
@@ -1246,19 +1320,25 @@ export const mockBuildingsData = {
                     { name: 'Female Restroom' },
                 ],
             },
-                        {
+            {
                 name: '3rd Floor',
                 facilities: [
                     { name: 'AS 310' },
                     { name: 'AS 312 (Statlabs)' },
                     { name: 'AS 313' },
-                    { name: 'AS 315 (Robotics and IOT lab)', email: 'itc.upcebu@up.edu.ph'},
+                    {
+                        name: 'AS 315 (Robotics and IOT lab)',
+                        email: 'itc.upcebu@up.edu.ph',
+                    },
                     { name: 'AS 314' },
                     { name: 'AS 316' },
                     { name: 'AS 317' },
                     { name: 'AS 308' },
                     { name: 'AS 306' },
-                    { name: 'AS 305 (UP Cebu Department of Computer Science Office)', email: 'dcs.upcebu@up.edu.ph'},
+                    {
+                        name: 'AS 305 (UP Cebu Department of Computer Science Office)',
+                        email: 'dcs.upcebu@up.edu.ph',
+                    },
                     { name: 'AS 304' },
                     { name: 'AS 303' },
                     { name: 'AS 302' },
