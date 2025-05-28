@@ -1459,7 +1459,7 @@ export const mockBuildingsData = {
     A3: {
         id: 'A3',
         name: 'Malacañang Cottage',
-        image: '/assets/images/buildings/malcs.jpg',
+        image: '/assets/images/buildings/malacs.jpg',
         type: 'activity',
         description:
             'Secondary camping area for student organizational activities.',
