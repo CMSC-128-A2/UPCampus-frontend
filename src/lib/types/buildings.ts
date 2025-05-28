@@ -355,7 +355,7 @@ export const mockBuildingsData = {
     '12': {
         id: '12',
         name: 'Union Building',
-        image: '/assets/images/random-building.jpg',
+        image: '/assets/images/buildings/union.jpg',
         type: 'building',
         slug: null,
         floors: [
@@ -413,23 +413,20 @@ export const mockBuildingsData = {
     '9': {
         id: '9',
         name: 'Fine Arts Workshop Bldg. 2',
-        image: '/assets/images/random-building.jpg',
+        image: '/assets/images/buildings/workshop2.jpg',
         type: 'building',
         slug: null,
         floors: [
             {
                 name: '1st Floor',
-                facilities: [
-                    { name: 'Workshop 3' },
-                ],
+                facilities: [{ name: 'Workshop 3' }],
             },
         ],
-
     },
     '10': {
         id: '10',
         name: 'Arts and Science Extension Bldg. (ASX)',
-        image: '/assets/images/random-building.jpg',
+        image: '/assets/images/buildings/asx.jpg',
         type: 'building',
         slug: null,
         floors: [
@@ -461,21 +458,17 @@ export const mockBuildingsData = {
     '8': {
         id: '8',
         name: 'Fine Arts Workshop Bldg.',
-        image: '/assets/images/random-building.jpg',
+        image: '/assets/images/buildings/workshop1.jpg',
         type: 'building',
         slug: null,
         floors: [
             {
                 name: '1st Floor',
-                facilities: [
-                    { name: 'Workshop 1' },
-                ],
+                facilities: [{ name: 'Workshop 1' }],
             },
             {
                 name: '2nd Floor',
-                facilities: [
-                    { name: 'Workshop 2' },
-                ],
+                facilities: [{ name: 'Workshop 2' }],
             },
             {
                 name: '3rd Floor',
@@ -493,14 +486,18 @@ export const mockBuildingsData = {
     '7': {
         id: '7',
         name: 'Undergraduate Building',
-        image: '/assets/images/random-building.jpg',
+        image: '/assets/images/buildings/undergraduate.jpg',
         type: 'building',
         slug: null,
         floors: [
             {
                 name: '1st Floor',
                 facilities: [
-                    { name: 'Teaching and Learning Resources Center', email:'lrc.upcebu@up.edu.ph', contactNumber:'(032) 232 8187'},
+                    {
+                        name: 'Teaching and Learning Resources Center',
+                        email: 'lrc.upcebu@up.edu.ph',
+                        contactNumber: '(032) 232 8187',
+                    },
                     { name: 'Lawak Sinehan' },
                     { name: 'Department of Biology and Environmental Science' },
                     { name: 'UG123A Zoology Lab' },
@@ -524,7 +521,6 @@ export const mockBuildingsData = {
                     { name: 'UG118 Computer Laboratory' },
                     { name: 'Male Comfort Room' },
                     { name: 'Female Comfort Room' },
-                    
                 ],
             },
             {
@@ -564,7 +560,7 @@ export const mockBuildingsData = {
     '6b': {
         id: '6b',
         name: 'Management Bldg. 1',
-        image: '/assets/images/random-building.jpg',
+        image: '/assets/images/buildings/man1.jpg',
         type: 'building',
         slug: null,
         floors: [
@@ -579,23 +575,18 @@ export const mockBuildingsData = {
             },
             {
                 name: '2nd Floor',
-                facilities: [
-                    { name: '202' },
-                    { name: 'Case Room' },
-                ],
+                facilities: [{ name: '202' }, { name: 'Case Room' }],
             },
             {
                 name: '3rd Floor',
-                facilities: [
-                    { name: 'Roofdeck' },
-                ],
+                facilities: [{ name: 'Roofdeck' }],
             },
         ],
     },
     '6a': {
         id: '6a',
         name: 'Management Administration',
-        image: '/assets/images/random-building.jpg',
+        image: '/assets/images/buildings/manAdmin.jpg',
         type: 'building',
         slug: null,
         floors: [
@@ -611,7 +602,7 @@ export const mockBuildingsData = {
     '6c': {
         id: '6c',
         name: 'Management Bldg. 2',
-        image: '/assets/images/random-building.jpg',
+        image: '/assets/images/buildings/man2.jpg',
         type: 'building',
         slug: null,
         floors: [
@@ -620,15 +611,12 @@ export const mockBuildingsData = {
                 facilities: [
                     { name: 'RM103' },
                     { name: 'RM104' },
-                    { name: 'Stock room'}
+                    { name: 'Stock room' },
                 ],
             },
             {
                 name: '2nd Floor',
-                facilities: [
-                    { name: 'RM203' },
-                    { name: 'RM204' },
-                ],
+                facilities: [{ name: 'RM203' }, { name: 'RM204' }],
             },
         ],
     },
@@ -636,7 +624,7 @@ export const mockBuildingsData = {
     '6': {
         id: '6',
         name: 'School of Management',
-        image: '/assets/images/random-building.jpg',
+        image: '/assets/images/buildings/man.jpg',
         type: 'building',
         slug: null,
         floors: [
@@ -663,7 +651,7 @@ export const mockBuildingsData = {
     '1': {
         id: '1',
         name: 'Administration Building',
-        image: '/assets/images/random-building.jpg',
+        image: '/assets/images/buildings/admin.jpg',
         type: 'building',
         slug: null,
         floors: [
@@ -672,12 +660,18 @@ export const mockBuildingsData = {
                 facilities: [
                     { name: 'PE Office' },
                     { name: 'Office of the Chancellor' },
-                    { name: 'Office of the Vice Chancellor for Academic Affairs', email:'ovcaa.upcebu@up.edu.ph'},
-                    { name: 'Office of the Vice Chancellor for Administration', email:'ovca.upcebu@up.edu.ph'},
+                    {
+                        name: 'Office of the Vice Chancellor for Academic Affairs',
+                        email: 'ovcaa.upcebu@up.edu.ph',
+                    },
+                    {
+                        name: 'Office of the Vice Chancellor for Administration',
+                        email: 'ovca.upcebu@up.edu.ph',
+                    },
                     { name: 'Mindscape' },
                     { name: 'Myths' },
                     { name: 'Male Comfort Room' },
-                    { name: 'Female Comfort Room' }
+                    { name: 'Female Comfort Room' },
                 ],
             },
             {
@@ -697,24 +691,52 @@ export const mockBuildingsData = {
     '2': {
         id: '2',
         name: 'College of Science Building',
-        image: '/assets/images/random-building.jpg',
+        image: '/assets/images/buildings/cos.jpg',
         slug: 'science-building',
         type: 'building',
         floors: [
             {
                 name: '1st Floor',
                 facilities: [
-                    { name: 'Budget Office', contactNumber:'Local - 122/305', email:'budget.upcebu@up.edu.ph'},
-                    { name: 'Office of the University Registrar', contactNumber:'Local - 324', email:'our.upcebu@up.edu.ph' },
-                    { name: 'Supply and Property Management Office',email:'spmo.upcebu@up.edu.ph' ,contactNumber:'Local - 325 | Direct - (032) 233 3497', },
-                    { name: 'College of Science', contactNumber:'Local - 311', email:'cos.upcebu@up.edu.ph'},
-                    { name: 'Bids and Awards Committee Office', contactNumber:'Local - 317', email:'bac_sec.upcebu@up.edu.ph'},
-                    { name: 'Cash Office', contactNumber:'Local - 101', email:'cash.upcebu@up.edu.ph'},
-                    { name: 'Accounting Office', contactNumber:'Local - 104', email:'accounting.upcebu@up.edu.ph'},
-                    { name: 'Server Room'},
-                    { name: 'Emergency Exit 1'},
-                    { name: 'Emergency Exit 2'},
-                    { name: 'Emergency Exit 3'},
+                    {
+                        name: 'Budget Office',
+                        contactNumber: 'Local - 122/305',
+                        email: 'budget.upcebu@up.edu.ph',
+                    },
+                    {
+                        name: 'Office of the University Registrar',
+                        contactNumber: 'Local - 324',
+                        email: 'our.upcebu@up.edu.ph',
+                    },
+                    {
+                        name: 'Supply and Property Management Office',
+                        email: 'spmo.upcebu@up.edu.ph',
+                        contactNumber: 'Local - 325 | Direct - (032) 233 3497',
+                    },
+                    {
+                        name: 'College of Science',
+                        contactNumber: 'Local - 311',
+                        email: 'cos.upcebu@up.edu.ph',
+                    },
+                    {
+                        name: 'Bids and Awards Committee Office',
+                        contactNumber: 'Local - 317',
+                        email: 'bac_sec.upcebu@up.edu.ph',
+                    },
+                    {
+                        name: 'Cash Office',
+                        contactNumber: 'Local - 101',
+                        email: 'cash.upcebu@up.edu.ph',
+                    },
+                    {
+                        name: 'Accounting Office',
+                        contactNumber: 'Local - 104',
+                        email: 'accounting.upcebu@up.edu.ph',
+                    },
+                    { name: 'Server Room' },
+                    { name: 'Emergency Exit 1' },
+                    { name: 'Emergency Exit 2' },
+                    { name: 'Emergency Exit 3' },
                     { name: 'Male Comfort Room' },
                     { name: 'Female Comfort Room' },
                 ],
@@ -723,8 +745,16 @@ export const mockBuildingsData = {
                 name: 'Mezzanine Floor',
                 facilities: [
                     { name: 'Stock Room' },
-                    { name: 'Human Resource Office', contactNumber:'Local - 319', email:'hrdo.upcebu@up.edu.ph'},
-                    { name: 'Legal Office', contactNumber:'Local - 326', email:'legal.upcebu@up.edu.ph'},
+                    {
+                        name: 'Human Resource Office',
+                        contactNumber: 'Local - 319',
+                        email: 'hrdo.upcebu@up.edu.ph',
+                    },
+                    {
+                        name: 'Legal Office',
+                        contactNumber: 'Local - 326',
+                        email: 'legal.upcebu@up.edu.ph',
+                    },
                     { name: 'Spare Room' },
                     { name: 'Resident Psychologist' },
                     { name: 'Common Conference Room & Staff Lounge' },
@@ -738,12 +768,16 @@ export const mockBuildingsData = {
                     { name: '201 Lecture Room' },
                     { name: '202 Lecture Room' },
                     { name: '203 Lecture Room' },
-                    { name: '204 Mathematics and Statistics Office', contactNumber:'Local - 205', email:'math.upcebu@up.edu.ph'},
+                    {
+                        name: '204 Mathematics and Statistics Office',
+                        contactNumber: 'Local - 205',
+                        email: 'math.upcebu@up.edu.ph',
+                    },
                     { name: 'Emergency Exit 1' },
                     { name: 'Emergency Exit 2' },
                     { name: 'Emergency Exit 3' },
                     { name: 'Male Comfort Room' },
-                    { name: 'Female Comfort Room' }
+                    { name: 'Female Comfort Room' },
                 ],
             },
             {
@@ -752,7 +786,7 @@ export const mockBuildingsData = {
                     { name: '301' },
                     { name: '302 Robotics and Internet of Things Group' },
                     { name: '303 Bioinformatics Research Interest Group' },
-                    { name: '304'},
+                    { name: '304' },
                     { name: '305' },
                     { name: '306' },
                     { name: '307 Image and Video Analysis Research Group' },
@@ -760,12 +794,16 @@ export const mockBuildingsData = {
                     { name: '310 Natural Language Processing Group' },
                     { name: '311 Mini Library' },
                     { name: '312 Office of the Chairperson' },
-                    { name: '204 Department of Computer Science Office', contactNumber:'Local - 206', email:'dcs.upcebu@up.edu.ph'},
+                    {
+                        name: '204 Department of Computer Science Office',
+                        contactNumber: 'Local - 206',
+                        email: 'dcs.upcebu@up.edu.ph',
+                    },
                     { name: 'Emergency Exit 1' },
                     { name: 'Emergency Exit 2' },
                     { name: 'Emergency Exit 3' },
                     { name: 'Male Comfort Room' },
-                    { name: 'Female Comfort Room' }
+                    { name: 'Female Comfort Room' },
                 ],
             },
             {
@@ -774,7 +812,7 @@ export const mockBuildingsData = {
                     { name: '401 Computer Laboratory' },
                     { name: '402 Computer Laboratory' },
                     { name: '403 Computer Laboratory' },
-                    { name: '404 Computer Laboratory'},
+                    { name: '404 Computer Laboratory' },
                     { name: '405 Lecture Room' },
                     { name: '406 Lecture Room' },
                     { name: '407 Lecture Room' },
@@ -792,8 +830,12 @@ export const mockBuildingsData = {
                     { name: '501 Faculty Research Laboratory 1' },
                     { name: '502 Faculty Research Laboratory 2' },
                     { name: '503 Faculty Research Laboratory 3' },
-                    { name: '504 Department of Biology and Environmental Science Conference Room'},
-                    { name: '505 Department of Biology and Environmental Science Office' },
+                    {
+                        name: '504 Department of Biology and Environmental Science Conference Room',
+                    },
+                    {
+                        name: '505 Department of Biology and Environmental Science Office',
+                    },
                     { name: 'Emergency Exit 1' },
                     { name: 'Emergency Exit 2' },
                     { name: 'Emergency Exit 3' },
@@ -807,7 +849,7 @@ export const mockBuildingsData = {
                     { name: '601 Bioassay Laboratory' },
                     { name: '602 Histology Laboratory' },
                     { name: '603 Botany Laboratory' },
-                    { name: '604 Zoology Laboratory'},
+                    { name: '604 Zoology Laboratory' },
                     { name: '605 Microbiology Laboratory' },
                     { name: '606 Biology Instrumentation Room' },
                     { name: '607 Biology Laboratory Stockroom' },
@@ -825,7 +867,7 @@ export const mockBuildingsData = {
     '5d': {
         id: '5d',
         name: 'Lihangin Hall',
-        image: '/assets/images/random-building.jpg',
+        image: '/assets/images/buildings/lihangin.jpg',
         type: 'building',
         slug: null,
         floors: [
@@ -850,7 +892,7 @@ export const mockBuildingsData = {
     '5a': {
         id: '5a',
         name: 'Balay Varangao',
-        image: '/assets/images/random-building.jpg',
+        image: '/assets/images/buildings/varangao.jpg',
         type: 'building',
         slug: null,
         floors: [
@@ -875,7 +917,7 @@ export const mockBuildingsData = {
     '5': {
         id: '5',
         name: 'Residence Halls',
-        image: '/assets/images/random-building.jpg',
+        image: '/assets/images/buildings/residence.jpg',
         type: 'building',
         slug: null,
         floors: [
@@ -900,7 +942,7 @@ export const mockBuildingsData = {
     '5b': {
         id: '5b',
         name: 'Lalahon Hall',
-        image: '/assets/images/random-building.jpg',
+        image: '/assets/images/buildings/lalahon.jpg',
         type: 'building',
         slug: null,
         floors: [
@@ -925,7 +967,7 @@ export const mockBuildingsData = {
     '5c': {
         id: '5c',
         name: 'Liadlaw Hall',
-        image: '/assets/images/random-building.jpg',
+        image: '/assets/images/buildings/liadlaw.jpg',
         type: 'building',
         slug: null,
         floors: [
@@ -951,7 +993,7 @@ export const mockBuildingsData = {
     '4': {
         id: '4',
         name: 'Library Building',
-        image: '/assets/images/random-building.jpg',
+        image: '/assets/images/buildings/library.jpg',
         type: 'building',
         slug: null,
         floors: [
@@ -976,15 +1018,15 @@ export const mockBuildingsData = {
     '3': {
         id: '3',
         name: 'Technology Innovation Center Building',
-        image: '/assets/images/random-building.jpg',
+        image: '/assets/images/buildings/ticb.jpg',
         type: 'building',
         slug: null,
         floors: [
             {
                 name: '1st Floor',
                 facilities: [
-                    { name: 'Canteen'},
-                    { name: 'Clinic'},
+                    { name: 'Canteen' },
+                    { name: 'Clinic' },
                     { name: 'Male Comfort Room' },
                     { name: 'Female Comfort Room' },
                 ],
@@ -1010,7 +1052,7 @@ export const mockBuildingsData = {
     '3b': {
         id: '3b',
         name: 'Clinic',
-        image: '/assets/images/random-building.jpg',
+        image: '/assets/images/buildings/clinic.jpg',
         type: 'building',
         slug: null,
         floors: [
@@ -1037,7 +1079,7 @@ export const mockBuildingsData = {
     '3a': {
         id: '3a',
         name: 'Cafeteria',
-        image: '/assets/images/random-building.jpg',
+        image: '/assets/images/buildings/canteen.jpg',
         type: 'building',
         slug: null,
         floors: [
@@ -1088,7 +1130,7 @@ export const mockBuildingsData = {
     '11': {
         id: '11',
         name: 'Arts and Sciences (AS) Bldg.',
-        image: '/assets/images/random-building.jpg',
+        image: '/assets/images/buildings/as.jpg',
         type: 'building',
         slug: null,
         floors: [
@@ -1113,7 +1155,7 @@ export const mockBuildingsData = {
     '11a': {
         id: '11a',
         name: 'AS Conference Hall',
-        image: '/assets/images/random-building.jpg',
+        image: '/assets/images/buildings/asHall.jpg',
         type: 'building',
         slug: null,
         floors: [
@@ -1138,7 +1180,7 @@ export const mockBuildingsData = {
     '11b': {
         id: '11b',
         name: 'AS East Wing',
-        image: '/assets/images/random-building.jpg',
+        image: '/assets/images/buildings/asEast.jpg',
         type: 'building',
         slug: null,
         floors: [
@@ -1151,7 +1193,10 @@ export const mockBuildingsData = {
                     { name: 'AS 161' },
                     { name: 'AS 164' },
                     { name: 'Student Council Room' },
-                    { name: 'Ugnayan sg Pahinungod Office (AS 152)', email: 'pahinungod.upc@up.edu.ph'},
+                    {
+                        name: 'Ugnayan sg Pahinungod Office (AS 152)',
+                        email: 'pahinungod.upc@up.edu.ph',
+                    },
                     { name: 'AS 151' },
                     { name: 'AS 150' },
                     { name: 'Male Restroom' },
@@ -1161,15 +1206,27 @@ export const mockBuildingsData = {
             {
                 name: '2nd Floor',
                 facilities: [
-                    { name: 'GAD Office (AS 251)', email: 'gad.upcebu@up.edu.ph'},
+                    {
+                        name: 'GAD Office (AS 251)',
+                        email: 'gad.upcebu@up.edu.ph',
+                    },
                     { name: 'Research Ethics Committee Room (AS 250)' },
                     { name: 'AS 249' },
                     { name: 'AS 248' },
                     { name: 'AS 247' },
                     { name: 'AS 246' },
-                    { name: 'Office of Alumni Relations (AS 257)', email: 'oar.upcebu@up.edu.ph'},
-                    { name: 'Cebuano Language & Cultural Office (AS 256)', email: 'our.upcebu@up.edu.ph | vaas.upcebu@up.edu.ph'},
-                    { name: 'NSTP Office (AS 258)', email:'nstp.upcebu@up.edu.ph'},
+                    {
+                        name: 'Office of Alumni Relations (AS 257)',
+                        email: 'oar.upcebu@up.edu.ph',
+                    },
+                    {
+                        name: 'Cebuano Language & Cultural Office (AS 256)',
+                        email: 'our.upcebu@up.edu.ph | vaas.upcebu@up.edu.ph',
+                    },
+                    {
+                        name: 'NSTP Office (AS 258)',
+                        email: 'nstp.upcebu@up.edu.ph',
+                    },
                     { name: 'AS 259' },
                     { name: 'AS 260' },
                     { name: 'AS 261' },
@@ -1180,19 +1237,27 @@ export const mockBuildingsData = {
             {
                 name: '3rd Floor',
                 facilities: [
-                    { name: 'Technology Transfer and Business Development Office (TTBDO)', email: 'cebuinit.upcebu@up.edu.ph'},
-                    { name: 'LO1 (BloodRed Office)', site: 'www.bloodredclothing.com'},
+                    {
+                        name: 'Technology Transfer and Business Development Office (TTBDO)',
+                        email: 'cebuinit.upcebu@up.edu.ph',
+                    },
+                    {
+                        name: 'LO1 (BloodRed Office)',
+                        site: 'www.bloodredclothing.com',
+                    },
                     { name: 'LO2 (The Backbone office)' },
                     { name: 'LO3 (Blood Red Office)' },
                     { name: 'LO4 (Artistko)' },
                     { name: 'LO7' },
-                    { name: 'LO8'},
-                    { name: 'LO6 (R7 Bountiful Maharlika Producers Cooperative)' },
+                    { name: 'LO8' },
+                    {
+                        name: 'LO6 (R7 Bountiful Maharlika Producers Cooperative)',
+                    },
                     { name: 'R07' },
                     { name: 'R06' },
                     { name: 'R05' },
                     { name: 'R03' },
-                    { name: 'R02 (Arka Office)', site:'www.arka.asia'},
+                    { name: 'R02 (Arka Office)', site: 'www.arka.asia' },
                     { name: 'R01' },
                     { name: 'Male Restroom' },
                     { name: 'Female Restroom' },
@@ -1203,7 +1268,7 @@ export const mockBuildingsData = {
     '11c': {
         id: '11c',
         name: 'AS West Wing',
-        image: '/assets/images/random-building.jpg',
+        image: '/assets/images/buildings/asWest.jpg',
         type: 'building',
         slug: null,
         floors: [
@@ -1214,13 +1279,19 @@ export const mockBuildingsData = {
                     { name: 'Faculty Room 1 (AS 146)' },
                     { name: 'Faculty Room 2 (AS 147)' },
                     { name: 'Faculty Room 3 (AS 149)' },
-                    { name: 'Office of the Dean, CSS (AS 148)', email:'css.upcebu@up.edu.ph'},
+                    {
+                        name: 'Office of the Dean, CSS (AS 148)',
+                        email: 'css.upcebu@up.edu.ph',
+                    },
                     { name: 'Faculty Room 2 (AS 147)' },
                     { name: 'Faculty Room 2 (AS 147)' },
                     { name: 'Faculty Room 2 (AS 147)' },
                     { name: 'AS 138 (Research Office of UP Cebu)' },
                     { name: 'AS 136' },
-                    { name: 'Office of the College Secretary - CSS (AS 135)', email:'ocs_css.upcebu@up.edu.ph'},
+                    {
+                        name: 'Office of the College Secretary - CSS (AS 135)',
+                        email: 'ocs_css.upcebu@up.edu.ph',
+                    },
                     { name: 'AS 133' },
                     { name: 'AS 134 UP Open University Office - Learning Hub' },
                     { name: 'Male Restroom' },
@@ -1233,7 +1304,10 @@ export const mockBuildingsData = {
                     { name: 'AS 239' },
                     { name: 'AS 240' },
                     { name: 'AS 241' },
-                    { name: 'Information Technology Center', email: 'itc.upcebu@up.edu.ph'},
+                    {
+                        name: 'Information Technology Center',
+                        email: 'itc.upcebu@up.edu.ph',
+                    },
                     { name: 'AS 243' },
                     { name: 'AS 244' },
                     { name: 'AS 245' },
@@ -1246,19 +1320,25 @@ export const mockBuildingsData = {
                     { name: 'Female Restroom' },
                 ],
             },
-                        {
+            {
                 name: '3rd Floor',
                 facilities: [
                     { name: 'AS 310' },
                     { name: 'AS 312 (Statlabs)' },
                     { name: 'AS 313' },
-                    { name: 'AS 315 (Robotics and IOT lab)', email: 'itc.upcebu@up.edu.ph'},
+                    {
+                        name: 'AS 315 (Robotics and IOT lab)',
+                        email: 'itc.upcebu@up.edu.ph',
+                    },
                     { name: 'AS 314' },
                     { name: 'AS 316' },
                     { name: 'AS 317' },
                     { name: 'AS 308' },
                     { name: 'AS 306' },
-                    { name: 'AS 305 (UP Cebu Department of Computer Science Office)', email: 'dcs.upcebu@up.edu.ph'},
+                    {
+                        name: 'AS 305 (UP Cebu Department of Computer Science Office)',
+                        email: 'dcs.upcebu@up.edu.ph',
+                    },
                     { name: 'AS 304' },
                     { name: 'AS 303' },
                     { name: 'AS 302' },
@@ -1272,7 +1352,7 @@ export const mockBuildingsData = {
     '14': {
         id: '14',
         name: 'UP High School Cebu',
-        image: '/assets/images/random-building.jpg',
+        image: '/assets/images/buildings/hs.jpg',
         type: 'building',
         slug: null,
         floors: [
@@ -1307,7 +1387,7 @@ export const mockBuildingsData = {
     A9: {
         id: 'A9',
         name: 'Amphitheater/Sunset Garden',
-        image: '/assets/images/random-building.jpg',
+        image: '/assets/images/buildings/amphitheater.jpg',
         type: 'activity',
         description:
             'Outdoor performance space for university events and cultural shows.',
@@ -1319,7 +1399,7 @@ export const mockBuildingsData = {
     A8: {
         id: 'A8',
         name: 'Volleyball Court',
-        image: '/assets/images/random-building.jpg',
+        image: '/assets/images/buildings/volleyball.jpg',
         type: 'activity',
         description:
             'Volleyball and basketball courts for recreational and varsity games.',
@@ -1331,7 +1411,7 @@ export const mockBuildingsData = {
     A7: {
         id: 'A7',
         name: 'Basketball Court',
-        image: '/assets/images/random-building.jpg',
+        image: '/assets/images/buildings/basketball.jpg',
         type: 'activity',
         description:
             'Full-sized basketball court for recreational play and varsity team practices.',
@@ -1343,7 +1423,7 @@ export const mockBuildingsData = {
     A6: {
         id: 'A6',
         name: 'Undergraduate Cottages',
-        image: '/assets/images/random-building.jpg',
+        image: '/assets/images/buildings/cottageUg.jpg',
         type: 'activity',
         description:
             'Designated area for student camping activities and outdoor events.',
@@ -1355,7 +1435,7 @@ export const mockBuildingsData = {
     A4: {
         id: 'A4',
         name: 'Admin Field',
-        image: '/assets/images/random-building.jpg',
+        image: '/assets/images/buildings/fieldAdmin.jpg',
         type: 'activity',
         description:
             'Professional archery range for training and competitions.',
@@ -1367,7 +1447,7 @@ export const mockBuildingsData = {
     A2: {
         id: 'A2',
         name: 'Admin Cottages',
-        image: '/assets/images/random-building.jpg',
+        image: '/assets/images/buildings/cottageAdmin.jpg',
         type: 'activity',
         description:
             'Picnic and relaxation area within the university botanical garden.',
@@ -1379,7 +1459,7 @@ export const mockBuildingsData = {
     A3: {
         id: 'A3',
         name: 'Malacañang Cottage',
-        image: '/assets/images/random-building.jpg',
+        image: '/assets/images/buildings/malcs.jpg',
         type: 'activity',
         description:
             'Secondary camping area for student organizational activities.',
@@ -1391,7 +1471,7 @@ export const mockBuildingsData = {
     A1: {
         id: 'A1',
         name: 'Oblation Square',
-        image: '/assets/images/random-building.jpg',
+        image: '/assets/images/buildings/oble.jpg',
         type: 'activity',
         description:
             'Central gathering space for university events and activities.',
@@ -1403,7 +1483,7 @@ export const mockBuildingsData = {
     A5: {
         id: 'A5',
         name: 'College Mini Stage',
-        image: '/assets/images/random-building.jpg',
+        image: '/assets/images/buildings/stage.jpg',
         type: 'activity',
         description: 'Open space for art installations and exhibitions.',
         schedule: 'Open daily from 8:00 AM to 8:00 PM',
@@ -1414,7 +1494,7 @@ export const mockBuildingsData = {
     A10: {
         id: 'A10',
         name: 'High School Open Field',
-        image: '/assets/images/random-building.jpg',
+        image: '/assets/images/buildings/fieldHs.jpg',
         type: 'activity',
         description:
             'Park dedicated to university alumni with monuments and memorials.',
@@ -1426,7 +1506,7 @@ export const mockBuildingsData = {
     A11: {
         id: 'A11',
         name: 'High School Open Court',
-        image: '/assets/images/random-building.jpg',
+        image: '/assets/images/buildings/courtHsOpen.jpg',
         type: 'activity',
         description:
             'Artificial lagoon for recreation and environmental studies.',
@@ -1438,7 +1518,7 @@ export const mockBuildingsData = {
     A12: {
         id: 'A12',
         name: 'High School Covered Court',
-        image: '/assets/images/random-building.jpg',
+        image: '/assets/images/buildings/courtHsCovered.jpg',
         type: 'activity',
         description: 'Quiet space for meditation and mindfulness activities.',
         schedule: 'Open daily from 6:00 AM to 6:00 PM',
@@ -1449,7 +1529,7 @@ export const mockBuildingsData = {
     A13: {
         id: 'A13',
         name: 'Soccer Field',
-        image: '/assets/images/random-building.jpg',
+        image: '/assets/images/buildings/soccer.jpg',
         type: 'activity',
         description:
             'Regulation-size football field for varsity games and practices.',
@@ -1462,7 +1542,7 @@ export const mockBuildingsData = {
     G1: {
         id: 'G1',
         name: 'Entrance Gate Guard House',
-        image: '/assets/images/random-building.jpg',
+        image: '/assets/images/buildings/guardEntrance.jpg',
         type: 'security',
         personnel: '5 security officers',
         services: [
@@ -1477,7 +1557,7 @@ export const mockBuildingsData = {
     G3: {
         id: 'G3',
         name: 'High School Guard House',
-        image: '/assets/images/random-building.jpg',
+        image: '/assets/images/buildings/guardHs.jpg',
         type: 'security',
         personnel: '3 security officers',
         services: [
@@ -1492,7 +1572,7 @@ export const mockBuildingsData = {
     G4: {
         id: 'G4',
         name: 'AS Guard House',
-        image: '/assets/images/random-building.jpg',
+        image: '/assets/images/buildings/guardAs.jpg',
         type: 'security',
         personnel: '4 security officers',
         services: [
@@ -1507,7 +1587,7 @@ export const mockBuildingsData = {
     G2: {
         id: 'G2',
         name: 'Exit Gate Guard House',
-        image: '/assets/images/random-building.jpg',
+        image: '/assets/images/buildings/guardExit.jpg',
         type: 'security',
         personnel: '3 security officers',
         services: [
@@ -1523,7 +1603,7 @@ export const mockBuildingsData = {
     P1: {
         id: 'P1',
         name: 'COS Bldg. Parking',
-        image: '/assets/images/random-building.jpg',
+        image: '/assets/images/buildings/parkingCos.jpg',
         type: 'security',
         capacity: '30 vehicles',
         description:
@@ -1535,7 +1615,7 @@ export const mockBuildingsData = {
     P2: {
         id: 'P2',
         name: 'Canteen Parking',
-        image: '/assets/images/random-building.jpg',
+        image: '/assets/images/buildings/parkingCanteen.jpg',
         type: 'security',
         capacity: '25 vehicles',
         description: 'Short-term parking for canteen and cafeteria visitors.',
@@ -1546,7 +1626,7 @@ export const mockBuildingsData = {
     P3: {
         id: 'P3',
         name: 'Library Parking',
-        image: '/assets/images/random-building.jpg',
+        image: '/assets/images/buildings/parkingLibrary.jpg',
         type: 'security',
         capacity: '40 vehicles',
         description:
@@ -1558,7 +1638,7 @@ export const mockBuildingsData = {
     P4: {
         id: 'P4',
         name: 'Motorcycle Parking',
-        image: '/assets/images/random-building.jpg',
+        image: '/assets/images/buildings/parkingMotor.jpg',
         type: 'security',
         capacity: '60 motorcycles',
         description: 'Main motorcycle parking area for students and visitors.',
@@ -1569,7 +1649,7 @@ export const mockBuildingsData = {
     P5: {
         id: 'P5',
         name: 'Undergraduate Bldg. Parking',
-        image: '/assets/images/random-building.jpg',
+        image: '/assets/images/buildings/parkingUndergrad.jpg',
         type: 'security',
         capacity: '35 vehicles',
         description: 'Parking lot adjacent to the Undergraduate Building.',
@@ -1580,7 +1660,7 @@ export const mockBuildingsData = {
     P6: {
         id: 'P6',
         name: 'AS Motorcycle Parking',
-        image: '/assets/images/random-building.jpg',
+        image: '/assets/images/buildings/parkingMotorAs.jpg',
         type: 'security',
         capacity: '50 motorcycles',
         description:
@@ -1592,7 +1672,7 @@ export const mockBuildingsData = {
     P7: {
         id: 'P7',
         name: 'AS Parking',
-        image: '/assets/images/random-building.jpg',
+        image: '/assets/images/buildings/parkingAs.jpg',
         type: 'security',
         capacity: '45 vehicles',
         description:
