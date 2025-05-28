@@ -1273,44 +1273,38 @@ export const roomsApi = {
                 'Fetching rooms from:',
                 `${API_BASE_URL}/api/schedules/rooms/`,
             );
-            const response = await fetch(
-                `${API_BASE_URL}/api/schedules/rooms/`,
-                {
+            
+            let allRooms: Room[] = [];
+            let nextUrl = `${API_BASE_URL}/api/schedules/rooms/`;
+
+            while (nextUrl) {
+                const response = await fetch(nextUrl, {
                     headers: {
                         Accept: 'application/json',
                     },
-                },
-            );
+                });
 
-            console.log('Response status:', response.status);
+                console.log('Response status:', response.status);
 
-            if (!response.ok) {
-                throw new Error(`Error: ${response.status}`);
+                if (!response.ok) {
+                    throw new Error(`Error: ${response.status}`);
+                }
+
+                const data = await response.json();
+                console.log('Page data:', data);
+
+                // Add rooms from current page
+                const rooms = data.results || data;
+                if (Array.isArray(rooms)) {
+                    allRooms = [...allRooms, ...rooms];
+                }
+
+                // Check if there's a next page
+                nextUrl = data.next || null;
             }
 
-            const rawData = await response.text();
-            console.log('Raw API response:', rawData);
-
-            let data;
-            try {
-                data = JSON.parse(rawData);
-            } catch (e) {
-                console.error('Failed to parse JSON:', e);
-                throw new Error('Invalid JSON response from server');
-            }
-
-            console.log('Parsed data:', data);
-
-            // Handle both paginated and non-paginated responses
-            const rooms = data.results ? data.results : data;
-            console.log('Rooms data:', rooms);
-
-            if (!Array.isArray(rooms)) {
-                console.error('Rooms is not an array:', rooms);
-                return [];
-            }
-
-            return rooms;
+            console.log('Total rooms fetched:', allRooms.length);
+            return allRooms;
         } catch (error) {
             console.error('Failed to fetch rooms:', error);
             throw error;
