@@ -502,7 +502,7 @@ const BuildingDetailsSidebar: React.FC = () => {
             {/* Sidebar */}
             <div
                 className={`fixed sm:top-2 sm:right-2 w-full sm:w-[320px] md:w-[350px] bg-maroon-accent-light text-white overflow-hidden shadow-lg z-50 
-                transition-all duration-300 ease-in-out rounded-xl
+                transition-all duration-300 ease-in-out md:rounded-xl
                 /* Mobile: Bottom half of screen */
                 top-[50%] h-[50%] rounded-t-2xl
                 /* Desktop: Full height */

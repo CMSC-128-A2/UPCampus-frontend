@@ -17,7 +17,7 @@ const MapControls: React.FC<MapControlsProps> = ({
     onLocate,
 }) => {
     return (
-        <div className="absolute bottom-2 left-2 z-10 flex flex-row bg-green-800 rounded-md shadow-md overflow-hidden">
+        <div className="fixed bottom-[calc(0.5rem+env(safe-area-inset-bottom))] left-2 z-10 flex flex-row bg-green-800 rounded-md shadow-md overflow-hidden">
             <button
                 onClick={onZoomIn}
                 className="p-3 hover:bg-green-700 border-r border-green-900 transition-colors focus:outline-none"

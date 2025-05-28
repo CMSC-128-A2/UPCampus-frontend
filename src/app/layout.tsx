@@ -59,6 +59,7 @@ export const metadata: Metadata = {
     viewport: {
         width: 'device-width',
         initialScale: 1,
+        viewportFit: 'cover',
     },
     robots: {
         index: true,

@@ -81,7 +81,7 @@ export default function Drawer({ title, onClose, isOpen = true }: DrawerProps) {
     return (
         <>
             <div
-                className={`absolute sm:top-2 h-full w-full sm:w-[320px] md:w-[350px] text-[#FFFFFF] bg-[#D45756] shadow-lg z-10 
+                className={`absolute sm:top-2 h-full w-full sm:w-[320px] md:w-[350px] text-[#FFFFFF] bg-[#D45756] shadow-lg z-20 
                 transition-all duration-300 ease-in-out rounded-xl
                 /* Mobile: Bottom half of screen */
                 top-[50%] max-h-[50%] rounded-t-2xl
@@ -102,7 +102,7 @@ export default function Drawer({ title, onClose, isOpen = true }: DrawerProps) {
                     </button>
                 </div>
 
-                <div className=" py-2 overflow-y-auto h-[calc(100%-56px)]">
+                <div className=" py-2 overflow-y-auto h-[calc(100%-56px)] pb-28 sm:pb-0">
                     {title === 'Buildings' && renderBuildings(buildingsData)}
                     {title === 'Activity Area' &&
                         renderBuildings(activityAreaData)}
