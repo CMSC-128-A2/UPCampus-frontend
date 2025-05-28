@@ -64,7 +64,7 @@ const buildingData = [
                             y: 6.5,
                         },
                         category: 'Offices',
-                        email: 'budget.upcebu@up.edu.ph'
+                        email: 'budget.upcebu@up.edu.ph',
                     },
                     {
                         code: '1b',
@@ -75,7 +75,7 @@ const buildingData = [
                             y: 1,
                         },
                         category: 'Offices',
-                        email: 'our.upcebu@up.edu.ph'
+                        email: 'our.upcebu@up.edu.ph',
                     },
                     {
                         code: '1c',
@@ -87,7 +87,7 @@ const buildingData = [
                         },
                         category: 'Offices',
                         phone: '(032) 233 3497',
-                        email: 'spmo.upcebu@up.edu.ph'
+                        email: 'spmo.upcebu@up.edu.ph',
                     },
                     {
                         code: '1d',
@@ -98,7 +98,7 @@ const buildingData = [
                             y: 7,
                         },
                         category: 'Offices',
-                        email: 'cos.upcebu@up.edu.ph'
+                        email: 'cos.upcebu@up.edu.ph',
                     },
                     {
                         code: '1e',
@@ -109,7 +109,7 @@ const buildingData = [
                             y: 3,
                         },
                         category: 'Offices',
-                        email: 'bac_sec.upcebu@up.edu.ph'
+                        email: 'bac_sec.upcebu@up.edu.ph',
                     },
                     {
                         code: '1f',
@@ -120,7 +120,7 @@ const buildingData = [
                             y: -1,
                         },
                         category: 'Offices',
-                        email: 'cash.upcebu@up.edu.ph'
+                        email: 'cash.upcebu@up.edu.ph',
                     },
                     {
                         code: '1g',
@@ -131,7 +131,7 @@ const buildingData = [
                             y: -6,
                         },
                         category: 'Offices',
-                        email: 'accounting.upcebu@up.edu.ph'
+                        email: 'accounting.upcebu@up.edu.ph',
                     },
                     {
                         code: '1h',
@@ -173,7 +173,6 @@ const buildingData = [
                         },
                         category: 'Emergency Exits',
                     },
-
                 ],
             },
             {
@@ -463,17 +462,17 @@ const buildingData = [
                             x: -5,
                             y: 1.1,
                         },
-                        category: 'Classrooms',
+                        category: 'Offices',
                     },
                     {
                         code: '312',
-                        name: 'Office of the Chairperson',
+                        name: 'Office of the DCS Chair',
                         icon: 'presentation',
                         position: {
                             x: -7,
                             y: 1.1,
                         },
-                        category: 'Classrooms',
+                        category: 'Offices',
                     },
                     {
                         code: '313',
