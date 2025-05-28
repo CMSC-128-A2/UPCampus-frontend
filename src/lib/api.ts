@@ -6,11 +6,18 @@ const API_BASE_URL = config.apiUrl;
 console.log('API_BASE_URL:', API_BASE_URL); // Debug the API URL
 
 // Types
+export interface Room {
+    id: string;
+    room: string;
+    floor: string;
+}
+
 export interface ClassSection {
     id: string;
     section: string;
     type: 'Lecture' | 'Laboratory';
     room: string;
+    room_display?: string;
     schedule: string;
     faculty?: string;
     faculty_name?: string;
@@ -76,7 +83,7 @@ export const mapCourseToFrontend = (course: Course) => {
             id: section.id,
             section: section.section,
             type: section.type,
-            room: section.room,
+            room: section.room_display || section.room || 'Unknown Room', // Prefer room_display, fallback to room, then to 'Unknown Room'
             schedule: section.schedule,
             faculty: section.faculty ? section.faculty.toString() : null,
             facultyName: section.faculty_name,
@@ -521,7 +528,7 @@ export const schedulesApi = {
         course_code: string;
         section: string;
         type: string;
-        room: string;
+        room_id: string;
         day: string;
         time: string;
         faculty_id?: string;
@@ -609,7 +616,7 @@ export const schedulesApi = {
             course_code?: string;
             section: string;
             type: string;
-            room: string;
+            room_id: string;
             day: string;
             time: string;
             faculty_id?: string;
@@ -1254,7 +1261,7 @@ export const adminApi = {
 
     logout: () => {
         localStorage.removeItem('adminUser');
-    },
+    }
 };
 
 // Rooms API
@@ -1262,25 +1269,19 @@ export const roomsApi = {
     // Get all rooms
     getAllRooms: async (): Promise<Room[]> => {
         try {
-            console.log(
-                'Fetching rooms from:',
-                `${API_BASE_URL}/api/schedules/rooms/`,
-            );
-            const response = await fetch(
-                `${API_BASE_URL}/api/schedules/rooms/`,
-                {
-                    headers: {
-                        Accept: 'application/json',
-                    },
+            console.log('Fetching rooms from:', `${API_BASE_URL}/api/schedules/rooms/`);
+            const response = await fetch(`${API_BASE_URL}/api/schedules/rooms/`, {
+                headers: {
+                    'Accept': 'application/json',
                 },
-            );
-
+            });
+            
             console.log('Response status:', response.status);
-
+            
             if (!response.ok) {
                 throw new Error(`Error: ${response.status}`);
             }
-
+            
             const rawData = await response.text();
             console.log('Raw API response:', rawData);
 
@@ -1291,13 +1292,13 @@ export const roomsApi = {
                 console.error('Failed to parse JSON:', e);
                 throw new Error('Invalid JSON response from server');
             }
-
+            
             console.log('Parsed data:', data);
-
+            
             // Handle both paginated and non-paginated responses
             const rooms = data.results ? data.results : data;
             console.log('Rooms data:', rooms);
-
+            
             if (!Array.isArray(rooms)) {
                 console.error('Rooms is not an array:', rooms);
                 return [];
@@ -1314,15 +1315,13 @@ export const roomsApi = {
     getRoom: async (id: string): Promise<Room> => {
         try {
             console.log(`Fetching room with id ${id}`);
-            const response = await fetch(
-                `${API_BASE_URL}/api/schedules/rooms/${id}/`,
-                {
-                    headers: {
-                        Accept: 'application/json',
-                    },
-                },
-            );
 
+            const response = await fetch(`${API_BASE_URL}/api/schedules/rooms/${id}/`, {
+                headers: {
+                    'Accept': 'application/json',
+                },
+            });
+            
             if (!response.ok) {
                 throw new Error(`Error: ${response.status}`);
             }
@@ -1341,17 +1340,15 @@ export const newSemesterApi = {
     resetForNewSemester: async () => {
         try {
             console.log('Starting new semester reset...');
-            const response = await fetch(
-                `${API_BASE_URL}/api/schedules/new-semester/`,
-                {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        Accept: 'application/json',
-                    },
-                },
-            );
 
+            const response = await fetch(`${API_BASE_URL}/api/schedules/new-semester/`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json',
+                },
+            });
+           
             if (!response.ok) {
                 const errorText = await response.text();
                 let errorData;
@@ -1360,10 +1357,6 @@ export const newSemesterApi = {
                 } catch (e) {
                     throw new Error(`Error: ${response.status} - ${errorText}`);
                 }
-                throw new Error(
-                    errorData.detail || `Error: ${response.status}`,
-                );
-            }
 
             const result = await response.json();
             console.log('New semester reset successful:', result);
@@ -1373,4 +1366,5 @@ export const newSemesterApi = {
             throw error;
         }
     },
-};
+
+}; 
