@@ -1275,38 +1275,53 @@ export const roomsApi = {
             );
 
             let allRooms: Room[] = [];
-            let nextUrl = `${API_BASE_URL}/api/schedules/rooms/`;
+            let currentPage = 1;
+            let hasMore = true;
 
-            const response = await fetch(nextUrl, {
-                headers: {
-                    Accept: 'application/json',
-                },
-            });
+            while (hasMore) {
+                // Build URL with page parameter
+                const url = `${API_BASE_URL}/api/schedules/rooms/?page=${currentPage}`;
+                console.log('Fetching page:', currentPage, 'URL:', url);
 
-            console.log('Response status:', response.status);
+                const response = await fetch(url, {
+                    method: 'GET',
+                    headers: {
+                        Accept: 'application/json',
+                    },
+                    // Remove credentials if not needed
+                    // credentials: 'include',
+                });
 
-            if (!response.ok) {
-                throw new Error(`Error: ${response.status}`);
+                console.log('Response status:', response.status);
+
+                if (!response.ok) {
+                    throw new Error(`Error: ${response.status}`);
+                }
+
+                const data = await response.json();
+                console.log('Page data:', data);
+
+                // Add rooms from current page
+                const rooms = data.results || data;
+                if (Array.isArray(rooms)) {
+                    allRooms = [...allRooms, ...rooms];
+                }
+
+                // Check if there are more pages
+                hasMore = data.next !== null && data.next !== undefined;
+                currentPage++;
+
+                // Safety check to prevent infinite loops
+                if (currentPage > 100) {
+                    console.warn('Reached maximum page limit');
+                    break;
+                }
             }
 
-            const data = await response.json();
-            console.log('Page data:', data);
-
-            // Add rooms from current page
-            const rooms = data.results || data;
-            if (Array.isArray(rooms)) {
-                allRooms = [...allRooms, ...rooms];
-            }
-            // while (nextUrl) {
-
-            //     // Check if there's a next page
-            //     nextUrl = data.next || null;
-            // }
-
-            console.log('Total rooms fetched:', allRooms.length);
+            console.log(`Total rooms fetched: ${allRooms.length}`);
             return allRooms;
         } catch (error) {
-            console.error('Failed to fetch rooms:', error);
+            console.error('Error fetching rooms:', error);
             throw error;
         }
     },
