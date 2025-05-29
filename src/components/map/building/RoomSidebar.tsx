@@ -531,9 +531,6 @@ const RoomSidebar: React.FC<RoomSidebarProps> = ({ selectedRoom, onClose }) => {
         if (isCurrentlyActive && isToday) {
             // Currently happening class - bright highlight
             return 'bg-[#FFAE1D] border-[#FFA500]  px-8 pt-2 pb-3';
-        } else if (schedule.isActive) {
-            // API says it's active but not currently happening
-            return 'bg-green-500/20 border-green-500/30 px-8 py-3';
         } else {
             // Regular class
             return 'px-8 py-3';
@@ -693,7 +690,7 @@ const RoomSidebar: React.FC<RoomSidebarProps> = ({ selectedRoom, onClose }) => {
                                             );
                                         })}
                                     </div>
-                                    <p className="px-3 text-xs text-white/70 mt-1">
+                                    <p className="px-3 text-xs text-white/70 mt-1 mb-2">
                                         {selectedDay === 'TODAY'
                                             ? `Showing today's schedule`
                                             : `Click a day to view its schedule`}
@@ -754,7 +751,7 @@ const RoomSidebar: React.FC<RoomSidebarProps> = ({ selectedRoom, onClose }) => {
                                                         >
                                                             {isCurrentlyActive &&
                                                                 isToday && (
-                                                                    <span className="text-xs underline decoration-1 decoration-white underline-offset-4">
+                                                                    <span className="text-xs text-white underline decoration-1 decoration-white underline-offset-4">
                                                                         Ongoing
                                                                     </span>
                                                                 )}
@@ -770,7 +767,7 @@ const RoomSidebar: React.FC<RoomSidebarProps> = ({ selectedRoom, onClose }) => {
                                                                 </span>
                                                             </div>
                                                             <div className="flex items-center gap-2">
-                                                                <Notebook className="w-4 h-4" />
+                                                                <Notebook className="w-4 h-4 text-white" />
                                                                 <span
                                                                     className={` text-m ${getScheduleItemTextColor(
                                                                         schedule,
@@ -785,7 +782,7 @@ const RoomSidebar: React.FC<RoomSidebarProps> = ({ selectedRoom, onClose }) => {
                                                                 </span>
                                                             </div>
                                                             <div className="flex items-center gap-2">
-                                                                <User className="w-4 h-4" />
+                                                                <User className="w-4 h-4 text-white" />
                                                                 <span
                                                                     className={`text-m ${getScheduleItemTextColor(
                                                                         schedule,
