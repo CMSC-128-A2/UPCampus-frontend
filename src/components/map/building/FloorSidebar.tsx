@@ -8,10 +8,9 @@ import {
     Toilet,
     X,
     ArrowLeftToLine,
-    ArrowRightToLine,
     ChevronLeft,
-    BrickWall,
     GraduationCap,
+    ChevronUp,
 } from 'lucide-react';
 
 // Use same Room interface as in FloorPlanView
@@ -152,14 +151,14 @@ const FloorSidebar: React.FC<FloorSidebarProps> = ({
             {/* Mobile toggle button - only visible when sidebar is closed on mobile */}
             <button
                 onClick={handleToggle}
-                className={`fixed sm:hidden flex items-center justify-center bottom-8 right-8 z-20 bg-[#7F1532] text-white p-3 rounded-full shadow-lg transition-all duration-300 ${
+                className={`fixed sm:hidden flex items-center justify-center bottom-4 right-8 z-20 bg-[#7F1532] text-white p-3 rounded-full shadow-lg transition-all duration-300 ${
                     sidebarOpen
                         ? 'opacity-0 pointer-events-none'
                         : 'opacity-100'
                 }`}
                 aria-label="Show floor panel"
             >
-                <BrickWall />
+                <ChevronUp />
             </button>
 
             <div
@@ -219,7 +218,7 @@ const FloorSidebar: React.FC<FloorSidebarProps> = ({
                                     {rooms.map((room) => (
                                         <div
                                             key={room.code}
-                                            className={`flex items-start p-2 text-white cursor-pointer hover:bg-white/10 transition-colors`}
+                                            className={`flex items-start p-3 text-white cursor-pointer hover:bg-[#BF4043] transition-colors`}
                                             onClick={() =>
                                                 setSelectedRoomCode(room.code)
                                             }

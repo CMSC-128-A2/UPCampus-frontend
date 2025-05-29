@@ -42,7 +42,7 @@ const renderBuildings = (buildings: any[], level = 0) => {
             </button>
 
             {/* Recursively render children with further increased indentation */}
-            {building.children && renderBuildings(building.children, level + 2)}
+            {building.children && renderBuildings(building.children, level + 3)}
         </div>
     ));
 };

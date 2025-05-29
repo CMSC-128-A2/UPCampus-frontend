@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { ArrowRightToLine } from 'lucide-react';
+import { ArrowRightToLine, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useMapStore } from '@/store/mapStore';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -522,7 +522,7 @@ const BuildingDetailsSidebar: React.FC = () => {
                         className="p-1.5 hover:bg-white/20 rounded-full transition-colors"
                         aria-label="Close sidebar"
                     >
-                        <ArrowRightToLine size={22} className="text-white" />
+                        <X size={22} className="text-white" />
                     </button>
                 </div>
 
