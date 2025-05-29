@@ -143,8 +143,8 @@ const BuildingDetailsSidebar: React.FC = () => {
                                 {floor.name}
                             </h4>
                             <ul className="space-y-1 text-sm px-4">
-                                {floor.facilities.map(
-                                    (facility, facilityIndex: number) => (
+                                {floor.facilities?.map((facility, facilityIndex: number) => (
+
                                         <li
                                             key={facilityIndex}
                                             className="pl-2"
@@ -285,7 +285,7 @@ const BuildingDetailsSidebar: React.FC = () => {
                         <ul className="list-disc pl-5 space-y-2">
                             {building.floors.flatMap((floor) =>
                                 floor.facilities
-                                    .filter(
+                                    ?.filter(
                                         (
                                             facility,
                                         ): facility is {
