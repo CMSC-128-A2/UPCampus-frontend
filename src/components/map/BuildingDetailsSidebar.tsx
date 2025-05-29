@@ -52,6 +52,8 @@ const BuildingDetailsSidebar: React.FC = () => {
 
     // State to track sidebar open/close state for animations
     const [sidebarOpen, setSidebarOpen] = useState(false);
+    // Add loading state for image
+    const [imageLoading, setImageLoading] = useState(true);
 
     // State to track the active tab for each building type
     const [activeTab, setActiveTab] = useState<{
@@ -77,6 +79,11 @@ const BuildingDetailsSidebar: React.FC = () => {
             setSidebarOpen(false);
         }
     }, [selectedMarkId, building]);
+
+    // Reset image loading state when building changes
+    useEffect(() => {
+        setImageLoading(true);
+    }, [selectedMarkId]);
 
     // Function to close the sidebar with animation
     const onClose = () => {
@@ -564,12 +571,21 @@ const BuildingDetailsSidebar: React.FC = () => {
                 <div className="overflow-y-auto h-[calc(100%-56px)]">
                     {/* Building Image */}
                     <div className="w-full h-48 relative my-4 bg-maroon-accent">
+                        {imageLoading && (
+                            <div className="absolute inset-0 flex items-center justify-center bg-maroon-accent/50">
+                                <div className="w-8 h-8 border-4 border-white/30 border-t-white rounded-full animate-spin"></div>
+                            </div>
+                        )}
                         <Image
                             src={building.image}
                             alt={building.name}
                             fill
                             style={{ objectFit: 'cover' }}
-                            className="w-full h-full border-8 border-maroon-accent"
+                            className={`w-full h-full border-8 border-maroon-accent transition-opacity duration-300 ${
+                                imageLoading ? 'opacity-0' : 'opacity-100'
+                            }`}
+                            onLoadingComplete={() => setImageLoading(false)}
+                            priority
                         />
                     </div>
 
