@@ -1273,35 +1273,35 @@ export const roomsApi = {
                 'Fetching rooms from:',
                 `${API_BASE_URL}/api/schedules/rooms/`,
             );
-            
+
             let allRooms: Room[] = [];
             let nextUrl = `${API_BASE_URL}/api/schedules/rooms/`;
 
-            while (nextUrl) {
-                const response = await fetch(nextUrl, {
-                    headers: {
-                        Accept: 'application/json',
-                    },
-                });
+            const response = await fetch(nextUrl, {
+                headers: {
+                    Accept: 'application/json',
+                },
+            });
 
-                console.log('Response status:', response.status);
+            console.log('Response status:', response.status);
 
-                if (!response.ok) {
-                    throw new Error(`Error: ${response.status}`);
-                }
-
-                const data = await response.json();
-                console.log('Page data:', data);
-
-                // Add rooms from current page
-                const rooms = data.results || data;
-                if (Array.isArray(rooms)) {
-                    allRooms = [...allRooms, ...rooms];
-                }
-
-                // Check if there's a next page
-                nextUrl = data.next || null;
+            if (!response.ok) {
+                throw new Error(`Error: ${response.status}`);
             }
+
+            const data = await response.json();
+            console.log('Page data:', data);
+
+            // Add rooms from current page
+            const rooms = data.results || data;
+            if (Array.isArray(rooms)) {
+                allRooms = [...allRooms, ...rooms];
+            }
+            // while (nextUrl) {
+
+            //     // Check if there's a next page
+            //     nextUrl = data.next || null;
+            // }
 
             console.log('Total rooms fetched:', allRooms.length);
             return allRooms;
