@@ -374,7 +374,7 @@ function ScheduleModal({
                                             {roomId
                                                 ? roomList.find(
                                                       (r) => r.id === roomId,
-                                                  )?.code
+                                                  )?.room
                                                 : 'Select a room'}
                                         </span>
                                         <Icon
