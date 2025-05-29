@@ -23,11 +23,11 @@ interface BuildingDetail {
     slug?: string | null;
     // Building-specific properties
     floors?: {
-        name: string;
-        facilities: (
+        name?: string;
+        facilities?: (
             | string
             | {
-                  name: string;
+                  name?: string;
                   email?: string;
                   contactNumber?: string;
                   site?: string;
@@ -143,8 +143,8 @@ const BuildingDetailsSidebar: React.FC = () => {
                                 {floor.name}
                             </h4>
                             <ul className="space-y-1 text-sm px-4">
-                                {floor.facilities.map(
-                                    (facility, facilityIndex: number) => (
+                                {floor.facilities?.map((facility, facilityIndex: number) => (
+
                                         <li
                                             key={facilityIndex}
                                             className="pl-2"
@@ -285,7 +285,7 @@ const BuildingDetailsSidebar: React.FC = () => {
                         <ul className="list-disc pl-5 space-y-2">
                             {building.floors.flatMap((floor) =>
                                 floor.facilities
-                                    .filter(
+                                    ?.filter(
                                         (
                                             facility,
                                         ): facility is {
@@ -315,7 +315,7 @@ const BuildingDetailsSidebar: React.FC = () => {
                                                     Email:{' '}
                                                     <a
                                                         href={`mailto:${facility.email}`}
-                                                        className="text-blue-500 underline"
+                                                        className="text-white underline"
                                                     >
                                                         {facility.email}
                                                     </a>
@@ -370,6 +370,16 @@ const BuildingDetailsSidebar: React.FC = () => {
         );
     };
 
+    const hasFacilityContacts = () => {
+        return building.floors?.some((floor) =>
+            floor.facilities?.some(
+                (facility) =>
+                    typeof facility === 'object' &&
+                    (facility.email || facility.contactNumber)
+            )
+        );
+    };
+
     // Render tabs based on building type
     const renderTabs = () => {
         // For activity type
@@ -382,19 +392,19 @@ const BuildingDetailsSidebar: React.FC = () => {
                     }
                     className="w-full"
                 >
-                    <TabsList className="w-[95%] mx-auto grid grid-cols-2 bg-maroon-accent/60">
+                    <TabsList className="w-[95%] mx-auto grid grid-cols-1 bg-maroon-accent/60">
                         <TabsTrigger
                             value="about"
                             className="text-white data-[state=active]:text-foreground"
                         >
                             About
                         </TabsTrigger>
-                        <TabsTrigger
+                        {/* <TabsTrigger
                             value="images"
                             className="text-white data-[state=active]:text-foreground"
                         >
                             Images
-                        </TabsTrigger>
+                        </TabsTrigger> */}
                     </TabsList>
                     <TabsContent value="about">{renderAboutTab()}</TabsContent>
                     <TabsContent value="images">
@@ -414,33 +424,39 @@ const BuildingDetailsSidebar: React.FC = () => {
                     }
                     className="w-full"
                 >
-                    <TabsList className="w-[95%] mx-auto grid grid-cols-3 bg-maroon-accent/60">
+                    <TabsList
+                        className={`w-[95%] mx-auto grid ${
+                            hasFacilityContacts() ? 'grid-cols-2' : 'grid-cols-1'
+                        } bg-maroon-accent/60`}
+                    >
                         <TabsTrigger
                             value="about"
                             className="text-white data-[state=active]:text-foreground"
                         >
                             About
                         </TabsTrigger>
-                        <TabsTrigger
-                            value="contacts"
-                            className="text-white data-[state=active]:text-foreground"
-                        >
-                            Contacts
-                        </TabsTrigger>
-                        <TabsTrigger
+                        {hasFacilityContacts() && (
+                            <TabsTrigger
+                                value="contacts"
+                                className="text-white data-[state=active]:text-foreground"
+                            >
+                                Contacts
+                            </TabsTrigger>
+                        )}
+                        {/* <TabsTrigger
                             value="images"
                             className="text-white data-[state=active]:text-foreground"
                         >
                             Images
-                        </TabsTrigger>
+                        </TabsTrigger> */}
                     </TabsList>
                     <TabsContent value="about">{renderAboutTab()}</TabsContent>
                     <TabsContent value="contacts">
                         {renderContactsTab()}
                     </TabsContent>
-                    <TabsContent value="images">
+                    {/* <TabsContent value="images">
                         {renderImagesTab()}
-                    </TabsContent>
+                    </TabsContent> */}
                 </Tabs>
             );
         }
@@ -454,7 +470,11 @@ const BuildingDetailsSidebar: React.FC = () => {
                 }
                 className="w-full "
             >
-                <TabsList className="w-[95%] mx-auto grid grid-cols-4 bg-maroon-accent/60">
+                <TabsList
+                    className={`w-[95%] mx-auto grid ${
+                        hasFacilityContacts() ? 'grid-cols-3' : 'grid-cols-2'
+                    } bg-maroon-accent/60`}
+                    >
                     <TabsTrigger
                         value="floors"
                         className="text-white data-[state=active]:text-foreground"
@@ -467,25 +487,29 @@ const BuildingDetailsSidebar: React.FC = () => {
                     >
                         About
                     </TabsTrigger>
-                    <TabsTrigger
+
+                    {hasFacilityContacts() && (
+                        <TabsTrigger
                         value="contacts"
                         className="text-white data-[state=active]:text-foreground"
-                    >
+                        >
                         Contacts
-                    </TabsTrigger>
-                    <TabsTrigger
+                        </TabsTrigger>
+                    )}
+
+                    {/* <TabsTrigger
                         value="images"
                         className="text-white data-[state=active]:text-foreground"
                     >
                         Images
-                    </TabsTrigger>
-                </TabsList>
+                    </TabsTrigger> */}
+                    </TabsList>
                 <TabsContent value="floors">{renderFloorsTab()}</TabsContent>
                 <TabsContent value="about">{renderAboutTab()}</TabsContent>
                 <TabsContent value="contacts">
                     {renderContactsTab()}
                 </TabsContent>
-                <TabsContent value="images">{renderImagesTab()}</TabsContent>
+                {/* <TabsContent value="images">{renderImagesTab()}</TabsContent> */}
             </Tabs>
         );
     };

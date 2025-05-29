@@ -263,7 +263,7 @@ const BuildingSearchBar: React.FC<{
                 <>
                     <Link href="/map">
                         <Image
-                            src="/assets/images/upseelogo.png"
+                            src="/assets/images/mainlogo.svg"
                             alt="Upsee Logo"
                             width={60}
                             height={30}
