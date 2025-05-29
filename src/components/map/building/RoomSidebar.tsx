@@ -13,6 +13,7 @@ import {
     GraduationCap,
     Presentation,
     Loader2,
+    ChevronDown,
 } from 'lucide-react';
 import { roomApi, parseSchedule, RoomScheduleSection } from '@/lib/api';
 
@@ -562,10 +563,10 @@ const RoomSidebar: React.FC<RoomSidebarProps> = ({ selectedRoom, onClose }) => {
             />
 
             <div
-                className={`fixed sm:top-2 sm:right-2 w-full sm:w-[320px] md:w-[350px] bg-[#D45756] text-white shadow-lg z-30 overflow-hidden
-                transition-all duration-300 ease-in-out rounded-xl
-                /* Mobile: Bottom half of screen */
-                top-[30%] h-[70%] rounded-t-2xl
+                className={`fixed sm:top-2 sm:right-2 w-full sm:w-[320px] md:w-[350px] bg-[#D45756] shadow-lg z-20 overflow-y-hidden
+                    transition-all duration-300 ease-in-out rounded-xl
+                    /* Mobile: Bottom half of screen */
+                    top-[50%] h-[50%] rounded-t-2xl
                 /* Desktop: Full height */
                 sm:h-[calc(100%-1rem)] ${
                     sidebarOpen
@@ -575,15 +576,28 @@ const RoomSidebar: React.FC<RoomSidebarProps> = ({ selectedRoom, onClose }) => {
             >
                 <div className="pt-4 text-white font-semibold flex justify-between items-center rounded-t-xl">
                     <div className="flex items-center justify-between gap-2 bg-maroon-accent px-4 py-2 w-full">
-                        <div className="flex items-center gap-2">
-                            {getIconForRoom(selectedRoom.icon)}
+                        <div className="flex items-center gap-2 text-xl">
+                            {/* {getIconForRoom(selectedRoom.icon)} */}
                             <span>{selectedRoom.name}</span>
                         </div>
                         <button
                             onClick={handleClose}
                             className="text-white hover:text-gray-200 transition-colors p-1.5 hover:bg-white/20 rounded-full"
                         >
-                            <ArrowRightToLine size={20} />
+                            <>
+                                <div className="sm:hidden">
+                                    <ChevronDown
+                                        size={22}
+                                        className="text-white"
+                                    />
+                                </div>
+                                <div className="hidden sm:block">
+                                    <ArrowRightToLine
+                                        size={22}
+                                        className="text-white"
+                                    />
+                                </div>
+                            </>
                         </button>
                     </div>
                 </div>

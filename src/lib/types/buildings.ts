@@ -1100,7 +1100,7 @@ export const mockBuildingsData = {
     '13': {
         id: '13',
         name: 'Cebu Cultural Center',
-        image: '/assets/images/random-building.png',
+        image: '/assets/images/buildings/culturalCenter.png',
         type: 'building',
         slug: null,
         floors: [

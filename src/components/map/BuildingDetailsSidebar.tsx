@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { ArrowRightToLine } from 'lucide-react';
+import { ArrowRightToLine, ChevronDown } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useMapStore } from '@/store/mapStore';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -143,8 +143,8 @@ const BuildingDetailsSidebar: React.FC = () => {
                                 {floor.name}
                             </h4>
                             <ul className="space-y-1 text-sm px-4">
-                                {floor.facilities?.map((facility, facilityIndex: number) => (
-
+                                {floor.facilities?.map(
+                                    (facility, facilityIndex: number) => (
                                         <li
                                             key={facilityIndex}
                                             className="pl-2"
@@ -375,8 +375,8 @@ const BuildingDetailsSidebar: React.FC = () => {
             floor.facilities?.some(
                 (facility) =>
                     typeof facility === 'object' &&
-                    (facility.email || facility.contactNumber)
-            )
+                    (facility.email || facility.contactNumber),
+            ),
         );
     };
 
@@ -426,7 +426,9 @@ const BuildingDetailsSidebar: React.FC = () => {
                 >
                     <TabsList
                         className={`w-[95%] mx-auto grid ${
-                            hasFacilityContacts() ? 'grid-cols-2' : 'grid-cols-1'
+                            hasFacilityContacts()
+                                ? 'grid-cols-2'
+                                : 'grid-cols-1'
                         } bg-maroon-accent/60`}
                     >
                         <TabsTrigger
@@ -474,7 +476,7 @@ const BuildingDetailsSidebar: React.FC = () => {
                     className={`w-[95%] mx-auto grid ${
                         hasFacilityContacts() ? 'grid-cols-3' : 'grid-cols-2'
                     } bg-maroon-accent/60`}
-                    >
+                >
                     <TabsTrigger
                         value="floors"
                         className="text-white data-[state=active]:text-foreground"
@@ -490,10 +492,10 @@ const BuildingDetailsSidebar: React.FC = () => {
 
                     {hasFacilityContacts() && (
                         <TabsTrigger
-                        value="contacts"
-                        className="text-white data-[state=active]:text-foreground"
+                            value="contacts"
+                            className="text-white data-[state=active]:text-foreground"
                         >
-                        Contacts
+                            Contacts
                         </TabsTrigger>
                     )}
 
@@ -503,7 +505,7 @@ const BuildingDetailsSidebar: React.FC = () => {
                     >
                         Images
                     </TabsTrigger> */}
-                    </TabsList>
+                </TabsList>
                 <TabsContent value="floors">{renderFloorsTab()}</TabsContent>
                 <TabsContent value="about">{renderAboutTab()}</TabsContent>
                 <TabsContent value="contacts">
@@ -546,7 +548,15 @@ const BuildingDetailsSidebar: React.FC = () => {
                         className="p-1.5 hover:bg-white/20 rounded-full transition-colors"
                         aria-label="Close sidebar"
                     >
-                        <ArrowRightToLine size={22} className="text-white" />
+                        <div className="sm:hidden">
+                            <ChevronDown size={22} className="text-white" />
+                        </div>
+                        <div className="hidden sm:block">
+                            <ArrowRightToLine
+                                size={22}
+                                className="text-white"
+                            />
+                        </div>
                     </button>
                 </div>
 

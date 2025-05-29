@@ -19,9 +19,22 @@ const MapControls: React.FC<MapControlsProps> = ({
 }) => {
     return (
         <div className="absolute bottom-4 left-4 flex gap-1 z-10 p-1.5 rounded-lg bg-green-accent">
+            
+            <button
+                onClick={onZoomOut}
+                className="bg-white w-10 rounded-tl-sm rounded-bl-sm h-10 flex items-center justify-center shadow-md hover:bg-gray-100"
+                aria-label="Zoom out"
+            >
+                    <Minus
+                        width="24"
+                        height="24"
+                        className="text-[#004D37]"
+                    />
+            </button>
+
             <button
                         onClick={onZoomIn}
-                        className="bg-white rounded-tl-sm rounded-bl-sm w-10 h-10 flex items-center justify-center shadow-md hover:bg-gray-100"
+                        className="bg-white w-10 h-10 flex items-center justify-center shadow-md hover:bg-gray-100"
                         aria-label="Zoom in"
                     >
 
@@ -33,17 +46,6 @@ const MapControls: React.FC<MapControlsProps> = ({
 
             </button>
 
-            <button
-                onClick={onZoomOut}
-                className="bg-white w-10 h-10 flex items-center justify-center shadow-md hover:bg-gray-100"
-                aria-label="Zoom out"
-            >
-                    <Minus
-                        width="24"
-                        height="24"
-                        className="text-[#004D37]"
-                    />
-            </button>
 
             <button
                 onClick={onReset}
@@ -59,7 +61,7 @@ const MapControls: React.FC<MapControlsProps> = ({
 
             <button
                 onClick={onLocate}
-                className="bg-white rounded-tr-sm rounded-br-sm w-10 h-10 flex items-center justify-center shadow-md hover:bg-gray-100"
+                className="rounded-tr-sm rounded-br-sm bg-white w-10 h-10 flex items-center justify-center shadow-md hover:bg-gray-100"
                 aria-label="Show my location"
             >
                     <MapPin

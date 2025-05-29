@@ -275,7 +275,7 @@ const BuildingSearchBar: React.FC<{
                         <input
                             ref={inputRef}
                             type="text"
-                            placeholder="Search rooms, facilities, offices..."
+                            placeholder="Search rooms or facilities"
                             className="flex-1 bg-transparent outline-none text-[#7F1532] h-8"
                             value={searchTerm}
                             onChange={handleSearchChange}
@@ -381,7 +381,7 @@ const BuildingSearchBar: React.FC<{
                         <input
                             ref={inputRef}
                             type="text"
-                            placeholder="Search rooms, facilities, offices..."
+                            placeholder="Search rooms or facilities"
                             className="flex-1 bg-transparent outline-none text-[#7F1532]"
                             autoFocus
                             value={searchTerm}
