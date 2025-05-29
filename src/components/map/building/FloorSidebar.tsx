@@ -11,6 +11,8 @@ import {
     ChevronLeft,
     GraduationCap,
     ChevronUp,
+    ChevronDown,
+    ArrowRightToLine,
 } from 'lucide-react';
 
 // Use same Room interface as in FloorPlanView
@@ -102,17 +104,17 @@ const FloorSidebar: React.FC<FloorSidebarProps> = ({
     const getIconForRoom = (iconName: string) => {
         switch (iconName) {
             case 'briefcase':
-                return <Briefcase className="w-4 h-4" strokeWidth={2.5}/>;
+                return <Briefcase className="w-4 h-4" strokeWidth={2.5} />;
             case 'presentation':
-                return <Presentation className="w-4 h-4" strokeWidth={2.5}/>;
+                return <Presentation className="w-4 h-4" strokeWidth={2.5} />;
             case 'emergency':
-                return <Siren className="w-4 h-4" strokeWidth={2.5}/>;
+                return <Siren className="w-4 h-4" strokeWidth={2.5} />;
             case 'toilet':
-                return <Toilet className="w-4 h-4" strokeWidth={2.5}/>;
+                return <Toilet className="w-4 h-4" strokeWidth={2.5} />;
             case 'graduation':
-                return <GraduationCap className="w-4 h-4" strokeWidth={2.5}/>;
+                return <GraduationCap className="w-4 h-4" strokeWidth={2.5} />;
             default:
-                return <Briefcase className="w-4 h-4" strokeWidth={2.5}/>;
+                return <Briefcase className="w-4 h-4" strokeWidth={2.5} />;
         }
     };
 
@@ -174,14 +176,21 @@ const FloorSidebar: React.FC<FloorSidebarProps> = ({
                 }`}
             >
                 <div className="py-4 text-white font-semibold flex justify-between items-center rounded-t-xl">
-                    <div className="flex items-center justify-between gap-2 bg-maroon-accent px-4 py-2 w-full">
+                    <div className="flex items-center justify-between gap-2 bg-maroon-accent px-4 py-2 w-full text-xl">
                         <span>{selectedFloor.name}</span>
                         <button
                             onClick={handleToggle}
                             className="text-white hover:text-gray-200 transition-colors p-1.5 hover:bg-white/20 rounded-full"
                         >
                             {sidebarOpen ? (
-                                <X size={20} />
+                                <>
+                                    <div className="sm:hidden">
+                                        <X size={22} className="text-white" />
+                                    </div>
+                                    <div className="hidden sm:block">
+                                        <X size={22} className="text-white" />
+                                    </div>
+                                </>
                             ) : (
                                 <ChevronLeft size={20} />
                             )}
@@ -196,7 +205,7 @@ const FloorSidebar: React.FC<FloorSidebarProps> = ({
                                 {rooms.map((room) => (
                                     <div
                                         key={room.code}
-                                        className={`flex items-center p-2 text-white cursor-pointer`}
+                                        className={`flex items-center px-3 py-1 text-white cursor-pointer`}
                                         onClick={() =>
                                             setSelectedRoomCode(room.code)
                                         }

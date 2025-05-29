@@ -2,7 +2,16 @@
 
 import React, { useState, useEffect, useRef, ReactNode } from 'react';
 import { mockBuildingsData } from '@/lib/types/buildings';
-import { Briefcase, Expand, Minus, Plus, Presentation, Siren, Toilet, GraduationCap } from 'lucide-react';
+import {
+    Briefcase,
+    Minus,
+    Plus,
+    Presentation,
+    Siren,
+    Toilet,
+    GraduationCap,
+    Shrink,
+} from 'lucide-react';
 
 type BuildingData = (typeof mockBuildingsData)[keyof typeof mockBuildingsData];
 
@@ -293,50 +302,68 @@ const FloorPlanView: React.FC<FloorPlanViewProps> = ({
                         {currentFloor?.rooms?.map((room) => {
                             const position = getRoomPosition(room);
 
-                 return (
-                        <div
-                        key={room.code}
-                        className={`
+                            return (
+                                <div
+                                    key={room.code}
+                                    className={`
                             absolute z-50 transform -translate-x-1/2 -translate-y-1/2
                             flex items-center  px-3 py-1.5 rounded-full cursor-pointer
                             text-sm md:text-base font-medium transition-colors duration-200
                             select-none shadow-md
-                            ${selectedRoomCode === room.code
-                            ? 'bg-[#7F1532] text-white'
-                            : 'bg-white text-[#7F1532] border-[3px] border-[#7F1532]'}
+                            ${
+                                selectedRoomCode === room.code
+                                    ? 'bg-[#7F1532] text-white'
+                                    : 'bg-white text-[#7F1532] border-[3px] border-[#7F1532]'
+                            }
                             hover:bg-[#7F1532] hover:text-white
                         `}
-                        style={{
-                            left: position.left,
-                            top: position.top,
-                            userSelect: 'none',
-                            WebkitUserSelect: 'none',
-                        }}
-                        onClick={() => handleRoomClick(room.code)}
-                        title={room.name}
-                        >
-                        <span className="flex items-center justify-center">
-                            {room.icon === 'briefcase' ? (
-                                <Briefcase className="w-4 h-4 md:w-5 md:h-5" strokeWidth={2.5}/>
-                            ) : room.icon === 'emergency' ? (
-                                <Siren className="w-4 h-4 md:w-5 md:h-5"  strokeWidth={2.5}/>
-                            ) : room.icon === 'toilet' ? (
-                                <Toilet className="w-4 h-4 md:w-5 md:h-5" strokeWidth={2.5}/>
-                            ) : room.icon === 'presentation' ? (
-                                <Presentation className="w-4 h-4 md:w-5 md:h-5" strokeWidth={2.5}/>
-                            ) : room.icon === 'graduation' ? (
-                                <GraduationCap className="w-4 h-4 md:w-5 md:h-5" strokeWidth={2.5}/>
-                            ) : (
-                            room.icon
-                            )}
-                        </span>
+                                    style={{
+                                        left: position.left,
+                                        top: position.top,
+                                        userSelect: 'none',
+                                        WebkitUserSelect: 'none',
+                                    }}
+                                    onClick={() => handleRoomClick(room.code)}
+                                    title={room.name}
+                                >
+                                    <span className="flex items-center justify-center">
+                                        {room.icon === 'briefcase' ? (
+                                            <Briefcase
+                                                className="w-4 h-4 md:w-5 md:h-5"
+                                                strokeWidth={2.5}
+                                            />
+                                        ) : room.icon === 'emergency' ? (
+                                            <Siren
+                                                className="w-4 h-4 md:w-5 md:h-5"
+                                                strokeWidth={2.5}
+                                            />
+                                        ) : room.icon === 'toilet' ? (
+                                            <Toilet
+                                                className="w-4 h-4 md:w-5 md:h-5"
+                                                strokeWidth={2.5}
+                                            />
+                                        ) : room.icon === 'presentation' ? (
+                                            <Presentation
+                                                className="w-4 h-4 md:w-5 md:h-5"
+                                                strokeWidth={2.5}
+                                            />
+                                        ) : room.icon === 'graduation' ? (
+                                            <GraduationCap
+                                                className="w-4 h-4 md:w-5 md:h-5"
+                                                strokeWidth={2.5}
+                                            />
+                                        ) : (
+                                            room.icon
+                                        )}
+                                    </span>
 
-                            {room.icon !== "toilet" && (
-                                <span className="ml-1 text-xs md:text-lg font-bold">{room.code}</span>
-                            )}
-                        </div>
-
-                        );
+                                    {room.icon !== 'toilet' && (
+                                        <span className="ml-1 text-xs md:text-lg font-bold">
+                                            {room.code}
+                                        </span>
+                                    )}
+                                </div>
+                            );
                         })}
                     </div>
                 )}
@@ -345,24 +372,26 @@ const FloorPlanView: React.FC<FloorPlanViewProps> = ({
             {/* Zoom controls */}
             <div className="absolute bottom-4 left-4 flex gap-1 z-10 p-1.5 rounded-lg bg-green-accent">
                 <button
-                    className="bg-white rounded-md w-10 h-10 flex items-center justify-center shadow-md hover:bg-gray-100"
-                    onClick={() => setScale((prev) => Math.min(prev * 1.2, 5))}
-                >
-                    <Plus className="text-green-accent" />
-                </button>
-                <button
-                    className="bg-white rounded-md w-10 h-10 flex items-center justify-center shadow-md hover:bg-gray-100"
+                    className="bg-white rounded-tl-sm rounded-bl-sm w-10 h-10 flex items-center justify-center shadow-md hover:bg-gray-100"
                     onClick={() =>
                         setScale((prev) => Math.max(prev * 0.8, 0.5))
                     }
                 >
                     <Minus className="text-green-accent" />
                 </button>
+
                 <button
-                    className="bg-white rounded-md w-10 h-10 flex items-center justify-center shadow-md hover:bg-gray-100"
+                    className="bg-white w-10 h-10 flex items-center justify-center shadow-md hover:bg-gray-100"
+                    onClick={() => setScale((prev) => Math.min(prev * 1.2, 5))}
+                >
+                    <Plus className="text-green-accent" />
+                </button>
+
+                <button
+                    className="bg-white rounded-tr-sm rounded-br-sm w-10 h-10 flex items-center justify-center shadow-md hover:bg-gray-100"
                     onClick={handleReset}
                 >
-                    <Expand className="text-green-accent" />
+                    <Shrink className="text-green-accent" />
                 </button>
             </div>
         </div>
