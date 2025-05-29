@@ -802,7 +802,7 @@ const RoomSidebar: React.FC<RoomSidebarProps> = ({ selectedRoom, onClose }) => {
                     )}
 
                     {/* General information - Only for non-schedule rooms */}
-                    {!shouldShowSchedules(selectedRoom) && (
+                    {/* {!shouldShowSchedules(selectedRoom) && (
                         <div className="p-3">
                             <div className="p-3 bg-white/80 rounded-md">
                                 <p className="text-sm text-maroon-accent">
@@ -811,7 +811,7 @@ const RoomSidebar: React.FC<RoomSidebarProps> = ({ selectedRoom, onClose }) => {
                                 </p>
                             </div>
                         </div>
-                    )}
+                    )} */}
                 </div>
             </div>
         </>
