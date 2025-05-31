@@ -32,13 +32,13 @@ export default function Home() {
                                     height={40}
                                     className="h-8 w-auto"
                                 />
-                                <Image
+                                {/* <Image
                                     src="/assets/images/UPC header logo.png"
                                     alt="UP Cebu Logo"
                                     width={200}
                                     height={200}
                                     className="h-10 w-auto"
-                                />
+                                /> */}
                             </div>
                             <nav className="hidden md:flex space-x-8">
                                 <Link
